@@ -1,0 +1,66 @@
+[
+  {
+    "Training title": "Pilates",
+    "Categories": ["Pilates"],
+    "descreption": "Pilates largely avoids high impact, high power output, and heavy muscular and skeletal loading.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 1
+  },
+  {
+    "Training title": "GLUEES&ABS",
+    "Categories": ["Anaerobic"],
+    "descreption": "Butt and abdominal training",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 2
+  },
+  {
+    "Training title": "Lifting",
+    "Categories": ["Anaerobic"],
+    "descreption": "A training that aims to develop physical strength and strengthen the body by lifting weights",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 3
+  },
+  {
+    "Training title": "TaBaTa",
+    "Categories": ["Anaerobic", "Aerobic"],
+    "descreption": "Interval training that combines both strength and endurance. The workout works on pulse cycles and high periodicity, which results in increased calorie burning.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 4
+  },
+  {
+    "Training title": "Hiit",
+    "Categories": ["Anaerobic", "Aerobic"],
+    "descreption": "Interval training that combines both strength and endurance. The workout works on pulse cycles and high periodicity, which results in increased calorie burning.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 5
+  },
+  {
+    "Training title": "BootCamp",
+    "Categories": ["Aerobic"],
+    "descreption": "Excellent training for improving cardio-pulmonary endurance, strength and flexibility. The training will pass with groovy music.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 6
+  },
+  {
+    "Training title": "Fanctional training",
+    "Categories": ["Aerobic"],
+    "descreption": "Functional training is based on mobility and body training as a whole, combining muscle groups, using exercises that simulate initial movement patterns.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 7
+  },
+  {
+    "Training title": "Fit kids",
+    "Categories": ["Kids"],
+    "descreption": "Training for kids under 12 years old and training for the whole family.",
+    "Training duration": "40 minutes",
+    "Group size": "12 people maximun",
+    "id": 8
+  }
+]

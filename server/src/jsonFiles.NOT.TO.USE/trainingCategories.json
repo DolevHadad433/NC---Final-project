@@ -1,0 +1,30 @@
+[
+  {
+    "Category title": "Pilates",
+    "descreption": "Pilates largely avoids high impact, high power output, and heavy muscular and skeletal loading.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 1
+  },
+  {
+    "Category title": "Aerobic",
+    "descreption": "Aerobic exercise is physical activity such as walking, running, cycling, swimming, squashing - and any other activity in which the cardiovascular and respiratory systems are used significantly to supply energy that activates large muscle groups in low-medium or high-intensity intensity - for a long period of time. relatively.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 2
+  },
+  {
+    "Category title": "Anaerobic",
+    "descreption": "Anaerobic training is a training in which the source of energy is not based on oxygen. Anaerobic exertion is performed at maximum intensity, while bouncing a pulse for a short period of time (up to three minutes). Common anaerobic workouts are weightlifting, iron ball throwing, sprint running, high or long jump and others.",
+    "Training duration": "1 Hour",
+    "Group size": "16 people maximun",
+    "id": 3
+  },
+  {
+    "Category title": "Kids",
+    "descreption": "Training for kids under 12 years old and training for the whole family.",
+    "Training duration": "40 minutes",
+    "Group size": "12 people maximun",
+    "id": 4
+  }
+]

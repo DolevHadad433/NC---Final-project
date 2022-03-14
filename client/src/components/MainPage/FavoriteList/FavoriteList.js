@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function FavoriteList() {
-  return (
-    <div>FavoriteList</div>
-  )
+  return <div className="FavoriteList">FavoriteList</div>;
 }
 
-export default FavoriteList
+export default FavoriteList;
