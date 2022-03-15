@@ -1,9 +1,10 @@
 import React, { useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 
-import SignUp from "../SignUp/SignUp";
+import { useUsersContext } from "../../contexts/UsersContext";
+
 import { login } from "./LoginCheck";
 import "./Login.css";
-import MainPage from "../MainPage/MainPage";
 
 function loginReducer(state, action) {
   switch (action.type) {
@@ -16,7 +17,6 @@ function loginReducer(state, action) {
     case "success":
       return {
         ...state,
-        isLoggedIn: true,
         password: "",
         error: "",
       };
@@ -30,25 +30,11 @@ function loginReducer(state, action) {
         ...state,
         isLoading: false,
       };
-    case "log_out":
-      return {
-        ...state,
-        isLoggedIn: false,
-        username: "",
-        password: "",
-        signUpIsShow: false,
-      };
     case "field":
       return {
         ...state,
         [action.field]: action.value,
       };
-    case "show_sign_up_form":
-      return {
-        ...state,
-        signUpIsShow: true,
-      };
-      break;
 
     default:
       break;
@@ -61,92 +47,82 @@ const initialLoginState = {
   password: "",
   isLoading: false,
   error: "",
-  isLoggedIn: false,
-  signUpIsShow: false,
 };
 
 function LogIn() {
-  const [state, dispatch] = useReducer(loginReducer, initialLoginState);
+  const [loginState, dispatchLogIn] = useReducer(
+    loginReducer,
+    initialLoginState
+  );
+  const { username, password } = loginState;
 
-  const { username, password, signUpIsShow } = state;
+  const { userContextState, userContextDispatch } = useUsersContext();
+  const clickLogInHandler = useNavigate();
 
-  async function subminLoginHandler(event) {
-    event.preventDefault();
+  const clickDontHaveUserHandler = useNavigate();
 
-    dispatch({ type: "login" });
+  async function onLogInSubmit(e) {
+    e.preventDefault();
+
+    dispatchLogIn({ type: "login" });
 
     try {
       await login({ username, password });
-      dispatch({ type: "success" });
+      clickLogInHandler("/main-page");
     } catch (error) {
-      dispatch({ type: "error" });
+      dispatchLogIn({ type: "error" });
+      dispatchLogIn({ type: "stop_loading" });
     }
-
-    dispatch({ type: "stop_loading" });
   }
 
-  if (signUpIsShow) {
-    return (
-      <div>
-        <SignUp logOut={() => dispatch({ type: "log_out" })} />
-      </div>
-    );
-  } else if (state.isLoggedIn) {
-    return (
-      <MainPage
-        username={state.username}
-        logOut={() => dispatch({ type: "log_out" })}
-      />
-    );
-  } else {
-    return (
-      <div className="LogIn">
-        <div className="login-container">
-          <form className="form" onSubmit={subminLoginHandler}>
-            {state.error && <p className="error">{state.error}</p>}
-            <p>Please Login</p>
-            <input
-              type="text"
-              placeholder="User Name"
-              value={state.username}
-              onChange={(e) =>
-                dispatch({
-                  type: "field",
-                  field: "username",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="password"
-              placeholder="password"
-              value={state.password}
-              onChange={(e) =>
-                dispatch({
-                  type: "field",
-                  field: "password",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={state.isLoading}
-            >
-              {state.isLoading ? "Logging in..." : "Log In"}
-            </button>
-          </form>
+  function onDontHaveUserHandler() {
+    clickDontHaveUserHandler("/sign-up");
+  }
+
+  return (
+    <div className="LogIn">
+      <div className="login-container">
+        <form className="form" onSubmit={onLogInSubmit}>
+          {loginState.error && <p className="error">{loginState.error}</p>}
+          <p>Please Login</p>
+          <input
+            type="text"
+            placeholder="User Name"
+            value={loginState.username}
+            onChange={(e) =>
+              dispatchLogIn({
+                type: "field",
+                field: "username",
+                value: e.currentTarget.value,
+              })
+            }
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={loginState.password}
+            onChange={(e) =>
+              dispatchLogIn({
+                type: "field",
+                field: "password",
+                value: e.currentTarget.value,
+              })
+            }
+          />
           <button
-            className="sign-up-link-button"
-            onClick={() => dispatch({ type: "show_sign_up_form" })}
+            type="submit"
+            className="submit-button"
+            disabled={loginState.isLoading}
           >
-            Don't have a user? Click here to sign up!
+            {loginState.isLoading ? "Logging in..." : "Log In"}
           </button>
-        </div>
+        </form>
+        <button className="sign-up-link-button" onClick={onDontHaveUserHandler}>
+          Don't have a user? Click here to sign up!
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default LogIn;

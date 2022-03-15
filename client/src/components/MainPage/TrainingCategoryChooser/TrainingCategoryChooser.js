@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function TrainingCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  let categoryLinkHandler = useNavigate();
+
   useEffect(() => {
     fetch("/api/categories/")
       .then((response) => response.json())
-      .then((data) => setCategoriesList(data));
+      .then((data) => setCategoriesList("All", ...data));
   }, []);
 
   function categoryButtonHandler(event) {
-    setSelectedCategory(event.target.value);
+    switch (event.target.value) {
+      case "All":
+        setSelectedCategory(event.target.value);
+        categoryLinkHandler(`/main-page`);
+        break;
+      default:
+        setSelectedCategory(event.target.value);
+        categoryLinkHandler(`/main-page:${event.target.value}`);
+        break;
+    }
   }
 
   return (

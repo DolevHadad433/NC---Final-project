@@ -1,7 +1,8 @@
 import React, { useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUsersContext } from "../../contexts/UsersContext";
 
 import { signup } from "./SignUpCheck";
-import MainPage from "../MainPage/MainPage";
 
 import "./SignUp.css";
 
@@ -36,13 +37,9 @@ function signUpReducer(state, action) {
         ...state,
         [action.field]: action.value,
       };
-      break;
-
     default:
-      break;
+      return state;
   }
-
-  return state;
 }
 
 const initialSignUpState = {
@@ -51,88 +48,97 @@ const initialSignUpState = {
   phoneNumber: "",
   isLoading: false,
   error: "",
-  isSignUp: false,
 };
 
-function SignUp(props) {
-  const [state, dispatch] = useReducer(signUpReducer, initialSignUpState);
-  const { username, password, phoneNumber } = state;
+function SignUp() {
+  const [signUpState, dispatchSignUp] = useReducer(
+    signUpReducer,
+    initialSignUpState
+  );
+  const { username, password, phoneNumber } = signUpState;
 
-  async function subminSignupHandler(event) {
-    event.preventDefault();
+  const { userContextState, userContextDispatch } = useUsersContext();
+  const clickSignUpHandler = useNavigate();
+  const clickAlreadyHaveUserHandler = useNavigate();
 
-    dispatch({ type: "new_signUp_trying" });
+  async function onSubmitSignUpHandler(e) {
+    e.preventDefault();
+
+    dispatchSignUp({ type: "new_signUp_trying" });
 
     try {
       await signup({ username, password, phoneNumber });
-      dispatch({ type: "signUp_success" });
+      dispatchSignUp({ type: "signUp_success" });
+      clickSignUpHandler("/main-page");
     } catch (error) {
-      dispatch({ type: "signUp_error" });
+      dispatchSignUp({ type: "signUp_error" });
+      dispatchSignUp({ type: "signUp_stop_loading" });
     }
-
-    dispatch({ type: "signUp_stop_loading" });
   }
 
-  if (state.isSignUp) {
-    return <MainPage username={state.username} logOut={props.logOut} />;
-  } else {
-    return (
-      <div className="SignUp">
-        <div className="sigup-container">
-          <form className="form" onSubmit={subminSignupHandler}>
-            {state.error && <p className="error">{state.error}</p>}
-            <p>Please Sign-up</p>
-            <input
-              type="text"
-              placeholder="User Name"
-              value={state.username}
-              onChange={(e) =>
-                dispatch({
-                  type: "field",
-                  field: "username",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="password"
-              placeholder="password"
-              value={state.password}
-              onChange={(e) =>
-                dispatch({
-                  type: "field",
-                  field: "password",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="tel"
-              placeholder="Phone number"
-              value={state.phoneNumber}
-              onChange={(e) =>
-                dispatch({
-                  type: "field",
-                  field: "phoneNumber",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={state.isLoading}
-            >
-              {state.isLoading ? "Please wait..." : "Sign Up"}
-            </button>
-          </form>
-          <button className="login-link-button" onClick={props.logOut}>
-            Already have a user? Click here to login!
+  function onAlreadyHaveUserClickHandler() {
+    clickAlreadyHaveUserHandler("/");
+  }
+
+  return (
+    <div className="SignUp">
+      <div className="sigup-container">
+        <form className="form" onSubmit={onSubmitSignUpHandler}>
+          {signUpState.error && <p className="error">{signUpState.error}</p>}
+          <p>Please Sign-up</p>
+          <input
+            type="text"
+            placeholder="User Name"
+            value={signUpState.username}
+            onChange={(e) =>
+              dispatchSignUp({
+                type: "field",
+                field: "username",
+                value: e.currentTarget.value,
+              })
+            }
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={signUpState.password}
+            onChange={(e) =>
+              dispatchSignUp({
+                type: "field",
+                field: "password",
+                value: e.currentTarget.value,
+              })
+            }
+          />
+          <input
+            type="tel"
+            placeholder="Phone number"
+            value={signUpState.phoneNumber}
+            onChange={(e) =>
+              dispatchSignUp({
+                type: "field",
+                field: "phoneNumber",
+                value: e.currentTarget.value,
+              })
+            }
+          />
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={signUpState.isLoading}
+          >
+            {signUpState.isLoading ? "Please wait..." : "Sign Up"}
           </button>
-        </div>
+        </form>
+        <button
+          className="login-link-button"
+          onClick={onAlreadyHaveUserClickHandler}
+        >
+          Already have a user? Click here to login!
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default SignUp;
