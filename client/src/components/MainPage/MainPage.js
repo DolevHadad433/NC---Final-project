@@ -14,8 +14,8 @@ function MainPage(props) {
       </div>
       <div className="main-page-body">
         <Search />
-        <TrainingCategoryChooser />
         <FavoriteList />
+        <TrainingCategoryChooser />
         <TrainingList />
       </div>
     </div>

@@ -1,0 +1,18 @@
+.TrainingCategoryChooser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+  width: 400px;
+}
+
+.category-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  padding: 20px;
+
+  justify-content: center;
+  align-items: center;
+}

@@ -12,7 +12,12 @@ function TrainingList() {
 
   return (
     <div className="TrainingList">
-      <Training />
+      <div className="training-container">
+        <h2 className="training-list-title">Here is the training list:</h2>
+        {trainingList.map((training) => {
+          return <Training key={training.id} training={training} />;
+        })}
+      </div>
     </div>
   );
 }

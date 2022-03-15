@@ -100,51 +100,51 @@ function LogIn() {
     );
   } else {
     return (
-    <div className="LogIn">
-      <div className="login-container">
-        <form className="form" onSubmit={subminLoginHandler}>
-          {state.error && <p className="error">{state.error}</p>}
-          <p>Please Login</p>
-          <input
-            type="text"
-            placeholder="User Name"
-            value={state.username}
-            onChange={(e) =>
-              dispatch({
-                type: "field",
-                field: "username",
-                value: e.currentTarget.value,
-              })
-            }
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={state.password}
-            onChange={(e) =>
-              dispatch({
-                type: "field",
-                field: "password",
-                value: e.currentTarget.value,
-              })
-            }
-          />
+      <div className="LogIn">
+        <div className="login-container">
+          <form className="form" onSubmit={subminLoginHandler}>
+            {state.error && <p className="error">{state.error}</p>}
+            <p>Please Login</p>
+            <input
+              type="text"
+              placeholder="User Name"
+              value={state.username}
+              onChange={(e) =>
+                dispatch({
+                  type: "field",
+                  field: "username",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <input
+              type="password"
+              placeholder="password"
+              value={state.password}
+              onChange={(e) =>
+                dispatch({
+                  type: "field",
+                  field: "password",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={state.isLoading}
+            >
+              {state.isLoading ? "Logging in..." : "Log In"}
+            </button>
+          </form>
           <button
-            type="submit"
-            className="submit-button"
-            disabled={state.isLoading}
+            className="sign-up-link-button"
+            onClick={() => dispatch({ type: "show_sign_up_form" })}
           >
-            {state.isLoading ? "Logging in..." : "Log In"}
+            Don't have a user? Click here to sign up!
           </button>
-        </form>
-        <button
-          className="sign-up-link-button"
-          onClick={() => dispatch({ type: "show_sign_up_form" })}
-        >
-          Don't have a user? Click here to sign up!
-        </button>
+        </div>
       </div>
-    </div>
     );
   }
 }
