@@ -9,17 +9,16 @@ function TrainingList({ search }) {
   useEffect(() => {
     fetch("/api/training/")
       .then((response) => response.json())
-      .then((data) => setTrainingList(data));
+      .then((data) => setTrainingList([...data]));
   }, []);
 
   return (
     <div className="TrainingList">
       <div className="training-container">
-        <h2 className="training-list-title">Here is the training list:</h2>
         {trainingList
           .filter((training) => {
             const isInCategory =
-              training === undefined || training.category === category;
+              category === undefined || training.category === category;
             const isInSearch = training.title
               .toLowerCase()
               .includes(search.toLowerCase());

@@ -1,7 +1,7 @@
 import React from "react";
 import "./Training.css";
 
-function Training({ title, descreption, duration, groupSize }) {
+function Training({ title, category, descreption, duration, groupSize, id }) {
   return (
     <div className="Training">
       <div className="training-container">

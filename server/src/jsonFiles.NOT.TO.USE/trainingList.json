@@ -1,7 +1,7 @@
 [
   {
     "title": "Pilates",
-    "categories": ["Pilates"],
+    "category": "Pilates",
     "descreption": "Pilates largely avoids high impact, high power output, and heavy muscular and skeletal loading.",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -9,7 +9,7 @@
   },
   {
     "title": "GLUEES&ABS",
-    "categories": ["Anaerobic"],
+    "category": "Anaerobic",
     "descreption": "Butt and abdominal training",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -17,7 +17,7 @@
   },
   {
     "title": "Lifting",
-    "categories": ["Anaerobic"],
+    "category": "Anaerobic",
     "descreption": "A training that aims to develop physical strength and strengthen the body by lifting weights",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -25,7 +25,7 @@
   },
   {
     "title": "TaBaTa",
-    "categories": ["Anaerobic", "Aerobic"],
+    "category": "Aerobic",
     "descreption": "Interval training that combines both strength and endurance. The workout works on pulse cycles and high periodicity, which results in increased calorie burning.",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -33,7 +33,7 @@
   },
   {
     "title": "Hiit",
-    "categories": ["Anaerobic", "Aerobic"],
+    "category": "Anaerobic",
     "descreption": "Interval training that combines both strength and endurance. The workout works on pulse cycles and high periodicity, which results in increased calorie burning.",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -41,7 +41,7 @@
   },
   {
     "title": "BootCamp",
-    "categories": ["Aerobic"],
+    "category": "Aerobic",
     "descreption": "Excellent training for improving cardio-pulmonary endurance, strength and flexibility. The training will pass with groovy music.",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -49,7 +49,7 @@
   },
   {
     "title": "Fanctional training",
-    "categories": ["Aerobic"],
+    "category": "Aerobic",
     "descreption": "Functional training is based on mobility and body training as a whole, combining muscle groups, using exercises that simulate initial movement patterns.",
     "duration": "1 Hour",
     "groupSize": "16 people maximun",
@@ -57,7 +57,7 @@
   },
   {
     "title": "Fit kids",
-    "categories": ["Kids"],
+    "category": "Kids",
     "descreption": "Training for kids under 12 years old and training for the whole family.",
     "duration": "40 minutes",
     "groupSize": "12 people maximun",

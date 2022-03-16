@@ -3,8 +3,8 @@ import React, { useContext, useMemo, useReducer } from "react";
 const Context = React.createContext({});
 
 export const Actions = {
-  LogInSuccess: 'log-in-success'
-}
+  LogInSuccess: "log-in-success",
+};
 
 function userReducer(state, action) {
   switch (action.type) {
