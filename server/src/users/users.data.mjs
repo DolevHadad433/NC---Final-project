@@ -13,26 +13,32 @@ export async function getAllUsers() {
   return users.find({}).toArray();
 }
 
-// READ - Get user by ID
-export async function getUserById(id) {
-  const user = await getUsersCollection();
-  return user.findOne({ _id: ObjectId(id) });
+// // READ - Get user by ID
+// export async function getUserById(id) {
+//   const users = await getUsersCollection();
+//   return users.findOne({ _id: ObjectId(id) });
+// }
+
+// READ - Get user by username
+export async function getUserByUsername(username) {
+  const users = await getUsersCollection();
+  return users.findOne({ username });
 }
 
 // CREATE - Create a new user
 export async function createNewUser(newUser) {
-  const user = await getUsersCollection();
-  return user.insertOne(newUser);
+  const users = await getUsersCollection();
+  return users.insertOne(newUser);
 }
 
 // UPDATE - Update user by ID
 export async function editUser(id, newUser) {
-  const user = await getUsersCollection();
-  return user.updateOne({ _id: ObjectId(id) }, { $set: newUser });
+  const users = await getUsersCollection();
+  return users.updateOne({ _id: ObjectId(id) }, { $set: newUser });
 }
 
 // DELETE - Delete user by ID
 export async function deleteUser(id) {
-  const user = await getUsersCollection();
-  return user.deleteOne({ _id: ObjectId(id) });
+  const users = await getUsersCollection();
+  return users.deleteOne({ _id: ObjectId(id) });
 }

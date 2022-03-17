@@ -2,7 +2,9 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { UsersProvider } from "../contexts/UsersContext";
 
+
 import LogIn from "./LogIn/LogIn";
+import AddingTraining from "./MainPage/AddingTraining/AddingTraining";
 import MainPage from "./MainPage/MainPage";
 import SignUp from "./SignUp/SignUp";
 
@@ -15,6 +17,7 @@ function App() {
           <Route path="/" element={<LogIn />} />
           <Route path="/main-page/*" element={<MainPage />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/add-new-training" element={<AddingTraining/>}/>
         </Routes>
       </div>
     </UsersProvider>

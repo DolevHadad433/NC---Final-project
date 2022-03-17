@@ -1,9 +1,8 @@
 import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useUsersContext } from "../../contexts/UsersContext";
+import { useUsersContext, Actions } from "../../contexts/UsersContext";
 
-import { login } from "./LoginCheck";
 import "./Login.css";
 
 function loginReducer(state, action) {
@@ -12,12 +11,6 @@ function loginReducer(state, action) {
       return {
         ...state,
         isLoading: true,
-        error: "",
-      };
-    case "success":
-      return {
-        ...state,
-        password: "",
         error: "",
       };
     case "error":
@@ -35,7 +28,6 @@ function loginReducer(state, action) {
         ...state,
         [action.field]: action.value,
       };
-
     default:
       break;
   }
@@ -54,12 +46,10 @@ function LogIn() {
     loginReducer,
     initialLoginState
   );
-  const { username, password } = loginState;
+  const clickLogInHandler = useNavigate();
+  const clickDontHaveUserHandler = useNavigate();
 
   const { userContextState, userContextDispatch } = useUsersContext();
-  const clickLogInHandler = useNavigate();
-
-  const clickDontHaveUserHandler = useNavigate();
 
   async function onLogInSubmit(e) {
     e.preventDefault();
@@ -67,11 +57,26 @@ function LogIn() {
     dispatchLogIn({ type: "login" });
 
     try {
-      await login({ username, password });
-      clickLogInHandler("/main-page");
+      const response = await fetch(`/api/users/${loginState.username}`);
+      const userData = await response.json();
+      if (
+        userData.username === loginState.username &&
+        userData.password === loginState.password
+      ) {
+        userContextDispatch({
+          type: Actions.logInSuccess,
+          payload: { ...userData },
+        });
+        setTimeout(() => {
+          dispatchLogIn({ type: "stop_loading" });
+          clickLogInHandler("/main-page");
+        }, 1000);
+      }
     } catch (error) {
-      dispatchLogIn({ type: "error" });
-      dispatchLogIn({ type: "stop_loading" });
+      setTimeout(() => {
+        dispatchLogIn({ type: "error" });
+        dispatchLogIn({ type: "stop_loading" });
+      }, 1000);
     }
   }
 
@@ -82,7 +87,7 @@ function LogIn() {
   return (
     <div className="LogIn">
       <div className="login-container">
-        <form className="form" onSubmit={onLogInSubmit}>
+        <form className="login-form" onSubmit={onLogInSubmit}>
           {loginState.error && <p className="error">{loginState.error}</p>}
           <p>Please Login</p>
           <input

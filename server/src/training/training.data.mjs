@@ -16,26 +16,23 @@ export async function getAllTraining() {
 // READ - Get training by ID
 export async function getTrainingById(id) {
   const training = await getTrainingCollection();
-  return training.findOne({_id: ObjectId(id)})
+  return training.findOne({ _id: ObjectId(id) });
 }
 
 // CREATE - Create a new training
 export async function createNewTraining(newTraining) {
   const training = await getTrainingCollection();
   return training.insertOne(newTraining);
-};
+}
 
 // UPDATE - Update training by ID
 export async function editTraining(id, newTraining) {
   const training = await getTrainingCollection();
-  return training.updateOne({_id: ObjectId(id)}, {$set: newTraining})
-};
+  return training.updateOne({ _id: ObjectId(id) }, { $set: newTraining });
+}
 
 // DELETE - Delete training by ID
 export async function deleteTraining(id) {
   const training = await getTrainingCollection();
-  return training.deleteOne({_id:ObjectId(id)})
-};
-
-
-
+  return training.deleteOne({ _id: ObjectId(id) });
+}

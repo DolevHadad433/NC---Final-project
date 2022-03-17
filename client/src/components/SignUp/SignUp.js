@@ -1,8 +1,6 @@
 import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUsersContext } from "../../contexts/UsersContext";
-
-import { signup } from "./SignUpCheck";
+import { useUsersContext, Actions } from "../../contexts/UsersContext";
 
 import "./SignUp.css";
 
@@ -12,13 +10,6 @@ function signUpReducer(state, action) {
       return {
         ...state,
         isLoading: true,
-        error: "",
-      };
-    case "signUp_success":
-      return {
-        ...state,
-        isSignUp: true,
-        password: "",
         error: "",
       };
     case "signUp_error":
@@ -55,8 +46,6 @@ function SignUp() {
     signUpReducer,
     initialSignUpState
   );
-  const { username, password, phoneNumber } = signUpState;
-
   const { userContextState, userContextDispatch } = useUsersContext();
   const clickSignUpHandler = useNavigate();
   const clickAlreadyHaveUserHandler = useNavigate();
@@ -67,12 +56,34 @@ function SignUp() {
     dispatchSignUp({ type: "new_signUp_trying" });
 
     try {
-      await signup({ username, password, phoneNumber });
-      dispatchSignUp({ type: "signUp_success" });
-      clickSignUpHandler("/main-page");
+      await fetch("/api/users", {
+        method: "POST",
+        body: JSON.stringify({
+          username: signUpState.username,
+          password: signUpState.password,
+          phoneNumber: signUpState.phoneNumber,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      userContextDispatch({
+        type: Actions.signUpSuccess,
+        payload: {
+          username: signUpState.username,
+          password: signUpState.password,
+          phoneNumber: signUpState.phoneNumber,
+        },
+      });
+      setTimeout(() => {
+        dispatchSignUp({ type: "signUp_stop_loading" });
+        clickSignUpHandler("/main-page");
+      }, 1000);
     } catch (error) {
-      dispatchSignUp({ type: "signUp_error" });
-      dispatchSignUp({ type: "signUp_stop_loading" });
+      setTimeout(() => {
+        dispatchSignUp({ type: "signUp_error" });
+        dispatchSignUp({ type: "signUp_stop_loading" });
+      }, 1000);
     }
   }
 
@@ -83,7 +94,7 @@ function SignUp() {
   return (
     <div className="SignUp">
       <div className="sigup-container">
-        <form className="form" onSubmit={onSubmitSignUpHandler}>
+        <form className="signup-form" onSubmit={onSubmitSignUpHandler}>
           {signUpState.error && <p className="error">{signUpState.error}</p>}
           <p>Please Sign-up</p>
           <input

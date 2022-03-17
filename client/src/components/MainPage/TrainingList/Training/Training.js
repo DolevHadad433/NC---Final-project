@@ -1,14 +1,14 @@
 import React from "react";
 import "./Training.css";
 
-function Training({ title, category, descreption, duration, groupSize, id }) {
+function Training({ title, category, description, duration, groupSize, id }) {
   return (
     <div className="Training">
       <div className="training-container">
         <h3 className="training-title">{title}</h3>
-        <p className="training-descreption">
-          <span>Descreption:</span>
-          {descreption}
+        <p className="training-description">
+          <span>Description:</span>
+          {description}
         </p>
         <p className="training-duration">
           <span>Duration:</span>

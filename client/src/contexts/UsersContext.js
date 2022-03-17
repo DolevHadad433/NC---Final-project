@@ -3,50 +3,33 @@ import React, { useContext, useMemo, useReducer } from "react";
 const Context = React.createContext({});
 
 export const Actions = {
-  LogInSuccess: "log-in-success",
+  logInSuccess: "log-in-success",
+  logOutSuccess: "log-out-from-main-page",
+  signUpSuccess: "sign-up-success",
 };
 
 function userReducer(state, action) {
   switch (action.type) {
-    case Actions.LogInSuccess:
+    case Actions.logInSuccess:
       return {
         ...state,
-        isLoggedIn: true,
-        isSignUp: true,
-        showLoginForm: false,
-        showSignUpForm: false,
+        username: action.payload.username,
+        password: action.payload.password,
+        phoneNumber: action.payload.phoneNumber,
       };
-    case "log-out-from-main-page":
+    case Actions.logOutSuccess:
       return {
         ...state,
-        isLoggedIn: false,
-        isSignUp: false,
-        showSignUpForm: false,
-        showLoginForm: true,
+        username: "logout",
+        password: "",
+        phoneNumber: "",
       };
-    case "show-sign-up-form":
+    case Actions.signUpSuccess:
       return {
         ...state,
-        isLoggedIn: false,
-        isSignUp: false,
-        showSignUpForm: true,
-        showLoginForm: false,
-      };
-    case "show-login-form":
-      return {
-        ...state,
-        isLoggedIn: false,
-        isSignUp: false,
-        showSignUpForm: false,
-        showLoginForm: true,
-      };
-    case "sign-up-success":
-      return {
-        ...state,
-        isLoggedIn: true,
-        isSignUp: true,
-        showLoginForm: false,
-        showSignUpForm: false,
+        username: action.payload.username,
+        password: action.payload.password,
+        phoneNumber: action.payload.phoneNumber,
       };
     default:
       return state;
@@ -58,11 +41,6 @@ const initialState = {
   password: "",
   phoneNumber: "",
   isLoading: false,
-  error: "",
-  isLoggedIn: false,
-  isSignUp: false,
-  showLoginForm: true,
-  showSignUpForm: false,
 };
 
 function UsersProvider({ children }) {

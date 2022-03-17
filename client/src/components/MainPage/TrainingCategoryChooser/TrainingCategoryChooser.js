@@ -40,11 +40,11 @@ function TrainingCategoryChooser() {
             </button>
           );
         })}
-        <div className="category-descreption-container">
+        <div className="category-description-container">
           {categoriesList
             .filter((category) => category.title === selectedCategory)
             .map((category) => {
-              return <p key={category.id}>{category.descreption}</p>;
+              return <p key={category.id}>{category.description}</p>;
             })}
         </div>
       </div>
