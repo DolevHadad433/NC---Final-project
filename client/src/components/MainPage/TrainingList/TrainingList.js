@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Training from "./Training/Training";
 import { useParams } from "react-router-dom";
+import './TrainingList.css';
 
 function TrainingList({ search }) {
   const [trainingList, setTrainingList] = useState([]);
@@ -14,7 +15,7 @@ function TrainingList({ search }) {
 
   return (
     <div className="TrainingList">
-      <div className="training-container">
+      <div className="training-container-list">
         {trainingList
           .filter((training) => {
             const isInCategory =

@@ -6,6 +6,7 @@ export const Actions = {
   logInSuccess: "log-in-success",
   logOutSuccess: "log-out-from-main-page",
   signUpSuccess: "sign-up-success",
+  getLocalStorage: "get-localstorage",
 };
 
 function userReducer(state, action) {
@@ -20,7 +21,7 @@ function userReducer(state, action) {
     case Actions.logOutSuccess:
       return {
         ...state,
-        username: "logout",
+        username: "",
         password: "",
         phoneNumber: "",
       };
@@ -30,6 +31,11 @@ function userReducer(state, action) {
         username: action.payload.username,
         password: action.payload.password,
         phoneNumber: action.payload.phoneNumber,
+      };
+    case Actions.getLocalStorage:
+      return {
+        ...state,
+        username: action.payload,
       };
     default:
       return state;

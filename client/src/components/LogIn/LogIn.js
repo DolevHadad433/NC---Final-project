@@ -67,6 +67,7 @@ function LogIn() {
           type: Actions.logInSuccess,
           payload: { ...userData },
         });
+        localStorage.setItem("username", loginState.username);
         setTimeout(() => {
           dispatchLogIn({ type: "stop_loading" });
           clickLogInHandler("/main-page");

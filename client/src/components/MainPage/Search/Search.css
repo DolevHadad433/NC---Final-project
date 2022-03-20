@@ -1,0 +1,27 @@
+.search-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    margin-top: 7px;
+    
+}
+
+.search {
+    font-size: 1.2em;
+    border: none;
+    border-bottom: 1px solid black;
+    background: none;
+    outline: none;
+    padding: 0 5px;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  font-weight: 700;
+  font-size: medium;
+  }
+  
+  .search.dirty {
+    background: black;
+    color: white;
+    border-radius: 5px;
+  }

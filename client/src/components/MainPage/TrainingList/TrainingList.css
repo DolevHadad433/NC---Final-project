@@ -1,0 +1,8 @@
+.training-container-list {
+  display: flex;
+  flex-flow: column;
+  justify-content: stretch;
+  align-items: stretch;
+  gap: 10px;
+  
+}

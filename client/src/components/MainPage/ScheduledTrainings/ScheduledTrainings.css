@@ -1,0 +1,7 @@
+.scheduled-trainings-container {
+  display: flex;
+  font-weight: 700;
+  font-size: medium;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}

@@ -76,6 +76,7 @@ function SignUp() {
         },
       });
       setTimeout(() => {
+        localStorage.setItem("username", signUpState.username);
         dispatchSignUp({ type: "signUp_stop_loading" });
         clickSignUpHandler("/main-page");
       }, 1000);

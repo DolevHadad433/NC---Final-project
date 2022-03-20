@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./TrainingCategoryChooser.css";
 
 function TrainingCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -40,13 +41,13 @@ function TrainingCategoryChooser() {
             </button>
           );
         })}
-        <div className="category-description-container">
-          {categoriesList
-            .filter((category) => category.title === selectedCategory)
-            .map((category) => {
-              return <p key={category.id}>{category.description}</p>;
-            })}
-        </div>
+      </div>
+      <div className="category-description-container">
+        {categoriesList
+          .filter((category) => category.title === selectedCategory)
+          .map((category) => {
+            return <p key={category.id}>{category.description}</p>;
+          })}
       </div>
     </div>
   );

@@ -1,18 +1,37 @@
 .TrainingCategoryChooser {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ddd;
-  width: 400px;
+  border: 2px solid black;
+  margin-top: 10px;
 }
 
 .category-container {
   display: flex;
-  flex-direction: column;
-  border: 1px solid black;
-  padding: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+}
 
-  justify-content: center;
-  align-items: center;
+.category-btn {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  font-weight: 700;
+  font-size: medium;
+  background: none;
+  outline: none;
+  border: none;
+  margin: 10px;
+  height: 25px;
+  color: black;
+  background-color: none;
+  border: none;
+}
+
+.category-btn:hover {
+  color: whitesmoke;
+  background-color: black;
+  border-radius: 7%;
+}
+
+.category-description-container {
+  text-align: center;
+  font-size: small;
 }
