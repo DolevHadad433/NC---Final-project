@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
-
+import { Button, Container, Grid, Input, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function addingTrainingReducer(state, action) {
@@ -56,6 +56,12 @@ function AddingTraining() {
     initialAddingTrainingState
   );
 
+  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+  };
+
   const clickSubmitAddingTrainingHandler = useNavigate();
   const clickCancelAddingTrainingHandler = useNavigate();
 
@@ -108,135 +114,169 @@ function AddingTraining() {
 
   if (addingTrainingState.addTraingingSuccessfully) {
     return (
-      <div className="successfully-add-training-container">
-        <h1 className="successfully-add-training-title">
-          The training was successfully added to the page!
-        </h1>
-        <h3 className="message">
-          Click one of the buttons or you will be redirected back to the main
-          page
-        </h3>
-        <button
-          className="add-another-training"
-          onClick={addingAnotherTrainingHandler}
-        >
-          Add another training!
-        </button>
-        <button
-          className="return-to-main-page"
-          onClick={cancelAddingTrainingFormHandler}
-        >
-          Back to main page
-        </button>
-      </div>
+      <Container>
+        <Grid container>
+          <div className="successfully-add-training-container">
+            <Grid item>
+              <h1 className="successfully-add-training-title">
+                The training was successfully added to the page!
+              </h1>
+              <h3 className="message">
+                Click one of the buttons or you will be redirected back to the
+                main page
+              </h3>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                sx={{ mt: 3, ml: 1 }}
+                onClick={addingAnotherTrainingHandler}
+              >
+                Add another training!
+              </Button>
+
+              <Button
+                variant="contained"
+                sx={{ mt: 3, ml: 1 }}
+                onClick={cancelAddingTrainingFormHandler}
+              >
+                Back to main page
+              </Button>
+            </Grid>
+          </div>
+        </Grid>
+      </Container>
     );
   } else {
     return (
-      <div className="adding-training">
-        <div className="adding-training-container">
-          <form
-            className="adding-training-form"
-            onSubmit={onSubmitAddingTrainingForm}
+      <Container sx={{ textAlign: "center" }}>
+        <form onSubmit={onSubmitAddingTrainingForm}>
+          <p>Please enter training details</p>
+
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            sx={{ marginTop: 1, width: 600 }}
           >
-            {addingTrainingState.error && (
-              <p className="error">{addingTrainingState.error}</p>
-            )}
-            <p>Please enter training details</p>
-            <input
-              type="text"
-              placeholder="Training title"
-              required={true}
-              value={addingTrainingState.title}
-              onChange={(e) =>
-                dispatchAddingTraining({
-                  type: "field",
-                  field: "title",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              required={true}
-              value={addingTrainingState.category}
-              onChange={(e) =>
-                dispatchAddingTraining({
-                  type: "field",
-                  field: "category",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Duration"
-              required={true}
-              value={addingTrainingState.duration}
-              onChange={(e) =>
-                dispatchAddingTraining({
-                  type: "field",
-                  field: "duration",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Group size"
-              value={addingTrainingState.groupSize}
-              onChange={(e) =>
-                dispatchAddingTraining({
-                  type: "field",
-                  field: "groupSize",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="date"
-              placeholder="Date"
-              required={true}
-              value={addingTrainingState.date}
-              onChange={(e) =>
-                dispatchAddingTraining({
-                  type: "field",
-                  field: "date",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Trainer's name"
-              required={true}
-              value={addingTrainingState.trainer}
-              onChange={(e) =>
-                dispatchAddingTraining({
-                  type: "field",
-                  field: "trainer",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={addingTrainingState.isLoading}
-            >
-              {addingTrainingState.isLoading
-                ? "Adding training..."
-                : "Add training"}
-            </button>
-          </form>
-          <button
-            className="cancel-add-training"
-            onClick={cancelAddingTrainingFormHandler}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
+            <Grid item sm={6}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Training title"
+                value={addingTrainingState.title}
+                onChange={(e) =>
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "title",
+                    value: e.currentTarget.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Category"
+                value={addingTrainingState.category}
+                onChange={(e) =>
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "category",
+                    value: e.currentTarget.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Duration"
+                value={addingTrainingState.duration}
+                onChange={(e) =>
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "duration",
+                    value: e.currentTarget.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Group size"
+                value={addingTrainingState.groupSize}
+                onChange={(e) =>
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "groupSize",
+                    value: e.currentTarget.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                required
+                id="outlined-required"
+                type="date"
+                value={addingTrainingState.date}
+                onChange={(e) =>
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "date",
+                    value: e.currentTarget.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Trainer's name"
+                value={addingTrainingState.trainer}
+                onChange={(e) =>
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "trainer",
+                    value: e.currentTarget.value,
+                  })
+                }
+              />
+            </Grid>
+
+            <Grid item sm={2}></Grid>
+            <Grid item sm={4}>
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{ mt: 3, ml: 1 }}
+                disabled={addingTrainingState.isLoading}
+              >
+                {addingTrainingState.isLoading
+                  ? "Adding training..."
+                  : "Add training"}
+              </Button>
+            </Grid>
+            <Grid item sm={3}>
+              <Button
+                variant="contained"
+                sx={{ mt: 3, ml: 1 }}
+                onClick={cancelAddingTrainingFormHandler}
+              >
+                Cancel
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
     );
   }
 }
