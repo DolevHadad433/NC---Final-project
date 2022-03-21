@@ -3,13 +3,12 @@ import { useNavigate } from "react-router-dom";
 // import "./TrainingCategoryChooser.css";
 
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { Grid } from "@mui/material";
-import { width } from "@mui/system";
+
 
 function TrainingCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -37,28 +36,7 @@ function TrainingCategoryChooser() {
 
   return (
     <>
-      {/* <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          <Typography
-            sx={{ fontSize: 14 }}
-            color="text.secondary"
-            gutterBottom
-          ></Typography>
-          <Typography variant="h5" component="div"></Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <br />
-          </Typography>
-          <Typography variant="body2"></Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Trainer: NAME
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">Subscribe</Button>
-        </CardActions>
-      </Card> */}
-
-      {/*========================*/}
+      
 
       <div className="TrainingCategoryChooser">
         <Container maxWidth={400}>

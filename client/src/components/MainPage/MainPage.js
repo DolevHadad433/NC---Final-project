@@ -16,9 +16,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import { Container } from "@mui/material";
 import { Grid } from "@mui/material";
 
@@ -78,37 +75,7 @@ function MainPage() {
           </AppBar>
         </Box>
       </div>
-      {/* =========================================================== */}
 
-      {/* <div className="user-preference-container">
-          <h3 className="hello-username">
-            Hello {localStorage.getItem("username")}!
-          </h3>
-
-          <div className="user-tools-preference-container">
-            <Search currentSearch={search} onSearch={setSearch} />
-
-            {(function isAdmin() {
-              if (
-                userContextState.username === "Admin" ||
-                userContextState.username === "admin" ||
-                localStorage.getItem("username") === "Admin" ||
-                localStorage.getItem("username") === "admin"
-              ) {
-                return (
-                  <button className="btn" onClick={addNewTraining}>
-                    Add new training
-                  </button>
-                );
-              }
-            })()}
-
-            <button className="btn" onClick={onLogOutButtonClick}>
-              Log out
-            </button>
-          </div>
-        </div>
-         */}
       <Container maxWidth={200}>
         <Grid container spacing={2} direction="row" sx={{ marginTop: 5 }}>
           <Grid item sm={7}>

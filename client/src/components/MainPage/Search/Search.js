@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
-import "./Search.css";
+// import "./Search.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { Input, TextField } from "@mui/material";
 
 function Search({ currentSearch, onSearch }) {
   const searchElement = useRef(null);
