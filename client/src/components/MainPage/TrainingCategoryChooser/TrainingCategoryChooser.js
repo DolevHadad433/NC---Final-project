@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { Grid } from "@mui/material";
 
-
 function TrainingCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -36,18 +35,20 @@ function TrainingCategoryChooser() {
 
   return (
     <>
-      
-
       <div className="TrainingCategoryChooser">
         <Container maxWidth={400}>
           <Grid container spacing={2} direction="row" alignItems="center">
             {categoriesList.map((category) => {
               return (
-                <Grid item>
+                <Grid
+                  item
+                  key={
+                    category._id === undefined ? "All" : String(category._id)
+                  }
+                >
                   <Button
                     variant="contained"
                     size="small"
-                    key={category.id}
                     value={
                       category.title === undefined ? "All" : category.title
                     }
@@ -65,6 +66,7 @@ function TrainingCategoryChooser() {
           {categoriesList
             .filter((category) => category.title === selectedCategory)
             .map((category) => {
+              console.log(category._id);
               return (
                 <Card sx={{ marginTop: 2 }}>
                   <CardContent>
@@ -72,7 +74,6 @@ function TrainingCategoryChooser() {
                       sx={{ fontSize: 16 }}
                       color="text.primary"
                       gutterBottom
-                      key={category.id}
                       align="left"
                     >
                       {category.description}

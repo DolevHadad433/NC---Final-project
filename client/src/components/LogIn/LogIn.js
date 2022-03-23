@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
@@ -55,19 +55,33 @@ function LogIn() {
     e.preventDefault();
 
     dispatchLogIn({ type: "login" });
-
+    
     try {
-      const response = await fetch(`/api/users/${loginState.username}`);
+      const response = await fetch("/api/users", {
+        method: "POST",
+        body: JSON.stringify({
+          username: loginState.username,
+          password: loginState.password,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
       const userData = await response.json();
-      if (
-        userData.username === loginState.username &&
-        userData.password === loginState.password
-      ) {
+      
+      if (userData !== undefined) {
         userContextDispatch({
           type: Actions.logInSuccess,
           payload: { ...userData },
         });
-        localStorage.setItem("username", loginState.username);
+        localStorage.setItem(
+          "User",
+          JSON.stringify({
+            username: userData.username,
+            userID: userData._id,
+          })
+        );
+
         setTimeout(() => {
           dispatchLogIn({ type: "stop_loading" });
           clickLogInHandler("/main-page");

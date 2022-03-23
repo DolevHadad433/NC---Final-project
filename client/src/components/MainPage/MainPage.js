@@ -3,7 +3,7 @@ import "./MainPage.css";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
 import Search from "./Search/Search";
 import TrainingCategoryChooser from "./TrainingCategoryChooser/TrainingCategoryChooser";
-import ScheduledTrainings from "./ScheduledTrainings/ScheduledTrainings";
+import ScheduledTrainingList from "./ScheduledTrainingList/ScheduledTrainingList";
 import TrainingList from "./TrainingList/TrainingList";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AddingTraining from "./AddingTraining/AddingTraining";
@@ -27,13 +27,17 @@ function MainPage() {
   const clickAddNewTraining = useNavigate();
 
   async function onLogOutButtonClick() {
-    localStorage.setItem("username", "");
+    localStorage.setItem("User", JSON.stringify({ username: "", userID: "" }));
     userContextDispatch({ type: Actions.logOutSuccess });
     clickLogOutHandler("/");
   }
 
   function addNewTraining() {
     clickAddNewTraining("/add-new-training");
+  }
+
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
   }
 
   return (
@@ -50,7 +54,11 @@ function MainPage() {
                 sx={{ mr: 2 }}
               ></IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Hello {localStorage.getItem("username")}!
+                Hello{" "}
+                {getUsernameFromLocalStorage(
+                  JSON.parse(localStorage.getItem("User"))
+                )}
+                !
               </Typography>
               <Search currentSearch={search} onSearch={setSearch} />
 
@@ -58,8 +66,12 @@ function MainPage() {
                 if (
                   userContextState.username === "Admin" ||
                   userContextState.username === "admin" ||
-                  localStorage.getItem("username") === "Admin" ||
-                  localStorage.getItem("username") === "admin"
+                  getUsernameFromLocalStorage(
+                    JSON.parse(localStorage.getItem("User"))
+                  ) === "Admin" ||
+                  getUsernameFromLocalStorage(
+                    JSON.parse(localStorage.getItem("User"))
+                  ) === "admin"
                 ) {
                   return (
                     <Button color="inherit" onClick={addNewTraining}>
@@ -76,7 +88,7 @@ function MainPage() {
         </Box>
       </div>
 
-      <Container maxWidth={200}>
+      <Container maxWidth="lg">
         <Grid container spacing={2} direction="row" sx={{ marginTop: 5 }}>
           <Grid item sm={7}>
             <Grid container spacing={4} direction="row">
@@ -100,7 +112,7 @@ function MainPage() {
             </Grid>
           </Grid>
           <Grid item sm={4}>
-            <ScheduledTrainings />
+            <ScheduledTrainingList />
           </Grid>
         </Grid>
       </Container>

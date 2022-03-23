@@ -1,37 +1,188 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Training.css";
-
+import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Container, Grid } from "@mui/material";
+import Box from "@mui/material/Box";
+import Popper from "@mui/material/Popper";
 
-function Training({ title, category, description, duration, groupSize, id }) {
+function Training({ training, deleteTraining }) {
+  const { userContextState, userContextDispatch } = useUsersContext();
+
+  function getUserIdFromLocalStorage(obj) {
+    return obj.userID;
+  }
+  //==============Subscribe========popper========================
+
+  async function subscribeHandler() {
+    await fetch("/api/schedules", {
+      method: "POST",
+      body: JSON.stringify({
+        userID: getUserIdFromLocalStorage(
+          JSON.parse(localStorage.getItem("User"))
+        ),
+        trainingID: training._id,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+
+    const response = await fetch("/api/schedules/userID", {
+      method: "POST",
+      body: JSON.stringify({
+        userID: getUserIdFromLocalStorage(
+          JSON.parse(localStorage.getItem("User"))
+        ),
+        trainingID: training._id,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await response.json();
+    userContextDispatch({
+      type: Actions.updateScheduledTraining,
+      payload: data.reverse(),
+    });
+
+    setTimeout(() => {
+      console.log(userContextState.scheduledTraining);
+    }, 1000);
+    // const updateResponse = await fetch(
+    //   `/api/users/${userContextState.userID}`,
+    //   {
+    //     method: "PUT",
+    //     body: JSON.stringify({
+    //       scheduled: userContextState.scheduledTraining,
+    //     }),
+    //     headers: {
+    //       "Content-type": "application/json; charset=UTF-8",
+    //     },
+    //   }
+    // );
+  }
+
+  //==============Subscribe========popper========================
+
+  //==============DELETE========popper========================
+
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const popperClickHandler = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
+  };
+
+  //=============DELETE=========popper========================
+
   return (
     <div className="Training">
-      <Card sx={{ minWidth: 275 }}>
+      <Card sx={{ minWidth: 275, marginBottom: 1 }}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {category}
+            {training.category}
           </Typography>
           <Typography variant="h5" component="div">
-            {title}:
+            {training.title}:
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Group size:
-            {groupSize}
+            {training.groupSize}
             <br />
             Duration:
-            {duration}
+            {training.duration}
           </Typography>
-          <Typography variant="body2">{description}</Typography>
+          <Typography variant="body2">{training.description}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Trainer: NAME
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Subscribe</Button>
+          <Container>
+            <Grid container direction="row-reverse">
+              {(function isAdmin() {
+                if (
+                  userContextState.username === "Admin" ||
+                  userContextState.username === "admin" ||
+                  localStorage.getItem("username") === "Admin" ||
+                  localStorage.getItem("username") === "admin"
+                ) {
+                  return (
+                    <Grid item sm={2} sx={{ marginLeft: 10, marginBottom: 2 }}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={popperClickHandler}
+                      >
+                        Delete
+                      </Button>
+                      <Popper open={open} anchorEl={anchorEl}>
+                        <Box
+                          sx={{
+                            border: 1,
+                            p: 1,
+                            bgcolor: "background.paper",
+                          }}
+                        >
+                          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            Are you sure that you want to delete the current
+                            training?
+                          </Typography>
+
+                          <Container maxWidth="lg">
+                            <Grid
+                              container
+                              spacing={2}
+                              direction="row"
+                              sx={{ marginLeft: 0, width: 1 }}
+                            >
+                              <Grid item sm={4} sx={{ marginLeft: 7.5 }}>
+                                <Button
+                                  size="small"
+                                  onClick={() => {
+                                    deleteTraining(training._id);
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                              </Grid>
+                              <Grid item sm={4}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  onClick={popperClickHandler}
+                                >
+                                  Cancel
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          </Container>
+                        </Box>
+                      </Popper>
+                    </Grid>
+                  );
+                } else {
+                  return (
+                    <Grid item sm={2} sx={{ marginLeft: 10, marginBottom: 2 }}>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        onClick={subscribeHandler}
+                      >
+                        Subscribe
+                      </Button>
+                    </Grid>
+                  );
+                }
+              })()}
+            </Grid>
+          </Container>
         </CardActions>
       </Card>
     </div>

@@ -13,16 +13,16 @@ export async function getAllUsers() {
   return users.find({}).toArray();
 }
 
-// // READ - Get user by ID
-// export async function getUserById(id) {
-//   const users = await getUsersCollection();
-//   return users.findOne({ _id: ObjectId(id) });
-// }
+// READ - Get user by ID
+export async function getUserById(id) {
+  const users = await getUsersCollection();
+  return users.findOne({ _id: ObjectId(id) });
+}
 
 // READ - Get user by username
-export async function getUserByUsername(username) {
+export async function getUserByUsernameAndPassword({ username, password }) {
   const users = await getUsersCollection();
-  return users.findOne({ username });
+  return users.findOne({ username, password });
 }
 
 // CREATE - Create a new user

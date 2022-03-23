@@ -3,10 +3,10 @@ import { Router } from "express";
 import {
   getAllUsers,
   createNewUser,
-  // getUserById,
+  getUserById,
   editUser,
   deleteUser,
-  getUserByUsername,
+  getUserByUsernameAndPassword,
 } from "./users.data.mjs";
 
 export const UsersRouters = Router();
@@ -17,18 +17,18 @@ UsersRouters.get("/", async (req, res) => {
 });
 
 // CREATE - Create a new user
-UsersRouters.post("/", async (req, res) => {
+UsersRouters.post("/post", async (req, res) => {
   res.send(await createNewUser(req.body));
 });
 
-// // READ - Get user by ID
-// UsersRouters.get("/:id", async (req, res) => {
-//   res.send(await getUserById(req.params.id));
-// });
+// READ - Get user by ID
+UsersRouters.get("/:id", async (req, res) => {
+  res.send(await getUserById(req.params.id));
+});
 
-// READ - Get user by username
-UsersRouters.get("/:username", async (req, res) => {
-  res.send(await getUserByUsername(req.params.username));
+// check username and password
+UsersRouters.post("/", async (req, res) => {
+  res.send(await getUserByUsernameAndPassword(req.body));
 });
 
 // UPDATE - Update user by ID

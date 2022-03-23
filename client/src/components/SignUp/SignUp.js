@@ -56,7 +56,7 @@ function SignUp() {
     dispatchSignUp({ type: "new_signUp_trying" });
 
     try {
-      await fetch("/api/users", {
+      const response = await fetch("/api/users/post", {
         method: "POST",
         body: JSON.stringify({
           username: signUpState.username,
@@ -67,16 +67,24 @@ function SignUp() {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
+      const userData = await response.json();
       userContextDispatch({
         type: Actions.signUpSuccess,
         payload: {
           username: signUpState.username,
           password: signUpState.password,
           phoneNumber: signUpState.phoneNumber,
+          userID: userData.insertedId,
         },
       });
+      localStorage.setItem(
+        "User",
+        JSON.stringify({
+          username: signUpState.username,
+          userID: userData.insertedId,
+        })
+      );
       setTimeout(() => {
-        localStorage.setItem("username", signUpState.username);
         dispatchSignUp({ type: "signUp_stop_loading" });
         clickSignUpHandler("/main-page");
       }, 1000);

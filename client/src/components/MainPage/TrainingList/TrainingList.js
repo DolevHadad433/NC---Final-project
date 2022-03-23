@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Training from "./Training/Training";
 import { useParams } from "react-router-dom";
-import './TrainingList.css';
+import "./TrainingList.css";
 
-function TrainingList({ search }) {
+function TrainingList({ search}) {
   const [trainingList, setTrainingList] = useState([]);
+  const [updateTraining, setUpdateTraining] = useState("");
   let { category } = useParams();
 
   useEffect(() => {
     fetch("/api/training/")
       .then((response) => response.json())
       .then((data) => setTrainingList([...data]));
-  }, []);
+  }, [updateTraining]);
+
+  async function deleteTraining(_id) {
+    await fetch(`/api/training/${_id}`, {
+      method: "DELETE",
+    });
+    setUpdateTraining(`Update the ${_id} training.`);
+  }
 
   return (
     <div className="TrainingList">
@@ -26,7 +34,13 @@ function TrainingList({ search }) {
             return isInCategory && isInSearch;
           })
           .map((training) => {
-            return <Training key={training.id} {...training} />;
+            return (
+              <Training
+                key={training._id}
+                training={training}
+                deleteTraining={deleteTraining}
+              />
+            );
           })}
       </div>
     </div>

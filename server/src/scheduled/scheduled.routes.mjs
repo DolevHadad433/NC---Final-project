@@ -6,6 +6,7 @@ import {
   getScheduleById,
   editSchedule,
   deleteSchedule,
+  getScheduleByUserId,
 } from "./scheduled.data.mjs";
 
 export const SchedulesRouters = Router();
@@ -23,6 +24,11 @@ SchedulesRouters.post("/", async (req, res) => {
 // READ - Get schedule by ID
 SchedulesRouters.get("/:id", async (req, res) => {
   res.send(await getScheduleById(req.params.id));
+});
+
+// READ - Get schedule by user ID
+SchedulesRouters.post("/userID", async (req, res) => {
+  res.send(await getScheduleByUserId(req.body));
 });
 
 // UPDATE - Update schedule by ID
