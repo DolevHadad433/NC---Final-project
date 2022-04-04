@@ -1,3 +1,5 @@
+//============ Imports start ============
+
 import React, { useState } from "react";
 import "./MainPage.css";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
@@ -6,10 +8,6 @@ import TrainingCategoryChooser from "./TrainingCategoryChooser/TrainingCategoryC
 import ScheduledTrainingList from "./ScheduledTrainingList/ScheduledTrainingList";
 import TrainingList from "./TrainingList/TrainingList";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import AddingTraining from "./AddingTraining/AddingTraining";
-
-/* =========================================================== */
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -19,13 +17,21 @@ import IconButton from "@mui/material/IconButton";
 import { Container } from "@mui/material";
 import { Grid } from "@mui/material";
 
-/* =========================================================== */
+//============ Imports end ============
+
+//============ Component start ============
+
 function MainPage() {
+  //============ Hooks start ============
+
   const [search, setSearch] = useState("");
   const { userContextState, userContextDispatch } = useUsersContext();
   const clickLogOutHandler = useNavigate();
   const clickAddNewTraining = useNavigate();
 
+  //============ Hooks end ============
+
+  //============ functions start ============
   async function onLogOutButtonClick() {
     localStorage.setItem("User", JSON.stringify({ username: "", userID: "" }));
     userContextDispatch({ type: Actions.logOutSuccess });
@@ -39,7 +45,9 @@ function MainPage() {
   function getUsernameFromLocalStorage(obj) {
     return obj.username;
   }
+//============ functions end ============
 
+//============ Component return start ============
   return (
     <div className="MainPage">
       <div className="main-page-header">
@@ -118,6 +126,9 @@ function MainPage() {
       </Container>
     </div>
   );
+  //============ Component return end ============
 }
+
+//============ Component end ============
 
 export default MainPage;

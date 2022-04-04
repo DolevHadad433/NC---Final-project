@@ -1,9 +1,11 @@
+//============ Imports start ============
 import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
-
 import "./SignUp.css";
+//============ Imports end ============
 
+//============ Reducer properties start ============
 function signUpReducer(state, action) {
   switch (action.type) {
     case "new_signUp_trying":
@@ -32,7 +34,6 @@ function signUpReducer(state, action) {
       return state;
   }
 }
-
 const initialSignUpState = {
   username: "",
   password: "",
@@ -40,7 +41,9 @@ const initialSignUpState = {
   isLoading: false,
   error: "",
 };
+//============ Reducer properties end ============
 
+//============ Component start ============
 function SignUp() {
   const [signUpState, dispatchSignUp] = useReducer(
     signUpReducer,
@@ -160,5 +163,6 @@ function SignUp() {
     </div>
   );
 }
+//============ Component end ============
 
 export default SignUp;

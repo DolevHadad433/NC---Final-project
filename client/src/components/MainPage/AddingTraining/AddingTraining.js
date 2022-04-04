@@ -1,8 +1,11 @@
-import React, { useReducer } from "react";
+//============ Imports start ============
+import React, { useReducer, useState } from "react";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import { Button, Container, Grid, Input, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+//============ Imports end ============
 
+//============ Reducer properties start ============
 function addingTrainingReducer(state, action) {
   switch (action.type) {
     case "trying-add-training":
@@ -37,7 +40,6 @@ function addingTrainingReducer(state, action) {
   }
   return state;
 }
-
 const initialAddingTrainingState = {
   title: "",
   category: "",
@@ -49,23 +51,22 @@ const initialAddingTrainingState = {
   error: "",
   addTraingingSuccessfully: false,
 };
+//============ Reducer properties end ============
 
+//============ Component start ============
 function AddingTraining() {
   const [addingTrainingState, dispatchAddingTraining] = useReducer(
     addingTrainingReducer,
     initialAddingTrainingState
   );
-
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
-
+  const [value, setValue] = useState(new Date("2014-08-18T21:11:54"));
   const clickSubmitAddingTrainingHandler = useNavigate();
   const clickCancelAddingTrainingHandler = useNavigate();
-
   const { userContextState, userContextDispatch } = useUsersContext();
+
+  function handleChange(newValue) {
+    setValue(newValue);
+  }
 
   async function onSubmitAddingTrainingForm(e) {
     e.preventDefault();
@@ -280,5 +281,6 @@ function AddingTraining() {
     );
   }
 }
+//============ Component end ============
 
 export default AddingTraining;

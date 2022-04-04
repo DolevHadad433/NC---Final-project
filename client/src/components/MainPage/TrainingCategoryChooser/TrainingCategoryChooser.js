@@ -1,15 +1,16 @@
+//============ Imports start ============
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-// import "./TrainingCategoryChooser.css";
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { Grid } from "@mui/material";
+//============ Imports end ============
 
+//============ Component start ============
 function TrainingCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -57,7 +58,6 @@ function TrainingCategoryChooser() {
             })}
           </Grid>
         </Container>
-
         <div className="category-description-container">
           {categoriesList
             .filter((category) => category.title === selectedCategory)
@@ -82,5 +82,6 @@ function TrainingCategoryChooser() {
     </>
   );
 }
+//============ Component end ============
 
 export default TrainingCategoryChooser;

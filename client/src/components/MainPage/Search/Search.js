@@ -1,7 +1,10 @@
+//============ Imports start ============
 import React, { useRef } from "react";
-// import "./Search.css";
 import SearchIcon from "@mui/icons-material/Search";
+//============ Imports end ============
 
+
+//============ Component start ============
 function Search({ currentSearch, onSearch }) {
   const searchElement = useRef(null);
 
@@ -17,5 +20,6 @@ function Search({ currentSearch, onSearch }) {
     </div>
   );
 }
+//============ Component end ============
 
 export default Search;

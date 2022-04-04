@@ -1,20 +1,18 @@
+//============ Imports start ============
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import ScheduledTraining from "./ScheduledTraining/ScheduledTraining";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import AppBar from "@mui/material/AppBar";
-
 import Typography from "@mui/material/Typography";
+//============ Imports end ============
 
+//============ Component start ============
 function ScheduledTrainings() {
   const [schedules, setScheduled] = useState([]);
   const [updateScheduled, setUpdateScheduled] = useState("");
   const { userContextState, userContextDispatch } = useUsersContext();
-
-  function getUserIdFromLocalStorage(obj) {
-    return obj.userID;
-  }
-
+  
   useEffect(async () => {
     const response = await fetch("/api/schedules/userID", {
       method: "POST",
@@ -28,10 +26,13 @@ function ScheduledTrainings() {
       },
     });
     const data = await response.json();
-    console.log(data);
-
     setScheduled(data.reverse());
   }, [updateScheduled, userContextState]);
+  
+
+  function getUserIdFromLocalStorage(obj) {
+    return obj.userID;
+  }
 
   //=======DELETE========Modal ** NOT DONE YET **=============
 
@@ -77,5 +78,6 @@ function ScheduledTrainings() {
     </>
   );
 }
+//============ Component end ============
 
 export default ScheduledTrainings;

@@ -1,7 +1,11 @@
+//============ Imports and properties start ============
 import React, { useContext, useMemo, useReducer } from "react";
-
 const Context = React.createContext({});
+//============ Imports and properties end ============
 
+
+
+//============ Reducer properties start ============
 export const Actions = {
   logInSuccess: "log-in-success",
   logOutSuccess: "log-out-from-main-page",
@@ -9,7 +13,6 @@ export const Actions = {
   getLocalStorage: "get-localstorage",
   updateScheduledTraining: "update-scheduled-training",
 };
-
 function userReducer(state, action) {
   switch (action.type) {
     case Actions.logInSuccess:
@@ -51,7 +54,6 @@ function userReducer(state, action) {
       return state;
   }
 }
-
 const initialState = {
   username: "",
   password: "",
@@ -60,13 +62,16 @@ const initialState = {
   scheduledTraining: "",
   isLoading: false,
 };
+//============ Reducer properties end ============
 
+
+
+//============ Context start ============
 function UsersProvider({ children }) {
   const [userContextState, userContextDispatch] = useReducer(
     userReducer,
     initialState
   );
-
   const value = useMemo(
     () => ({
       userContextState,
@@ -74,12 +79,17 @@ function UsersProvider({ children }) {
     }),
     [userContextState]
   );
-
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
+//============ Context end ============
 
+
+
+//============ functions start ============
 function useUsersContext() {
   return useContext(Context);
 }
+//============ functions end ============
+
 
 export { UsersProvider, useUsersContext };

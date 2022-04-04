@@ -1,15 +1,15 @@
+//============ Imports start ============
 import React from "react";
 import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
 import Button from "@mui/material/Button";
-import { borderRadius, width } from "@mui/system";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { Container, Grid } from "@mui/material";
-import Box from "@mui/material/Box";
-import Popper from "@mui/material/Popper";
 import Typography from "@mui/material/Typography";
+//============ Imports end ============
 
+//============ Component start ============
 function ScheduledTraining({ scheduled, unsubscribeScheduledTraining }) {
   return (
     <div>
@@ -28,7 +28,6 @@ function ScheduledTraining({ scheduled, unsubscribeScheduledTraining }) {
             <br />
             {scheduled.trainingInfo.groupSize}
           </Typography>
-
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Trainer: NAME
           </Typography>
@@ -42,7 +41,6 @@ function ScheduledTraining({ scheduled, unsubscribeScheduledTraining }) {
                   variant="contained"
                   onClick={() => {
                     unsubscribeScheduledTraining(scheduled._id);
-                    // console.log(scheduled._id);
                   }}
                 >
                   Unsubscribe
@@ -55,5 +53,6 @@ function ScheduledTraining({ scheduled, unsubscribeScheduledTraining }) {
     </div>
   );
 }
+//============ Component end ============
 
 export default ScheduledTraining;

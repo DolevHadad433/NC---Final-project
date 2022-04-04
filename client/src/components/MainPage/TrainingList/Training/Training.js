@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+//============ Imports start ============
+import React, { useState, useEffect } from "react";
 import "./Training.css";
 import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
 import Card from "@mui/material/Card";
@@ -9,13 +10,18 @@ import Typography from "@mui/material/Typography";
 import { Container, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Popper from "@mui/material/Popper";
+import Modal from "@mui/material/Modal";
+//============ Imports end ============
 
-function Training({ training, deleteTraining }) {
+//============ Component start ============
+function Training({ training, deleteTraining, isAdmin }) {
   const { userContextState, userContextDispatch } = useUsersContext();
+  const [open, setOpen] = useState(false);
 
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
   }
+
   //=======Subscribe========Modal ** NOT DONE YET **=============
 
   async function subscribeHandler() {
@@ -41,7 +47,6 @@ function Training({ training, deleteTraining }) {
 
   //=======DELETE=====popper ** NEED TO CHANGE TO -  Modal **=====
 
-  const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const popperClickHandler = (event) => {
@@ -76,81 +81,70 @@ function Training({ training, deleteTraining }) {
         <CardActions>
           <Container>
             <Grid container direction="row-reverse">
-              {(function isAdmin() {
-                if (
-                  userContextState.username === "Admin" ||
-                  userContextState.username === "admin" ||
-                  localStorage.getItem("username") === "Admin" ||
-                  localStorage.getItem("username") === "admin"
-                ) {
-                  return (
-                    <Grid item sm={2} sx={{ marginLeft: 10, marginBottom: 2 }}>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        onClick={popperClickHandler}
-                      >
-                        Delete
-                      </Button>
-                      <Popper open={open} anchorEl={anchorEl}>
-                        <Box
-                          sx={{
-                            border: 1,
-                            p: 1,
-                            bgcolor: "background.paper",
-                          }}
-                        >
-                          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            Are you sure that you want to delete the current
-                            training?
-                          </Typography>
+              {isAdmin ? (
+                <Grid item sm={2} sx={{ marginLeft: 10, marginBottom: 2 }}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={popperClickHandler}
+                  >
+                    Delete
+                  </Button>
+                  <Popper open={open} anchorEl={anchorEl}>
+                    <Box
+                      sx={{
+                        border: 1,
+                        p: 1,
+                        bgcolor: "background.paper",
+                      }}
+                    >
+                      <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        Are you sure that you want to delete the current
+                        training?
+                      </Typography>
 
-                          <Container maxWidth="lg">
-                            <Grid
-                              container
-                              spacing={2}
-                              direction="row"
-                              sx={{ marginLeft: 0, width: 1 }}
+                      <Container maxWidth="lg">
+                        <Grid
+                          container
+                          spacing={2}
+                          direction="row"
+                          sx={{ marginLeft: 0, width: 1 }}
+                        >
+                          <Grid item sm={4} sx={{ marginLeft: 7.5 }}>
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                deleteTraining(training._id);
+                              }}
                             >
-                              <Grid item sm={4} sx={{ marginLeft: 7.5 }}>
-                                <Button
-                                  size="small"
-                                  onClick={() => {
-                                    deleteTraining(training._id);
-                                  }}
-                                >
-                                  Delete
-                                </Button>
-                              </Grid>
-                              <Grid item sm={4}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={popperClickHandler}
-                                >
-                                  Cancel
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Container>
-                        </Box>
-                      </Popper>
-                    </Grid>
-                  );
-                } else {
-                  return (
-                    <Grid item sm={2} sx={{ marginLeft: 10, marginBottom: 2 }}>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        onClick={subscribeHandler}
-                      >
-                        Subscribe
-                      </Button>
-                    </Grid>
-                  );
-                }
-              })()}
+                              Delete
+                            </Button>
+                          </Grid>
+                          <Grid item sm={4}>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              onClick={popperClickHandler}
+                            >
+                              Cancel
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Container>
+                    </Box>
+                  </Popper>
+                </Grid>
+              ) : (
+                <Grid item sm={2} sx={{ marginLeft: 10, marginBottom: 2 }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={subscribeHandler}
+                  >
+                    Subscribe
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </Container>
         </CardActions>
@@ -158,5 +152,6 @@ function Training({ training, deleteTraining }) {
     </div>
   );
 }
+//============ Component end ============
 
 export default Training;

@@ -1,13 +1,19 @@
+//============ Imports start ============
 import React, { useEffect, useState } from "react";
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 import Training from "./Training/Training";
+import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
 import "./TrainingList.css";
+//============ Imports end ============
 
+//============ Component start ============
 function TrainingList({ search }) {
   const [trainingList, setTrainingList] = useState([]);
   const [updateTraining, setUpdateTraining] = useState("");
+  const { userContextState, userContextDispatch } = useUsersContext();
   let { category } = useParams();
+  let isAdmin = false;
 
   useEffect(() => {
     fetch("/api/training/")
@@ -15,11 +21,28 @@ function TrainingList({ search }) {
       .then((data) => setTrainingList([...data]));
   }, [updateTraining]);
 
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
+  }
+
   async function deleteTraining(_id) {
     await fetch(`/api/training/${_id}`, {
       method: "DELETE",
     });
     setUpdateTraining(`Update the ${_id} training.`);
+  }
+
+  if (
+    userContextState.username === "Admin" ||
+    userContextState.username === "admin" ||
+    getUsernameFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
+      "Admin" ||
+    getUsernameFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
+      "admin"
+  ) {
+    isAdmin = true;
+  } else {
+    isAdmin = false;
   }
 
   return (
@@ -40,6 +63,7 @@ function TrainingList({ search }) {
                 key={uuid()}
                 training={training}
                 deleteTraining={deleteTraining}
+                isAdmin={isAdmin}
               />
             );
           })}
@@ -47,5 +71,6 @@ function TrainingList({ search }) {
     </div>
   );
 }
+//============ Component end ============
 
 export default TrainingList;

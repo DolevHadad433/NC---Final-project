@@ -1,10 +1,11 @@
+//============ Imports start ============
 import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
-
 import "./Login.css";
+//============ Imports end ============
 
+//============ Reducer properties start ============
 function loginReducer(state, action) {
   switch (action.type) {
     case "login":
@@ -33,14 +34,15 @@ function loginReducer(state, action) {
   }
   return state;
 }
-
 const initialLoginState = {
   username: "",
   password: "",
   isLoading: false,
   error: "",
 };
+//============ Reducer properties end ============
 
+//============ Component start ============
 function LogIn() {
   const [loginState, dispatchLogIn] = useReducer(
     loginReducer,
@@ -48,14 +50,13 @@ function LogIn() {
   );
   const clickLogInHandler = useNavigate();
   const clickDontHaveUserHandler = useNavigate();
-
   const { userContextState, userContextDispatch } = useUsersContext();
 
   async function onLogInSubmit(e) {
     e.preventDefault();
 
     dispatchLogIn({ type: "login" });
-    
+
     try {
       const response = await fetch("/api/users", {
         method: "POST",
@@ -68,7 +69,7 @@ function LogIn() {
         },
       });
       const userData = await response.json();
-      
+
       if (userData !== undefined) {
         userContextDispatch({
           type: Actions.logInSuccess,
@@ -81,7 +82,7 @@ function LogIn() {
             userID: userData._id,
           })
         );
-          
+
         setTimeout(() => {
           dispatchLogIn({ type: "stop_loading" });
           clickLogInHandler("/main-page");
@@ -144,5 +145,6 @@ function LogIn() {
     </div>
   );
 }
+//============ Component end ============
 
 export default LogIn;
