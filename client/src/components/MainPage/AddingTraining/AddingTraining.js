@@ -1,8 +1,14 @@
 //============ Imports start ============
-import React, { useReducer, useState } from "react";
-import { useUsersContext, Actions } from "../../../contexts/UsersContext";
-import { Button, Container, Grid, Input, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import React, { useReducer, useState, useEffect } from "react";
+import { v4 as uuid } from "uuid";
+import {
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  Autocomplete,
+} from "@mui/material";
 //============ Imports end ============
 
 //============ Reducer properties start ============
@@ -13,17 +19,17 @@ function addingTrainingReducer(state, action) {
         ...state,
         isLoading: true,
         error: "",
+        addTraingingSuccessfully: false,
       };
     case "error":
       return {
         ...state,
         error: "Fill the form correctly",
       };
-    case "stop_loading":
+    case "stop-loading":
       return {
         ...state,
         isLoading: false,
-        addTraingingSuccessfully: false,
       };
     case "add-successfully":
       return {
@@ -34,6 +40,11 @@ function addingTrainingReducer(state, action) {
       return {
         ...state,
         [action.field]: action.value,
+      };
+    case "add-another":
+      return {
+        ...state,
+        addTraingingSuccessfully: false,
       };
     default:
       break;
@@ -54,19 +65,20 @@ const initialAddingTrainingState = {
 //============ Reducer properties end ============
 
 //============ Component start ============
-function AddingTraining() {
+function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
   const [addingTrainingState, dispatchAddingTraining] = useReducer(
     addingTrainingReducer,
     initialAddingTrainingState
   );
-  const [value, setValue] = useState(new Date("2014-08-18T21:11:54"));
-  const clickSubmitAddingTrainingHandler = useNavigate();
-  const clickCancelAddingTrainingHandler = useNavigate();
-  const { userContextState, userContextDispatch } = useUsersContext();
+  const [categoriesList, setCategoriesList] = useState([]);
+  const options = categoriesList.map((e) => e.title);
+  const [dropDownValue, setDropDownValue] = useState(options[0]);
 
-  function handleChange(newValue) {
-    setValue(newValue);
-  }
+  useEffect(() => {
+    fetch("/api/categories/")
+      .then((response) => response.json())
+      .then((data) => setCategoriesList([...data]));
+  }, []);
 
   async function onSubmitAddingTrainingForm(e) {
     e.preventDefault();
@@ -88,15 +100,10 @@ function AddingTraining() {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      dispatchAddingTraining({ type: "add-successfully" });
       setTimeout(() => {
-        try {
-          dispatchAddingTraining({ type: "stop_loading" });
-          clickCancelAddingTrainingHandler("/main-page");
-        } catch {
-          addingAnotherTrainingHandler();
-        }
-      }, 5000);
+        dispatchAddingTraining({ type: "stop-loading" });
+        dispatchAddingTraining({ type: "add-successfully" });
+      }, 1000);
     } catch (error) {
       setTimeout(() => {
         dispatchAddingTraining({ type: "error" });
@@ -105,33 +112,21 @@ function AddingTraining() {
     }
   }
 
-  function addingAnotherTrainingHandler() {
-    dispatchAddingTraining({ type: "stop_loading" });
-  }
-
-  function cancelAddingTrainingFormHandler() {
-    clickCancelAddingTrainingHandler("/main-page");
-  }
-
   if (addingTrainingState.addTraingingSuccessfully) {
     return (
       <Container>
         <Grid container>
           <div className="successfully-add-training-container">
             <Grid item>
-              <h1 className="successfully-add-training-title">
-                The training was successfully added to the page!
-              </h1>
-              <h3 className="message">
-                Click one of the buttons or you will be redirected back to the
-                main page
-              </h3>
+              <Typography variant="h4" component="div">
+                Please enter training details:
+              </Typography>
             </Grid>
             <Grid item>
               <Button
                 variant="contained"
                 sx={{ mt: 3, ml: 1 }}
-                onClick={addingAnotherTrainingHandler}
+                onClick={() => dispatchAddingTraining({ type: "add-another" })}
               >
                 Add another training!
               </Button>
@@ -139,7 +134,7 @@ function AddingTraining() {
               <Button
                 variant="contained"
                 sx={{ mt: 3, ml: 1 }}
-                onClick={cancelAddingTrainingFormHandler}
+                onClick={() => handleClose(uuid())}
               >
                 Back to main page
               </Button>
@@ -152,8 +147,9 @@ function AddingTraining() {
     return (
       <Container sx={{ textAlign: "center" }}>
         <form onSubmit={onSubmitAddingTrainingForm}>
-          <p>Please enter training details</p>
-
+          <Typography variant="h4" component="div">
+            Please enter training details:
+          </Typography>
           <Grid
             container
             direction="row"
@@ -177,19 +173,23 @@ function AddingTraining() {
                 }
               />
             </Grid>
+
             <Grid item sm={6}>
-              <TextField
-                required
-                id="outlined-required"
-                label="Category"
-                value={addingTrainingState.category}
-                onChange={(e) =>
+              <Autocomplete
+                value={dropDownValue}
+                onChange={(event, newValue) => {
                   dispatchAddingTraining({
                     type: "field",
                     field: "category",
-                    value: e.currentTarget.value,
-                  })
-                }
+                    value: newValue,
+                  });
+                }}
+                id="category-drop-down"
+                options={options}
+                sx={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Category" />
+                )}
               />
             </Grid>
             <Grid item sm={6}>
@@ -252,8 +252,15 @@ function AddingTraining() {
                 }
               />
             </Grid>
-
-            <Grid item sm={2}></Grid>
+            <Grid item sm={3}>
+              <Button
+                variant="outlined"
+                sx={{ mt: 3, ml: 1 }}
+                onClick={() => handleClose(uuid())}
+              >
+                Cancel
+              </Button>
+            </Grid>
             <Grid item sm={4}>
               <Button
                 variant="contained"
@@ -266,21 +273,13 @@ function AddingTraining() {
                   : "Add training"}
               </Button>
             </Grid>
-            <Grid item sm={3}>
-              <Button
-                variant="contained"
-                sx={{ mt: 3, ml: 1 }}
-                onClick={cancelAddingTrainingFormHandler}
-              >
-                Cancel
-              </Button>
-            </Grid>
           </Grid>
         </form>
       </Container>
     );
   }
 }
+// }
 //============ Component end ============
 
 export default AddingTraining;

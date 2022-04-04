@@ -12,12 +12,12 @@ import {
 export const SchedulesRouters = Router();
 
 // READ - Get all schedules
-SchedulesRouters.get("/", async (req, res) => {
-  res.send(await getAllSchedules());
+SchedulesRouters.post("/", async (req, res) => {
+  res.send(await getAllSchedules(req.body));
 });
 
 // CREATE - Create a new schedule
-SchedulesRouters.post("/", async (req, res) => {
+SchedulesRouters.post("/create", async (req, res) => {
   res.send(await createNewSchedule(req.body));
 });
 

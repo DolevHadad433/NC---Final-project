@@ -5,15 +5,15 @@ import Training from "./Training/Training";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
 import "./TrainingList.css";
+import { Container } from "@mui/material";
 //============ Imports end ============
 
 //============ Component start ============
-function TrainingList({ search }) {
+function TrainingList({ search, updateTraining, setUpdateTraining }) {
   const [trainingList, setTrainingList] = useState([]);
-  const [updateTraining, setUpdateTraining] = useState("");
+  // const [updateTraining, setUpdateTraining] = useState("");
   const { userContextState, userContextDispatch } = useUsersContext();
   let { category } = useParams();
-  let isAdmin = false;
 
   useEffect(() => {
     fetch("/api/training/")
@@ -32,43 +32,31 @@ function TrainingList({ search }) {
     setUpdateTraining(`Update the ${_id} training.`);
   }
 
-  if (
-    userContextState.username === "Admin" ||
-    userContextState.username === "admin" ||
-    getUsernameFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
-      "Admin" ||
-    getUsernameFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
-      "admin"
-  ) {
-    isAdmin = true;
-  } else {
-    isAdmin = false;
-  }
-
   return (
-    <div className="TrainingList">
-      <div className="training-container-list">
-        {trainingList
-          .filter((training) => {
-            const isInCategory =
-              category === undefined || training.category === category;
-            const isInSearch = training.title
-              .toLowerCase()
-              .includes(search.toLowerCase());
-            return isInCategory && isInSearch;
-          })
-          .map((training) => {
-            return (
-              <Training
-                key={uuid()}
-                training={training}
-                deleteTraining={deleteTraining}
-                isAdmin={isAdmin}
-              />
-            );
-          })}
+    <Container maxWidth="xl">
+      <div className="TrainingList">
+        <div className="training-container-list">
+          {trainingList
+            .filter((training) => {
+              const isInCategory =
+                category === undefined || training.category === category;
+              const isInSearch = training.title
+                .toLowerCase()
+                .includes(search.toLowerCase());
+              return isInCategory && isInSearch;
+            })
+            .map((training) => {
+              return (
+                <Training
+                  key={uuid()}
+                  training={training}
+                  deleteTraining={deleteTraining}
+                />
+              );
+            })}
+        </div>
       </div>
-    </div>
+    </Container>
   );
 }
 //============ Component end ============

@@ -19,7 +19,7 @@ export async function getUserById(id) {
   return users.findOne({ _id: ObjectId(id) });
 }
 
-// READ - Get user by username
+// READ - Get user by username and password
 export async function getUserByUsernameAndPassword({ username, password }) {
   const users = await getUsersCollection();
   return users.findOne({ username, password });

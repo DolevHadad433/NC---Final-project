@@ -1,9 +1,7 @@
 //============ Imports and properties start ============
-import React, { useContext, useMemo, useReducer } from "react";
+import React, { useContext, useMemo, useReducer, useCallback, useEffect } from "react";
 const Context = React.createContext({});
 //============ Imports and properties end ============
-
-
 
 //============ Reducer properties start ============
 export const Actions = {
@@ -12,6 +10,7 @@ export const Actions = {
   signUpSuccess: "sign-up-success",
   getLocalStorage: "get-localstorage",
   updateScheduledTraining: "update-scheduled-training",
+  isAdmin: "is-admin",
 };
 function userReducer(state, action) {
   switch (action.type) {
@@ -50,6 +49,11 @@ function userReducer(state, action) {
         ...state,
         scheduledTraining: action.payload,
       };
+    case Actions.isAdmin:
+      return {
+        ...state,
+        isAdmin: true,
+      };
     default:
       return state;
   }
@@ -59,12 +63,11 @@ const initialState = {
   password: "",
   phoneNumber: "",
   userID: "",
-  scheduledTraining: "",
+  scheduledTraining: [],
   isLoading: false,
+  isAdmin: false,
 };
 //============ Reducer properties end ============
-
-
 
 //============ Context start ============
 function UsersProvider({ children }) {
@@ -72,24 +75,45 @@ function UsersProvider({ children }) {
     userReducer,
     initialState
   );
+  // let isAdmin = false;
+
+  const isAdmin = useCallback(() => {
+    if (
+      getUsernameFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
+        "Admin" &&
+      getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
+        "62335b9fed5fccd856d8f6bc"
+    ) {
+      // userContextDispatch({ type: Actions.isAdmin });
+      return true;
+    }
+  });
+
   const value = useMemo(
     () => ({
       userContextState,
       userContextDispatch,
+      isAdmin,
     }),
     [userContextState]
   );
+
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
+  }
+  function getUserIdFromLocalStorage(obj) {
+    return obj.userID;
+  }
+
+
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 //============ Context end ============
-
-
 
 //============ functions start ============
 function useUsersContext() {
   return useContext(Context);
 }
 //============ functions end ============
-
 
 export { UsersProvider, useUsersContext };

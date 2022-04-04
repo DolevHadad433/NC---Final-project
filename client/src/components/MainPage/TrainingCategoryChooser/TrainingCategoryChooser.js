@@ -1,5 +1,6 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
+import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import Card from "@mui/material/Card";
@@ -14,6 +15,7 @@ import { Grid } from "@mui/material";
 function TrainingCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { userContextState, userContextDispatch } = useUsersContext();
   let categoryLinkHandler = useNavigate();
 
   useEffect(() => {
@@ -38,14 +40,15 @@ function TrainingCategoryChooser() {
   return (
     <>
       <div className="TrainingCategoryChooser">
-        <Container>
+        <Container maxWidth="xl">
           <Grid container spacing={2} direction="row" alignItems="center">
             {categoriesList.map((category) => {
               return (
-                <Grid item key={uuid()}>
+                <Grid item sm={2.4} key={uuid()}>
                   <Button
                     variant="contained"
                     size="small"
+                    sx={{ width: 90 }}
                     value={
                       category.title === undefined ? "All" : category.title
                     }

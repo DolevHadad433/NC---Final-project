@@ -17,7 +17,6 @@ function App() {
           <Route path="/" element={<LogIn />} />
           <Route path="/main-page/*" element={<MainPage />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/add-new-training" element={<AddingTraining/>}/>
         </Routes>
       </div>
     </UsersProvider>
