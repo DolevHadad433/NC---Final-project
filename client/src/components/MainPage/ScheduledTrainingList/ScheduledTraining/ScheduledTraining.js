@@ -10,30 +10,23 @@ import Box from "@mui/material/Box";
 import Popper from "@mui/material/Popper";
 import Typography from "@mui/material/Typography";
 
-function ScheduledTraining({
-  _id,
-  title,
-  category,
-  description,
-  duration,
-  groupSize,
-}) {
+function ScheduledTraining({ scheduled, unsubscribeScheduledTraining }) {
   return (
     <div>
       <Card
-        sx={{ minWidth: 450, marginBottom: 1, marginLeft: 10, marginTop: 2 }}
+        sx={{ minWidth: 450, marginBottom: 1, marginLeft: 5, marginTop: 2 }}
       >
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {category}
+            {scheduled.trainingInfo.category}
           </Typography>
           <Typography variant="h5" component="div">
-            {title}
+            {scheduled.trainingInfo.title}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {duration}
+            {scheduled.trainingInfo.duration}
             <br />
-            {groupSize}
+            {scheduled.trainingInfo.groupSize}
           </Typography>
 
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -44,7 +37,14 @@ function ScheduledTraining({
           <Container>
             <Grid container direction="row-reverse">
               <Grid item sm={2} sx={{ marginBottom: 2, marginRight: 5 }}>
-                <Button size="small" variant="contained">
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => {
+                    unsubscribeScheduledTraining(scheduled._id);
+                    // console.log(scheduled._id);
+                  }}
+                >
                   Unsubscribe
                 </Button>
               </Grid>

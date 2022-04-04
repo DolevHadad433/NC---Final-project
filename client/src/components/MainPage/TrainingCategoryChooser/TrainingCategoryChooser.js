@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 // import "./TrainingCategoryChooser.css";
 
 import Card from "@mui/material/Card";
@@ -36,16 +37,11 @@ function TrainingCategoryChooser() {
   return (
     <>
       <div className="TrainingCategoryChooser">
-        <Container maxWidth={400}>
+        <Container>
           <Grid container spacing={2} direction="row" alignItems="center">
             {categoriesList.map((category) => {
               return (
-                <Grid
-                  item
-                  key={
-                    category._id === undefined ? "All" : String(category._id)
-                  }
-                >
+                <Grid item key={uuid()}>
                   <Button
                     variant="contained"
                     size="small"
@@ -66,9 +62,8 @@ function TrainingCategoryChooser() {
           {categoriesList
             .filter((category) => category.title === selectedCategory)
             .map((category) => {
-              console.log(category._id);
               return (
-                <Card sx={{ marginTop: 2 }}>
+                <Card key={uuid()} sx={{ marginTop: 2 }}>
                   <CardContent>
                     <Typography
                       sx={{ fontSize: 16 }}

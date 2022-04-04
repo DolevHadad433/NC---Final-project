@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import {v4 as uuid} from 'uuid';
 import Training from "./Training/Training";
 import { useParams } from "react-router-dom";
 import "./TrainingList.css";
 
-function TrainingList({ search}) {
+function TrainingList({ search }) {
   const [trainingList, setTrainingList] = useState([]);
   const [updateTraining, setUpdateTraining] = useState("");
   let { category } = useParams();
@@ -36,7 +37,7 @@ function TrainingList({ search}) {
           .map((training) => {
             return (
               <Training
-                key={training._id}
+                key={uuid()}
                 training={training}
                 deleteTraining={deleteTraining}
               />

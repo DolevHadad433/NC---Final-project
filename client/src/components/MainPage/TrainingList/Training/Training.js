@@ -16,23 +16,10 @@ function Training({ training, deleteTraining }) {
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
   }
-  //==============Subscribe========popper========================
+  //=======Subscribe========Modal ** NOT DONE YET **=============
 
   async function subscribeHandler() {
-    await fetch("/api/schedules", {
-      method: "POST",
-      body: JSON.stringify({
-        userID: getUserIdFromLocalStorage(
-          JSON.parse(localStorage.getItem("User"))
-        ),
-        trainingID: training._id,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-
-    const response = await fetch("/api/schedules/userID", {
+    const response = await fetch("/api/schedules", {
       method: "POST",
       body: JSON.stringify({
         userID: getUserIdFromLocalStorage(
@@ -47,29 +34,12 @@ function Training({ training, deleteTraining }) {
     const data = await response.json();
     userContextDispatch({
       type: Actions.updateScheduledTraining,
-      payload: data.reverse(),
+      payload: { ...data },
     });
-
-    setTimeout(() => {
-      console.log(userContextState.scheduledTraining);
-    }, 1000);
-    // const updateResponse = await fetch(
-    //   `/api/users/${userContextState.userID}`,
-    //   {
-    //     method: "PUT",
-    //     body: JSON.stringify({
-    //       scheduled: userContextState.scheduledTraining,
-    //     }),
-    //     headers: {
-    //       "Content-type": "application/json; charset=UTF-8",
-    //     },
-    //   }
-    // );
   }
+  //=========================Subscribe===========================
 
-  //==============Subscribe========popper========================
-
-  //==============DELETE========popper========================
+  //=======DELETE=====popper ** NEED TO CHANGE TO -  Modal **=====
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -79,7 +49,7 @@ function Training({ training, deleteTraining }) {
     setOpen((previousOpen) => !previousOpen);
   };
 
-  //=============DELETE=========popper========================
+  //===========================DELETE=========================
 
   return (
     <div className="Training">

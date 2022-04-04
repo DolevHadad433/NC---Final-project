@@ -88,7 +88,7 @@ function MainPage() {
         </Box>
       </div>
 
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Grid container spacing={2} direction="row" sx={{ marginTop: 5 }}>
           <Grid item sm={7}>
             <Grid container spacing={4} direction="row">

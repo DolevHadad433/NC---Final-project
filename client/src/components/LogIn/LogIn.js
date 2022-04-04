@@ -81,7 +81,7 @@ function LogIn() {
             userID: userData._id,
           })
         );
-
+          
         setTimeout(() => {
           dispatchLogIn({ type: "stop_loading" });
           clickLogInHandler("/main-page");

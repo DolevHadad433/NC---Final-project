@@ -27,7 +27,7 @@ function userReducer(state, action) {
         password: "",
         phoneNumber: "",
         userID: "",
-        // scheduledTraining: "",
+        scheduledTraining: "",
       };
     case Actions.signUpSuccess:
       return {
