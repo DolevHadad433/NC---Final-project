@@ -9,8 +9,21 @@ async function getCategoriesCollection() {
 
 // READ - Get all Categories
 export async function getAllCategories() {
-  const categories = await getCategoriesCollection();
-  return categories.find({}).toArray();
+  const categoriesCollection = await getCategoriesCollection();
+  const categories = await categoriesCollection
+    .aggregate([
+      {
+        $lookup: {
+          from: "Training",
+          localField: "title",
+          foreignField: "category",
+          as: "trainingInfo",
+        },
+      },
+    ])
+    .toArray();
+  
+  return categories;
 }
 
 // READ - Get category by ID

@@ -40,7 +40,7 @@ function MainPage() {
   const clickLogOutHandler = useNavigate();
 
   async function onLogOutButtonClick() {
-    localStorage.setItem("User", JSON.stringify({ username: "", userID: "" }));
+    localStorage.removeItem("User");
     userContextDispatch({ type: Actions.logOutSuccess });
     clickLogOutHandler("/");
   }
