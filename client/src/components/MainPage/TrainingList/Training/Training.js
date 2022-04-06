@@ -80,11 +80,14 @@ function Training({ training, deleteTraining }) {
               {training.title}:
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              On <strong>{training.date}</strong> at{" "}
+              <strong>{training.timeInDay}</strong>
+              <br />
               Group size:
-              {training.groupSize}
+              {training.groupSize} people maximun
               <br />
               Duration:
-              {training.duration}
+              {training.duration} minutes
             </Typography>
             <Typography variant="body2">{training.description}</Typography>
             <br />
@@ -93,7 +96,7 @@ function Training({ training, deleteTraining }) {
               color="text.secondary"
               gutterBottom
             >
-              Trainer: NAME
+              Trainer: {training.trainerName}
             </Typography>
           </CardContent>
           <CardActions>
@@ -113,13 +116,14 @@ function Training({ training, deleteTraining }) {
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                           Are you sure that you want to delete the{" "}
                           <Typography
-                            variant="h6"
+                            variant="h7"
                             component="span"
                             display="inline"
                           >
-                            {training.title}
+                            <strong>{training.title}</strong>
                           </Typography>{" "}
-                          training?
+                          training on <strong>{training.date}</strong> at{" "}
+                          <strong>{training.timeInDay}</strong>?
                         </Typography>
 
                         <Container maxWidth="lg">
@@ -168,13 +172,14 @@ function Training({ training, deleteTraining }) {
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                           Please confirm your subscribing to{" "}
                           <Typography
-                            variant="h6"
+                            variant="h7"
                             component="span"
                             display="inline"
                           >
-                            {training.title}
+                            <strong>{training.title}</strong>
                           </Typography>{" "}
-                          training on **ADD DATE**
+                          training on <strong>{training.date}</strong> at{" "}
+                          <strong>{training.timeInDay}</strong>
                         </Typography>
                         <Container maxWidth="lg">
                           <Grid

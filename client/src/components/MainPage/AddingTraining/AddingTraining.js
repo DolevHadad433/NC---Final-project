@@ -63,7 +63,8 @@ const initialAddingTrainingState = {
   duration: "",
   groupSize: "",
   date: "",
-  trainer: "",
+  timeInDay: "",
+  trainerName: "",
   isLoading: false,
   error: "",
   addTraingingSuccessfully: false,
@@ -73,6 +74,12 @@ const initialAddingTrainingState = {
   trainingTitleInputValue: "",
   trainingDurationValue: "",
   trainingDurationInputValue: "",
+  trainingGroupSizeValue: "",
+  trainingGroupSizeInputValue: "",
+  trainingTrainerNameValue: "",
+  trainingTrainerNameInputValue: "",
+  trainingTimeInDayValue: "",
+  trainingTimeInDayInputValue: "",
 };
 //============ Reducer properties end ============
 
@@ -87,15 +94,18 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
   const workoutsOptions = {
     categoryTitle: categoriesList.map((e) => e.title),
     trainingTitle: trainingList.map((e) => e.title),
-    trainingDuration: (function removeDuplicateDuration() {
-      const uniqueDuration = [];
-      trainingList
-        .map((e) => e.duration)
-        .filter((e) => {
-          return uniqueDuration.find((c) => c === e) === undefined;
-        });
-      return uniqueDuration;
-    })(),
+    trainingDuration: trainingList
+      .map((e) => e.duration)
+      .filter((e, index, self) => index === self.findIndex((t) => t === e)),
+    trainingGroupSize: trainingList
+      .map((e) => e.groupSize)
+      .filter((e, index, self) => index === self.findIndex((t) => t === e)),
+    trainingTrainerName: trainingList
+      .map((e) => e.trainerName)
+      .filter((e, index, self) => index === self.findIndex((t) => t === e)),
+    trainingTimeInDay: Array.from(new Array(15)).map(
+      (_, index) => `${index < 2 ? "0" : ""}${Math.floor(index + 8)}:00`
+    ),
   };
 
   useEffect(() => {
@@ -124,7 +134,8 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
           duration: addingTrainingState.duration,
           groupSize: addingTrainingState.groupSize,
           date: addingTrainingState.date,
-          trainer: addingTrainingState.trainer,
+          trainerName: addingTrainingState.trainerName,
+          timeInDay: addingTrainingState.timeInDay,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -215,7 +226,7 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 }}
                 id="training-title-auto-complete"
                 options={workoutsOptions.trainingTitle}
-                sx={{ width: 200 }}
+                sx={{ width: 250 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Training title" />
                 )}
@@ -248,7 +259,7 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 }}
                 id="category-auto-complete"
                 options={workoutsOptions.categoryTitle}
-                sx={{ width: 200 }}
+                sx={{ width: 250 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Category" />
                 )}
@@ -281,25 +292,43 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 }}
                 id="training-duration-auto-complete"
                 options={workoutsOptions.trainingDuration}
-                sx={{ width: 200 }}
+                sx={{ width: 250 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Training duration" />
+                  <TextField {...params} label="Training duration in minutes" />
                 )}
               />
             </Grid>
             <Grid className="Group-size" item sm={6}>
-              <TextField
+              <Autocomplete
+                value={addingTrainingState.trainingGroupSizeValue}
                 required
-                id="outlined-required"
-                label="Group size"
-                value={addingTrainingState.groupSize}
-                onChange={(e) =>
+                freeSolo
+                onChange={(event, newValue) => {
                   dispatchAddingTraining({
                     type: "field",
                     field: "groupSize",
-                    value: e.currentTarget.value,
-                  })
-                }
+                    value: newValue,
+                  });
+                }}
+                inputValue={addingTrainingState.trainingGroupSizeInputValue}
+                onInputChange={(event, newInputValue) => {
+                  dispatchAddingTraining({
+                    type: "input-value",
+                    field: "trainingGroupSizeInputValue",
+                    value: newInputValue,
+                  });
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "groupSize",
+                    value: newInputValue,
+                  });
+                }}
+                id="training-group-size-auto-complete"
+                options={workoutsOptions.trainingGroupSize}
+                sx={{ width: 250 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Training group size" />
+                )}
               />
             </Grid>
             <Grid className="date" item sm={6}>
@@ -307,6 +336,7 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 required
                 id="outlined-required"
                 type="date"
+                sx={{ width: 250 }}
                 value={addingTrainingState.date}
                 onChange={(e) =>
                   dispatchAddingTraining({
@@ -316,20 +346,72 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                   })
                 }
               />
-            </Grid>
-            <Grid className="Trainer's-name" item sm={6}>
-              <TextField
-                required
-                id="outlined-required"
-                label="Trainer's name"
-                value={addingTrainingState.trainer}
-                onChange={(e) =>
+              <Autocomplete
+                value={addingTrainingState.trainingTimeInDayValue}
+                id="time-in-day"
+                freeSolo
+                options={workoutsOptions.trainingTimeInDay}
+                getOptionDisabled={(option) =>
+                  option === workoutsOptions.trainingTimeInDay[0] ||
+                  option === workoutsOptions.trainingTimeInDay[2]
+                }
+                onChange={(event, newValue) => {
                   dispatchAddingTraining({
                     type: "field",
-                    field: "trainer",
-                    value: e.currentTarget.value,
-                  })
-                }
+                    field: "timeInDay",
+                    value: newValue,
+                  });
+                }}
+                inputValue={addingTrainingState.trainingTimeInDayInputValue}
+                onInputChange={(event, newInputValue) => {
+                  dispatchAddingTraining({
+                    type: "input-value",
+                    field: "trainingTimeInDayInputValue",
+                    value: newInputValue,
+                  });
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "timeInDay",
+                    value: newInputValue,
+                  });
+                }}
+                sx={{ width: 250 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Time in day" />
+                )}
+              />
+            </Grid>
+            <Grid className="Trainer's-name" item sm={6}>
+              <Autocomplete
+                value={addingTrainingState.trainingTrainerNameValue}
+                required
+                freeSolo
+                onChange={(event, newValue) => {
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "trainerName",
+                    value: newValue,
+                  });
+                }}
+                inputValue={addingTrainingState.trainingTrainerNameInputValue}
+                onInputChange={(event, newInputValue) => {
+                  dispatchAddingTraining({
+                    type: "input-value",
+                    field: "trainingTrainerNameInputValue",
+                    value: newInputValue,
+                  });
+                  dispatchAddingTraining({
+                    type: "field",
+                    field: "trainerName",
+                    value: newInputValue,
+                  });
+                }}
+                id="training-trainer's-name-auto-complete"
+                options={workoutsOptions.trainingTrainerName}
+                sx={{ width: 250 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Trainer's name" />
+                )}
               />
             </Grid>
             <Grid className="btn-cancel" item sm={3}>

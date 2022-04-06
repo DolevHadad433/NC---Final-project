@@ -60,16 +60,19 @@ function ScheduledTraining({
               {scheduled.trainingInfo.title}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              {scheduled.trainingInfo.duration}
+              On <strong>{scheduled.trainingInfo.date}</strong> at{" "}
+              <strong>{scheduled.trainingInfo.timeInDay}</strong>
               <br />
-              {scheduled.trainingInfo.groupSize}
+              {scheduled.trainingInfo.duration} minutes
+              <br />
+              {scheduled.trainingInfo.groupSize} people maximun
             </Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Trainer: NAME
+              Trainer: {scheduled.trainingInfo.trainerName}
             </Typography>
             {userName !== undefined ? (
               <Typography

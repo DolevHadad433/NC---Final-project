@@ -1,10 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { UsersProvider } from "../contexts/UsersContext";
-
-
 import LogIn from "./LogIn/LogIn";
-import AddingTraining from "./MainPage/AddingTraining/AddingTraining";
 import MainPage from "./MainPage/MainPage";
 import SignUp from "./SignUp/SignUp";
 
