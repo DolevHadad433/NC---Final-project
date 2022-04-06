@@ -7,12 +7,6 @@ async function getScheduledCollection() {
   return db.collection("Scheduled");
 }
 
-// // READ - Get all schedules
-// export async function getAllSchedules() {
-//   const schedules = await getScheduledCollection();
-//   return schedules.find({}).toArray();
-// }
-
 // READ - Get all schedules
 export async function getAllSchedules(body) {
   const schedule = await getScheduledCollection();
@@ -21,28 +15,28 @@ export async function getAllSchedules(body) {
       {
         $lookup: {
           //searching collection name
-          from: "Training",
-          //setting variable [findTrainingID] where your string converted to ObjectId
-          let: { findTrainingID: { $toObjectId: body.trainingID } },
-          //search query with our [trainingID] value
+          from: "Workouts",
+          //setting variable [findWorkoutID] where your string converted to ObjectId
+          let: { findWorkoutID: { $toObjectId: body.workoutID } },
+          //search query with our [workoutID] value
           pipeline: [
-            //searching [trainingID] value equals your field [id]
-            { $match: { $expr: "findTrainingID" } },
+            //searching [workoutID] value equals your field [id]
+            { $match: { $expr: "findWorkoutID" } },
           ],
-          as: "trainingInfo",
+          as: "workoutInfo",
         },
       },
       {
-        $unwind: "$trainingInfo",
+        $unwind: "$workoutInfo",
       },
     ])
     .toArray();
-  const findTrainingInfo = findUser.filter((e) => {
-    if (e.trainingID === String(e.trainingInfo._id)) {
-      return e.trainingInfo;
+  const findWorkoutInfo = findUser.filter((e) => {
+    if (e.workoutID === String(e.workoutInfo._id)) {
+      return e.workoutInfo;
     }
   });
-  return findTrainingInfo;
+  return findWorkoutInfo;
 }
 
 // READ - Get schedule by ID
@@ -58,33 +52,33 @@ export async function getScheduleByUserId(body) {
     .aggregate([
       {
         $match: { userID: body.userID },
-      }, //filter the matches by the user id that we want to get his scheduled training.
+      }, //filter the matches by the user id that we want to get his scheduled workout.
       {
         $lookup: {
           //searching collection name
-          from: "Training",
-          //setting variable [findTrainingID] where your string converted to ObjectId
-          let: { findTrainingID: { $toObjectId: body.trainingID } },
-          //search query with our [trainingID] value
+          from: "Workout",
+          //setting variable [findWorkoutID] where your string converted to ObjectId
+          let: { findWorkoutID: { $toObjectId: body.workoutID } },
+          //search query with our [workoutID] value
           pipeline: [
-            //searching [trainingID] value equals your field [id]
-            { $match: { $expr: "findTrainingID" } },
+            //searching [workoutID] value equals your field [id]
+            { $match: { $expr: "findWorkoutID" } },
           ],
 
-          as: "trainingInfo",
+          as: "workoutInfo",
         },
       },
       {
-        $unwind: "$trainingInfo",
+        $unwind: "$workoutInfo",
       },
     ])
     .toArray();
-  const findTrainingInfo = findUser.filter((e) => {
-    if (e.trainingID === String(e.trainingInfo._id)) {
-      return e.trainingInfo;
+  const findWorkoutInfo = findUser.filter((e) => {
+    if (e.workoutID === String(e.workoutInfo._id)) {
+      return e.workoutInfo;
     }
   });
-  return findTrainingInfo;
+  return findWorkoutInfo;
 }
 
 // CREATE - Create a new schedule

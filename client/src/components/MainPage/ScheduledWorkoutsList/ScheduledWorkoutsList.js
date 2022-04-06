@@ -1,7 +1,7 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import ScheduledTraining from "./ScheduledTraining/ScheduledTraining";
+import ScheduledWorkout from "./ScheduledWorkout/ScheduledWorkout";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
@@ -9,13 +9,13 @@ import { Container, Grid } from "@mui/material";
 //============ Imports end ============
 
 //============ Component start ============
-function ScheduledTrainings() {
+function ScheduledWorkoutsList() {
   const [schedules, setScheduled] = useState([]);
   const [updateScheduled, setUpdateScheduled] = useState("");
   const [userNames, setUserNames] = useState([]);
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
 
-  //get the schedules training by user (the post request send the userID to the server and recieve the data)
+  //get the schedules workouts by user (the post request send the userID to the server and recieve the data)
   useEffect(async () => {
     // if you are an admin you will get all schedules, if you are an ordinery user you will get just your schedules.
     if (isAdmin()) {
@@ -58,11 +58,11 @@ function ScheduledTrainings() {
     return obj.userID;
   }
 
-  async function unsubscribeScheduledTraining(_id) {
+  async function unsubscribeScheduledWorkout(_id) {
     await fetch(`/api/schedules/${_id}`, {
       method: "DELETE",
     });
-    setUpdateScheduled(`Delete scheduled training: ${_id}.`);
+    setUpdateScheduled(`Delete scheduled workout: ${_id}.`);
   }
 
   function whatIsYourUserName(userId) {
@@ -73,10 +73,10 @@ function ScheduledTrainings() {
   function ifThereIsScheduled() {
     if (schedules !== "") {
       return schedules.map((scheduled) => (
-        <ScheduledTraining
+        <ScheduledWorkout
           key={uuid()}
           scheduled={scheduled}
-          unsubscribeScheduledTraining={unsubscribeScheduledTraining}
+          unsubscribeScheduledWorkout={unsubscribeScheduledWorkout}
           userName={whatIsYourUserName(scheduled.userID)}
         />
       ));
@@ -98,7 +98,7 @@ function ScheduledTrainings() {
             }}
           >
             <Typography variant="h6" component="div">
-              My trainings:
+              My workouts:
             </Typography>
           </AppBar>
         </Grid>
@@ -111,4 +111,4 @@ function ScheduledTrainings() {
 }
 //============ Component end ============
 
-export default ScheduledTrainings;
+export default ScheduledWorkoutsList;

@@ -1,6 +1,6 @@
 //============ Imports start ============
 import React, { useState } from "react";
-import "./Training.css";
+
 import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -25,7 +25,7 @@ const style = {
 };
 
 //============ Component start ============
-function Training({ training, deleteTraining }) {
+function Workout({ workout, deleteWorkout }) {
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
   const [open, setOpen] = useState(false);
 
@@ -42,7 +42,7 @@ function Training({ training, deleteTraining }) {
         userID: getUserIdFromLocalStorage(
           JSON.parse(localStorage.getItem("User"))
         ),
-        trainingID: training._id,
+        workoutID: workout._id,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -50,7 +50,7 @@ function Training({ training, deleteTraining }) {
     });
     const data = await response.json();
     userContextDispatch({
-      type: Actions.updateScheduledTraining,
+      type: Actions.updateScheduledWorkout,
       payload: { ...data },
     });
   }
@@ -65,7 +65,7 @@ function Training({ training, deleteTraining }) {
   }
 
   return (
-    <div className="Training">
+    <div className="Workout">
       <Container maxWidth="xxl">
         <Card sx={{ minWidth: 275, marginBottom: 1, marginRight: 5 }}>
           <CardContent>
@@ -74,29 +74,29 @@ function Training({ training, deleteTraining }) {
               color="text.secondary"
               gutterBottom
             >
-              {training.category}
+              {workout.category}
             </Typography>
             <Typography variant="h5" component="div">
-              {training.title}:
+              {workout.title}:
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              On <strong>{training.date}</strong> at{" "}
-              <strong>{training.timeInDay}</strong>
+              On <strong>{workout.date}</strong> at{" "}
+              <strong>{workout.timeInDay}</strong>
               <br />
               Group size:
-              {training.groupSize} people maximun
+              {workout.groupSize} people maximun
               <br />
               Duration:
-              {training.duration} minutes
+              {workout.duration} minutes
             </Typography>
-            <Typography variant="body2">{training.description}</Typography>
+            <Typography variant="body2">{workout.description}</Typography>
             <br />
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Trainer: {training.trainerName}
+              Trainer: {workout.trainerName}
             </Typography>
           </CardContent>
           <CardActions>
@@ -120,10 +120,10 @@ function Training({ training, deleteTraining }) {
                             component="span"
                             display="inline"
                           >
-                            <strong>{training.title}</strong>
+                            <strong>{workout.title}</strong>
                           </Typography>{" "}
-                          training on <strong>{training.date}</strong> at{" "}
-                          <strong>{training.timeInDay}</strong>?
+                          workout on <strong>{workout.date}</strong> at{" "}
+                          <strong>{workout.timeInDay}</strong>?
                         </Typography>
 
                         <Container maxWidth="lg">
@@ -138,7 +138,7 @@ function Training({ training, deleteTraining }) {
                                 size="small"
                                 variant="outlined"
                                 onClick={() => {
-                                  deleteTraining(training._id);
+                                  deleteWorkout(workout._id);
                                 }}
                               >
                                 Delete
@@ -176,10 +176,10 @@ function Training({ training, deleteTraining }) {
                             component="span"
                             display="inline"
                           >
-                            <strong>{training.title}</strong>
+                            <strong>{workout.title}</strong>
                           </Typography>{" "}
-                          training on <strong>{training.date}</strong> at{" "}
-                          <strong>{training.timeInDay}</strong>
+                          workout on <strong>{workout.date}</strong> at{" "}
+                          <strong>{workout.timeInDay}</strong>
                         </Typography>
                         <Container maxWidth="lg">
                           <Grid
@@ -222,4 +222,4 @@ function Training({ training, deleteTraining }) {
 }
 //============ Component end ============
 
-export default Training;
+export default Workout;

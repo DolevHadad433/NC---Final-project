@@ -1,5 +1,11 @@
 //============ Imports and properties start ============
-import React, { useContext, useMemo, useReducer, useCallback, useEffect } from "react";
+import React, {
+  useContext,
+  useMemo,
+  useReducer,
+  useCallback,
+  useEffect,
+} from "react";
 const Context = React.createContext({});
 //============ Imports and properties end ============
 
@@ -9,7 +15,7 @@ export const Actions = {
   logOutSuccess: "log-out-from-main-page",
   signUpSuccess: "sign-up-success",
   getLocalStorage: "get-localstorage",
-  updateScheduledTraining: "update-scheduled-training",
+  updateScheduledWorkouts: "update-scheduled-workouts",
   isAdmin: "is-admin",
 };
 function userReducer(state, action) {
@@ -29,7 +35,7 @@ function userReducer(state, action) {
         password: "",
         phoneNumber: "",
         userID: "",
-        scheduledTraining: "",
+        scheduledWorkouts: "",
       };
     case Actions.signUpSuccess:
       return {
@@ -44,10 +50,10 @@ function userReducer(state, action) {
         ...state,
         username: action.payload,
       };
-    case Actions.updateScheduledTraining:
+    case Actions.updateScheduledWorkouts:
       return {
         ...state,
-        scheduledTraining: action.payload,
+        scheduledWorkouts: action.payload,
       };
     case Actions.isAdmin:
       return {
@@ -63,7 +69,7 @@ const initialState = {
   password: "",
   phoneNumber: "",
   userID: "",
-  scheduledTraining: [],
+  scheduledWorkouts: [],
   isLoading: false,
   isAdmin: false,
 };
@@ -75,7 +81,6 @@ function UsersProvider({ children }) {
     userReducer,
     initialState
   );
-  // let isAdmin = false;
 
   const isAdmin = useCallback(() => {
     if (
@@ -84,7 +89,6 @@ function UsersProvider({ children }) {
       getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
         "62335b9fed5fccd856d8f6bc"
     ) {
-      // userContextDispatch({ type: Actions.isAdmin });
       return true;
     }
   });
@@ -104,7 +108,6 @@ function UsersProvider({ children }) {
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
   }
-
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

@@ -1,11 +1,10 @@
 //============ Imports start ============
 import React, { useState } from "react";
-import "./MainPage.css";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
 import Search from "./Search/Search";
-import TrainingCategoryChooser from "./TrainingCategoryChooser/TrainingCategoryChooser";
-import ScheduledTrainingList from "./ScheduledTrainingList/ScheduledTrainingList";
-import TrainingList from "./TrainingList/TrainingList";
+import WorkoutsCategoryChooser from "./WorkoutsCategoryChooser/WorkoutsCategoryChooser";
+import ScheduledWorkoutsList from "./ScheduledWorkoutsList/ScheduledWorkoutsList";
+import WorkoutsList from "./WorkoutsList/WorkoutsList";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,7 +14,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { Container, Grid } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import AddingTraining from "./AddingTraining/AddingTraining";
+import AddingWorkout from "./AddingWorkout/AddingWorkout";
 import { padding } from "@mui/system";
 //============ Imports end ============
 
@@ -35,7 +34,7 @@ const style = {
 function MainPage() {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
-  const [updateTraining, setUpdateTraining] = useState("");
+  const [updateWorkout, setUpdateWorkout] = useState("");
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
   const clickLogOutHandler = useNavigate();
 
@@ -55,7 +54,7 @@ function MainPage() {
 
   function handleClose(id) {
     setOpen(false);
-    setUpdateTraining(`Update the ${id} training.`);
+    setUpdateWorkout(`Update the ${id} workout.`);
   }
 
   return (
@@ -83,14 +82,14 @@ function MainPage() {
               {isAdmin() ? (
                 <>
                   <Button color="inherit" onClick={handleOpen}>
-                    Add new training
+                    Add new workout
                   </Button>
                   <Modal open={open}>
                     <Box sx={style}>
-                      <AddingTraining
+                      <AddingWorkout
                         handleClose={handleClose}
-                        updateTraining={updateTraining}
-                        setUpdateTraining={setUpdateTraining}
+                        updateWorkout={updateWorkout}
+                        setUpdateWorkout={setUpdateWorkout}
                       />
                     </Box>
                   </Modal>
@@ -117,7 +116,7 @@ function MainPage() {
             <Grid container spacing={4} direction="row">
               <Grid item sm={12}>
                 <div className="main-page-preference-container">
-                  <TrainingCategoryChooser />
+                  <WorkoutsCategoryChooser />
                 </div>
               </Grid>
 
@@ -127,20 +126,20 @@ function MainPage() {
                     <Route
                       index
                       element={
-                        <TrainingList
+                        <WorkoutsList
                           search={search}
-                          updateTraining={updateTraining}
-                          setUpdateTraining={setUpdateTraining}
+                          updateWorkout={updateWorkout}
+                          setUpdateWorkout={setUpdateWorkout}
                         />
                       }
                     />
                     <Route
                       path=":category"
                       element={
-                        <TrainingList
+                        <WorkoutsList
                           search={search}
-                          updateTraining={updateTraining}
-                          setUpdateTraining={setUpdateTraining}
+                          updateWorkout={updateWorkout}
+                          setUpdateWorkout={setUpdateWorkout}
                         />
                       }
                     />
@@ -150,7 +149,7 @@ function MainPage() {
             </Grid>
           </Grid>
           <Grid item sm={5}>
-            <ScheduledTrainingList />
+            <ScheduledWorkoutsList />
           </Grid>
         </Grid>
       </Container>

@@ -1,56 +1,57 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import Training from "./Training/Training";
+import Workout from "./Workout/Workout";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
-import "./TrainingList.css";
 import { Container } from "@mui/material";
 //============ Imports end ============
 
 //============ Component start ============
-function TrainingList({ search, updateTraining, setUpdateTraining }) {
-  const [trainingList, setTrainingList] = useState([]);
-  // const [updateTraining, setUpdateTraining] = useState("");
+function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
+  const [workoutsList, setWorkoutsList] = useState([]);
   const { userContextState, userContextDispatch } = useUsersContext();
   let { category } = useParams();
 
   useEffect(() => {
-    fetch("/api/training/")
+    fetch("/api/workouts/")
       .then((response) => response.json())
-      .then((data) => setTrainingList([...data]));
-  }, [updateTraining]);
+      .then((data) => setWorkoutsList([...data]));
+  }, [updateWorkout]);
 
   function getUsernameFromLocalStorage(obj) {
     return obj.username;
   }
 
-  async function deleteTraining(_id) {
-    await fetch(`/api/training/${_id}`, {
+  async function deleteWorkout(_id) {
+    await fetch(`/api/workouts/${_id}`, {
       method: "DELETE",
     });
-    setUpdateTraining(`Update the ${_id} training.`);
+    await fetch(`/api/schedules/${_id}`, {
+      method: "DELETE",
+    });
+    setUpdateWorkout(`Update the ${_id} workout.`);
   }
 
   return (
     <Container maxWidth="xl">
-      <div className="TrainingList">
-        <div className="training-container-list">
-          {trainingList
-            .filter((training) => {
+      <div className="WorkoutsList">
+        <div className="workout-container-list">
+          {workoutsList
+            .filter((workout) => {
               const isInCategory =
-                category === undefined || training.category === category;
-              const isInSearch = training.title
+                category === undefined || workout.category === category;
+              const isInSearch = workout.title
                 .toLowerCase()
                 .includes(search.toLowerCase());
               return isInCategory && isInSearch;
             })
-            .map((training) => {
+            .map((workout) => {
               return (
-                <Training
+                <Workout
                   key={uuid()}
-                  training={training}
-                  deleteTraining={deleteTraining}
+                  workout={workout}
+                  deleteWorkout={deleteWorkout}
                 />
               );
             })}
@@ -61,4 +62,4 @@ function TrainingList({ search, updateTraining, setUpdateTraining }) {
 }
 //============ Component end ============
 
-export default TrainingList;
+export default WorkoutsList;

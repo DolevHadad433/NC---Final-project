@@ -24,9 +24,9 @@ const style = {
 };
 
 //============ Component start ============
-function ScheduledTraining({
+function ScheduledWorkout({
   scheduled,
-  unsubscribeScheduledTraining,
+  unsubscribeScheduledWorkout,
   userName,
 }) {
   const [open, setOpen] = useState(false);
@@ -54,25 +54,25 @@ function ScheduledTraining({
               color="text.secondary"
               gutterBottom
             >
-              {scheduled.trainingInfo.category}
+              {scheduled.workoutInfo.category}
             </Typography>
             <Typography variant="h5" component="div">
-              {scheduled.trainingInfo.title}
+              {scheduled.workoutInfo.title}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              On <strong>{scheduled.trainingInfo.date}</strong> at{" "}
-              <strong>{scheduled.trainingInfo.timeInDay}</strong>
+              On <strong>{scheduled.workoutInfo.date}</strong> at{" "}
+              <strong>{scheduled.workoutInfo.timeInDay}</strong>
               <br />
-              {scheduled.trainingInfo.duration} minutes
+              {scheduled.workoutInfo.duration} minutes
               <br />
-              {scheduled.trainingInfo.groupSize} people maximun
+              {scheduled.workoutInfo.groupSize} people maximun
             </Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Trainer: {scheduled.trainingInfo.trainerName}
+              Trainer: {scheduled.workoutInfo.trainerName}
             </Typography>
             {userName !== undefined ? (
               <Typography
@@ -100,9 +100,9 @@ function ScheduledTraining({
                           component="span"
                           display="inline"
                         >
-                          {scheduled.trainingInfo.title}
+                          {scheduled.workoutInfo.title}
                         </Typography>{" "}
-                        training on **ADD DATE**?
+                        workout on **ADD DATE**?
                       </Typography>
                       <Container maxWidth="lg">
                         <Grid
@@ -115,7 +115,7 @@ function ScheduledTraining({
                             <Button
                               size="small"
                               onClick={() => {
-                                unsubscribeScheduledTraining(scheduled._id);
+                                unsubscribeScheduledWorkout(scheduled._id);
                               }}
                             >
                               Confirm
@@ -145,4 +145,4 @@ function ScheduledTraining({
 }
 //============ Component end ============
 
-export default ScheduledTraining;
+export default ScheduledWorkout;

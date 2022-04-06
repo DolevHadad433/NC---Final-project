@@ -14,10 +14,10 @@ export async function getAllCategories() {
     .aggregate([
       {
         $lookup: {
-          from: "Training",
+          from: "Workouts",
           localField: "title",
           foreignField: "category",
-          as: "trainingInfo",
+          as: "workoutInfo",
         },
       },
     ])

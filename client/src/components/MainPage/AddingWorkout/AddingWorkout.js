@@ -13,14 +13,14 @@ import {
 //============ Imports end ============
 
 //============ Reducer properties start ============
-function addingTrainingReducer(state, action) {
+function addingWorkoutReducer(state, action) {
   switch (action.type) {
-    case "trying-add-training":
+    case "trying-add-Workout":
       return {
         ...state,
         isLoading: true,
         error: "",
-        addTraingingSuccessfully: false,
+        addWorkoutSuccessfully: false,
       };
     case "error":
       return {
@@ -35,7 +35,7 @@ function addingTrainingReducer(state, action) {
     case "add-successfully":
       return {
         ...state,
-        addTraingingSuccessfully: true,
+        addWorkoutSuccessfully: true,
       };
     case "field":
       return {
@@ -45,7 +45,7 @@ function addingTrainingReducer(state, action) {
     case "add-another":
       return {
         ...state,
-        addTraingingSuccessfully: false,
+        addWorkoutSuccessfully: false,
       };
     case "input-value":
       return {
@@ -57,7 +57,7 @@ function addingTrainingReducer(state, action) {
   }
   return state;
 }
-const initialAddingTrainingState = {
+const initialAddingWorkoutState = {
   title: "",
   category: "",
   duration: "",
@@ -67,43 +67,43 @@ const initialAddingTrainingState = {
   trainerName: "",
   isLoading: false,
   error: "",
-  addTraingingSuccessfully: false,
+  addWorkoutSuccessfully: false,
   categoryValue: "",
   categoryInputValue: "",
-  trainingTitleValue: "",
-  trainingTitleInputValue: "",
-  trainingDurationValue: "",
-  trainingDurationInputValue: "",
-  trainingGroupSizeValue: "",
-  trainingGroupSizeInputValue: "",
-  trainingTrainerNameValue: "",
-  trainingTrainerNameInputValue: "",
-  trainingTimeInDayValue: "",
-  trainingTimeInDayInputValue: "",
+  workoutTitleValue: "",
+  workoutTitleInputValue: "",
+  workoutDurationValue: "",
+  workoutDurationInputValue: "",
+  workoutGroupSizeValue: "",
+  workoutGroupSizeInputValue: "",
+  workoutTrainerNameValue: "",
+  workoutTrainerNameInputValue: "",
+  workoutTimeInDayValue: "",
+  workoutTimeInDayInputValue: "",
 };
 //============ Reducer properties end ============
 
 //============ Component start ============
-function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
-  const [addingTrainingState, dispatchAddingTraining] = useReducer(
-    addingTrainingReducer,
-    initialAddingTrainingState
+function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
+  const [addingWorkoutState, dispatchAddingWorkout] = useReducer(
+    addingWorkoutReducer,
+    initialAddingWorkoutState
   );
   const [categoriesList, setCategoriesList] = useState([]);
-  const [trainingList, setTrainingList] = useState([]);
+  const [workoutList, setWorkoutList] = useState([]);
   const workoutsOptions = {
     categoryTitle: categoriesList.map((e) => e.title),
-    trainingTitle: trainingList.map((e) => e.title),
-    trainingDuration: trainingList
+    workoutTitle: workoutList.map((e) => e.title),
+    workoutDuration: workoutList
       .map((e) => e.duration)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
-    trainingGroupSize: trainingList
+    workoutGroupSize: workoutList
       .map((e) => e.groupSize)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
-    trainingTrainerName: trainingList
+    workoutTrainerName: workoutList
       .map((e) => e.trainerName)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
-    trainingTimeInDay: Array.from(new Array(15)).map(
+    workoutTimeInDay: Array.from(new Array(15)).map(
       (_, index) => `${index < 2 ? "0" : ""}${Math.floor(index + 8)}:00`
     ),
   };
@@ -115,61 +115,61 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
   }, []);
 
   useEffect(() => {
-    fetch("/api/training/")
+    fetch("/api/workouts/")
       .then((response) => response.json())
-      .then((data) => setTrainingList([...data]));
+      .then((data) => setWorkoutList([...data]));
   }, []);
 
-  async function onSubmitAddingTrainingForm(e) {
+  async function onSubmitAddingWorkoutForm(e) {
     e.preventDefault();
 
-    dispatchAddingTraining({ type: "trying-add-training" });
+    dispatchAddingWorkout({ type: "trying-add-workout" });
 
     try {
-      await fetch("/api/training", {
+      await fetch("/api/workout", {
         method: "POST",
         body: JSON.stringify({
-          title: addingTrainingState.title,
-          category: addingTrainingState.category,
-          duration: addingTrainingState.duration,
-          groupSize: addingTrainingState.groupSize,
-          date: addingTrainingState.date,
-          trainerName: addingTrainingState.trainerName,
-          timeInDay: addingTrainingState.timeInDay,
+          title: addingWorkoutState.title,
+          category: addingWorkoutState.category,
+          duration: addingWorkoutState.duration,
+          groupSize: addingWorkoutState.groupSize,
+          date: addingWorkoutState.date,
+          trainerName: addingWorkoutState.trainerName,
+          timeInDay: addingWorkoutState.timeInDay,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
       setTimeout(() => {
-        dispatchAddingTraining({ type: "stop-loading" });
-        dispatchAddingTraining({ type: "add-successfully" });
+        dispatchAddingWorkout({ type: "stop-loading" });
+        dispatchAddingWorkout({ type: "add-successfully" });
       }, 1000);
     } catch (error) {
       setTimeout(() => {
-        dispatchAddingTraining({ type: "error" });
-        dispatchAddingTraining({ type: "stop_loading" });
+        dispatchAddingWorkout({ type: "error" });
+        dispatchAddingWorkout({ type: "stop_loading" });
       }, 1000);
     }
   }
 
-  if (addingTrainingState.addTraingingSuccessfully) {
+  if (addingWorkoutState.addWorkoutSuccessfully) {
     return (
       <Container>
         <Grid container>
-          <div className="successfully-add-training-container">
+          <div className="successfully-add-workout-container">
             <Grid item>
               <Typography variant="h4" component="div">
-                Please enter training details:
+                Please enter workout details:
               </Typography>
             </Grid>
             <Grid item>
               <Button
                 variant="contained"
                 sx={{ mt: 3, ml: 1 }}
-                onClick={() => dispatchAddingTraining({ type: "add-another" })}
+                onClick={() => dispatchAddingWorkout({ type: "add-another" })}
               >
-                Add another training!
+                Add another workout!
               </Button>
 
               <Button
@@ -187,9 +187,9 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
   } else {
     return (
       <Container sx={{ textAlign: "center" }}>
-        <form onSubmit={onSubmitAddingTrainingForm}>
+        <form onSubmit={onSubmitAddingWorkoutForm}>
           <Typography variant="h4" component="div">
-            Please enter training details:
+            Please enter workout details:
           </Typography>
           <Grid
             container
@@ -201,57 +201,57 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
           >
             <Grid className="title" item sm={6}>
               <Autocomplete
-                value={addingTrainingState.trainingTitleValue}
+                value={addingWorkoutState.workoutTitleValue}
                 required
                 freeSolo
                 onChange={(event, newValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "title",
                     value: newValue,
                   });
                 }}
-                inputValue={addingTrainingState.trainingTitleInputValue}
+                inputValue={addingWorkoutState.workoutTitleInputValue}
                 onInputChange={(event, newInputValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "input-value",
-                    field: "trainingTitleInputValue",
+                    field: "workoutTitleInputValue",
                     value: newInputValue,
                   });
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "title",
                     value: newInputValue,
                   });
                 }}
-                id="training-title-auto-complete"
-                options={workoutsOptions.trainingTitle}
+                id="workout-title-auto-complete"
+                options={workoutsOptions.workoutTitle}
                 sx={{ width: 250 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Training title" />
+                  <TextField {...params} label="Workout title" />
                 )}
               />
             </Grid>
             <Grid className="category" item sm={6}>
               <Autocomplete
-                value={addingTrainingState.categoryValue}
+                value={addingWorkoutState.categoryValue}
                 required
                 freeSolo
                 onChange={(event, newValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "category",
                     value: newValue,
                   });
                 }}
-                inputValue={addingTrainingState.categoryInputValue}
+                inputValue={addingWorkoutState.categoryInputValue}
                 onInputChange={(event, newInputValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "input-value",
                     field: "categoryInputValue",
                     value: newInputValue,
                   });
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "category",
                     value: newInputValue,
@@ -267,67 +267,67 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
             </Grid>
             <Grid className="duration" item sm={6}>
               <Autocomplete
-                value={addingTrainingState.trainingDurationValue}
+                value={addingWorkoutState.workoutDurationValue}
                 required
                 freeSolo
                 onChange={(event, newValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "duration",
                     value: newValue,
                   });
                 }}
-                inputValue={addingTrainingState.trainingDurationInputValue}
+                inputValue={addingWorkoutState.workoutDurationInputValue}
                 onInputChange={(event, newInputValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "input-value",
-                    field: "trainingDurationInputValue",
+                    field: "workoutDurationInputValue",
                     value: newInputValue,
                   });
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "duration",
                     value: newInputValue,
                   });
                 }}
-                id="training-duration-auto-complete"
-                options={workoutsOptions.trainingDuration}
+                id="workout-duration-auto-complete"
+                options={workoutsOptions.workoutDuration}
                 sx={{ width: 250 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Training duration in minutes" />
+                  <TextField {...params} label="Workout duration in minutes" />
                 )}
               />
             </Grid>
             <Grid className="Group-size" item sm={6}>
               <Autocomplete
-                value={addingTrainingState.trainingGroupSizeValue}
+                value={addingWorkoutState.workoutGroupSizeValue}
                 required
                 freeSolo
                 onChange={(event, newValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "groupSize",
                     value: newValue,
                   });
                 }}
-                inputValue={addingTrainingState.trainingGroupSizeInputValue}
+                inputValue={addingWorkoutState.workoutGroupSizeInputValue}
                 onInputChange={(event, newInputValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "input-value",
-                    field: "trainingGroupSizeInputValue",
+                    field: "workoutGroupSizeInputValue",
                     value: newInputValue,
                   });
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "groupSize",
                     value: newInputValue,
                   });
                 }}
-                id="training-group-size-auto-complete"
-                options={workoutsOptions.trainingGroupSize}
+                id="workout-group-size-auto-complete"
+                options={workoutsOptions.workoutGroupSize}
                 sx={{ width: 250 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Training group size" />
+                  <TextField {...params} label="Workout group size" />
                 )}
               />
             </Grid>
@@ -337,9 +337,9 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 id="outlined-required"
                 type="date"
                 sx={{ width: 250 }}
-                value={addingTrainingState.date}
+                value={addingWorkoutState.date}
                 onChange={(e) =>
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "date",
                     value: e.currentTarget.value,
@@ -347,29 +347,29 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 }
               />
               <Autocomplete
-                value={addingTrainingState.trainingTimeInDayValue}
+                value={addingWorkoutState.workoutTimeInDayValue}
                 id="time-in-day"
                 freeSolo
-                options={workoutsOptions.trainingTimeInDay}
+                options={workoutsOptions.workoutTimeInDay}
                 getOptionDisabled={(option) =>
-                  option === workoutsOptions.trainingTimeInDay[0] ||
-                  option === workoutsOptions.trainingTimeInDay[2]
+                  option === workoutsOptions.workoutTimeInDay[0] ||
+                  option === workoutsOptions.workoutTimeInDay[2]
                 }
                 onChange={(event, newValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "timeInDay",
                     value: newValue,
                   });
                 }}
-                inputValue={addingTrainingState.trainingTimeInDayInputValue}
+                inputValue={addingWorkoutState.workoutTimeInDayInputValue}
                 onInputChange={(event, newInputValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "input-value",
-                    field: "trainingTimeInDayInputValue",
+                    field: "workoutTimeInDayInputValue",
                     value: newInputValue,
                   });
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "timeInDay",
                     value: newInputValue,
@@ -383,31 +383,31 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
             </Grid>
             <Grid className="Trainer's-name" item sm={6}>
               <Autocomplete
-                value={addingTrainingState.trainingTrainerNameValue}
+                value={addingWorkoutState.workoutTrainerNameValue}
                 required
                 freeSolo
                 onChange={(event, newValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "trainerName",
                     value: newValue,
                   });
                 }}
-                inputValue={addingTrainingState.trainingTrainerNameInputValue}
+                inputValue={addingWorkoutState.workoutTrainerNameInputValue}
                 onInputChange={(event, newInputValue) => {
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "input-value",
-                    field: "trainingTrainerNameInputValue",
+                    field: "workoutTrainerNameInputValue",
                     value: newInputValue,
                   });
-                  dispatchAddingTraining({
+                  dispatchAddingWorkout({
                     type: "field",
                     field: "trainerName",
                     value: newInputValue,
                   });
                 }}
-                id="training-trainer's-name-auto-complete"
-                options={workoutsOptions.trainingTrainerName}
+                id="workout-trainer's-name-auto-complete"
+                options={workoutsOptions.workoutTrainerName}
                 sx={{ width: 250 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Trainer's name" />
@@ -428,11 +428,11 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
                 variant="contained"
                 type="submit"
                 sx={{ mt: 3, ml: 1 }}
-                disabled={addingTrainingState.isLoading}
+                disabled={addingWorkoutState.isLoading}
               >
-                {addingTrainingState.isLoading
-                  ? "Adding training..."
-                  : "Add training"}
+                {addingWorkoutState.isLoading
+                  ? "Adding workout..."
+                  : "Add workout"}
               </Button>
             </Grid>
           </Grid>
@@ -444,4 +444,4 @@ function AddingTraining({ handleClose, updateTraining, setUpdateTraining }) {
 // }
 //============ Component end ============
 
-export default AddingTraining;
+export default AddingWorkout;

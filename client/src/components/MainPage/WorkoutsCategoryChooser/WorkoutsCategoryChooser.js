@@ -12,7 +12,7 @@ import { Grid } from "@mui/material";
 //============ Imports end ============
 
 //============ Component start ============
-function TrainingCategoryChooser() {
+function WorkoutsCategoryChooser() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { userContextState, userContextDispatch } = useUsersContext();
@@ -39,7 +39,7 @@ function TrainingCategoryChooser() {
 
   return (
     <>
-      <div className="TrainingCategoryChooser">
+      <div className="WorkoutsCategoryChooser">
         <Container maxWidth="xl">
           <Grid container spacing={2} direction="row" alignItems="center">
             {categoriesList.map((category) => {
@@ -87,4 +87,4 @@ function TrainingCategoryChooser() {
 }
 //============ Component end ============
 
-export default TrainingCategoryChooser;
+export default WorkoutsCategoryChooser;
