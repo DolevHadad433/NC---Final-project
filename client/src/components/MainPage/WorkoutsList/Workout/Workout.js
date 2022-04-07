@@ -50,7 +50,7 @@ function Workout({ workout, deleteWorkout }) {
     });
     const data = await response.json();
     userContextDispatch({
-      type: Actions.updateScheduledWorkout,
+      type: Actions.updateScheduledWorkouts,
       payload: { ...data },
     });
   }
@@ -80,8 +80,7 @@ function Workout({ workout, deleteWorkout }) {
               {workout.title}:
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              On <strong>{workout.date}</strong> at{" "}
-              <strong>{workout.timeInDay}</strong>
+              <strong>{workout.date}</strong>
               <br />
               Group size:
               {workout.groupSize} people maximun
@@ -97,6 +96,8 @@ function Workout({ workout, deleteWorkout }) {
               gutterBottom
             >
               Trainer: {workout.trainerName}
+              <br />
+              {workout._id}
             </Typography>
           </CardContent>
           <CardActions>
@@ -113,7 +114,10 @@ function Workout({ workout, deleteWorkout }) {
                     </Button>
                     <Modal open={open} onClose={handleClose}>
                       <Box sx={style}>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        <Typography
+                          sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
+                          color="text.secondary"
+                        >
                           Are you sure that you want to delete the{" "}
                           <Typography
                             variant="h7"
@@ -122,8 +126,7 @@ function Workout({ workout, deleteWorkout }) {
                           >
                             <strong>{workout.title}</strong>
                           </Typography>{" "}
-                          workout on <strong>{workout.date}</strong> at{" "}
-                          <strong>{workout.timeInDay}</strong>?
+                          workout on <strong>{workout.date}</strong>?
                         </Typography>
 
                         <Container maxWidth="lg">
@@ -169,7 +172,10 @@ function Workout({ workout, deleteWorkout }) {
                     </Button>
                     <Modal open={open} onClose={handleClose}>
                       <Box sx={style}>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        <Typography
+                          sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
+                          color="text.secondary"
+                        >
                           Please confirm your subscribing to{" "}
                           <Typography
                             variant="h7"
@@ -178,8 +184,7 @@ function Workout({ workout, deleteWorkout }) {
                           >
                             <strong>{workout.title}</strong>
                           </Typography>{" "}
-                          workout on <strong>{workout.date}</strong> at{" "}
-                          <strong>{workout.timeInDay}</strong>
+                          workout on <strong>{workout.date}</strong>.
                         </Typography>
                         <Container maxWidth="lg">
                           <Grid

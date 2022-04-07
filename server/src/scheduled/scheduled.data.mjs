@@ -56,7 +56,7 @@ export async function getScheduleByUserId(body) {
       {
         $lookup: {
           //searching collection name
-          from: "Workout",
+          from: "Workouts",
           //setting variable [findWorkoutID] where your string converted to ObjectId
           let: { findWorkoutID: { $toObjectId: body.workoutID } },
           //search query with our [workoutID] value
@@ -93,8 +93,103 @@ export async function editSchedule(id, newSchedule) {
   return schedule.updateOne({ _id: ObjectId(id) }, { $set: newSchedule });
 }
 
-// DELETE - Delete schedule by ID
+// DELETE - Delete schedule by ID and return the deleted one in order to inform the user
 export async function deleteSchedule(id) {
   const schedule = await getScheduledCollection();
-  return schedule.deleteOne({ _id: ObjectId(id) });
+
+  async function scheduleToReturnByEnteredScheduledID(
+    entered_id,
+    enterWorkoutID
+  ) {
+    const getSchedule = await getScheduledCollection();
+    const getWorkoutInfo = await getSchedule
+      .aggregate([
+        {
+          $match: { _id: entered_id },
+        },
+        {
+          $lookup: {
+            from: "Workouts",
+            let: { findWorkoutID: { $toObjectId: enterWorkoutID } },
+            pipeline: [{ $match: { $expr: "findWorkoutID" } }],
+            as: "workoutInfo",
+          },
+        },
+        {
+          $unwind: "$workoutInfo",
+        },
+      ])
+      .toArray();
+    const returnedWorkoutInfo = await getWorkoutInfo.filter((e) => {
+      if (e.workoutID === String(e.workoutInfo._id)) {
+        return e.workoutInfo;
+      }
+    });
+    return returnedWorkoutInfo;
+  }
+
+  async function scheduleToReturnByEnteredWorkoutID(enterWorkoutID) {
+    const getSchedule = await getScheduledCollection();
+    const getWorkoutInfo = await getSchedule
+      .aggregate([
+        {
+          $match: { workoutID: enterWorkoutID },
+        },
+        {
+          $lookup: {
+            from: "Workouts",
+            let: { findWorkoutID: { $toObjectId: enterWorkoutID } },
+            pipeline: [{ $match: { $expr: "findWorkoutID" } }],
+            as: "workoutInfo",
+          },
+        },
+        {
+          $unwind: "$workoutInfo",
+        },
+      ])
+      .toArray();
+    const returnedWorkoutInfo = await getWorkoutInfo.filter((e) => {
+      if (e.workoutID === String(e.workoutInfo._id)) {
+        return e.workoutInfo;
+      }
+    });
+    return returnedWorkoutInfo;
+  }
+
+  const deleteFromWorkouts = await schedule
+    .aggregate([
+      {
+        $match: { workoutID: id },
+      },
+    ])
+    .toArray();
+
+  // console.log(
+  //   (await schedule.findOne({ _id: ObjectId(id) })) === null &&
+  //     deleteFromWorkouts.length === 0
+  // );
+
+  if (
+    (await schedule.findOne({ _id: ObjectId(id) })) === null &&
+    deleteFromWorkouts.length === 0
+  ) {
+    const noGymnests = "There are no gymnests for this workout!";
+    return JSON.stringify(noGymnests);
+
+    // ==================
+  } else if (deleteFromWorkouts.length !== 0) {
+    const returnValue = await scheduleToReturnByEnteredWorkoutID(id);
+    await schedule.deleteMany({ workoutID: id });
+    return returnValue;
+
+    //================
+  } else if ((await schedule.findOne({ _id: ObjectId(id) })) !== null) {
+    const deleteFromSchedule = await schedule.findOne({ _id: ObjectId(id) });
+    const returnValue = await scheduleToReturnByEnteredScheduledID(
+      await deleteFromSchedule._id,
+      await deleteFromSchedule.workoutID
+    );
+    await schedule.deleteOne({ _id: returnValue[0]._id });
+    return returnValue[0];
+  }
 }

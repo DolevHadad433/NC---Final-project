@@ -59,14 +59,16 @@ function ScheduledWorkoutsList() {
   }
 
   async function unsubscribeScheduledWorkout(_id) {
-    await fetch(`/api/schedules/${_id}`, {
+    const response = await fetch(`/api/schedules/${_id}`, {
       method: "DELETE",
     });
+    const data = await response.json();
+    console.log(await data);
     setUpdateScheduled(`Delete scheduled workout: ${_id}.`);
   }
 
   function whatIsYourUserName(userId) {
-    const username = userNames.find(e => e._id === userId);
+    const username = userNames.find((e) => e._id === userId);
     return username;
   }
 

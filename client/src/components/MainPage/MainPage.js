@@ -15,7 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import { Container, Grid } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import AddingWorkout from "./AddingWorkout/AddingWorkout";
-import { padding } from "@mui/system";
+
 //============ Imports end ============
 
 const style = {
@@ -119,7 +119,7 @@ function MainPage() {
                   <WorkoutsCategoryChooser />
                 </div>
               </Grid>
-
+              
               <Grid item sm={12} sx={{ marginLeft: 0 }}>
                 <div className="main-page-body">
                   <Routes>

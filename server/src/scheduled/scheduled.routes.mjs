@@ -38,6 +38,5 @@ SchedulesRouters.put("/:id", async (req, res) => {
 
 // DELETE - Delete schedule by ID
 SchedulesRouters.delete("/:id", async (req, res) => {
-  await deleteSchedule(req.params.id);
-  res.send("ok");
+  res.send(await deleteSchedule(req.params.id));
 });

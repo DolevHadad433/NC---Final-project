@@ -15,7 +15,7 @@ export const Actions = {
   logOutSuccess: "log-out-from-main-page",
   signUpSuccess: "sign-up-success",
   getLocalStorage: "get-localstorage",
-  updateScheduledWorkouts: "update-scheduled-workouts",
+  updateScheduledWorkouts: "update-or-delete-scheduled-workouts",
   isAdmin: "is-admin",
 };
 function userReducer(state, action) {
@@ -53,13 +53,14 @@ function userReducer(state, action) {
     case Actions.updateScheduledWorkouts:
       return {
         ...state,
-        scheduledWorkouts: action.payload,
+        updatedOrDeletedScheduledWorkout: action.payload,
       };
     case Actions.isAdmin:
       return {
         ...state,
         isAdmin: true,
       };
+
     default:
       return state;
   }
@@ -69,7 +70,7 @@ const initialState = {
   password: "",
   phoneNumber: "",
   userID: "",
-  scheduledWorkouts: [],
+  updatedOrDeletedScheduledWorkout: "",
   isLoading: false,
   isAdmin: false,
 };

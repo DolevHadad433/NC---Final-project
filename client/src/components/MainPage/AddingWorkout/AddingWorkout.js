@@ -8,8 +8,8 @@ import {
   TextField,
   Typography,
   Autocomplete,
-  Stack,
 } from "@mui/material";
+import moment from "moment";
 //============ Imports end ============
 
 //============ Reducer properties start ============
@@ -78,8 +78,6 @@ const initialAddingWorkoutState = {
   workoutGroupSizeInputValue: "",
   workoutTrainerNameValue: "",
   workoutTrainerNameInputValue: "",
-  workoutTimeInDayValue: "",
-  workoutTimeInDayInputValue: "",
 };
 //============ Reducer properties end ============
 
@@ -103,9 +101,6 @@ function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
     workoutTrainerName: workoutList
       .map((e) => e.trainerName)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
-    workoutTimeInDay: Array.from(new Array(15)).map(
-      (_, index) => `${index < 2 ? "0" : ""}${Math.floor(index + 8)}:00`
-    ),
   };
 
   useEffect(() => {
@@ -126,16 +121,17 @@ function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
     dispatchAddingWorkout({ type: "trying-add-workout" });
 
     try {
-      await fetch("/api/workout", {
+      await fetch("/api/workouts", {
         method: "POST",
         body: JSON.stringify({
           title: addingWorkoutState.title,
           category: addingWorkoutState.category,
           duration: addingWorkoutState.duration,
           groupSize: addingWorkoutState.groupSize,
-          date: addingWorkoutState.date,
+          date: moment(addingWorkoutState.date).format(
+            "dddd[,] MMM Do[,] [ at] kk:mm[ ]A"
+          ),
           trainerName: addingWorkoutState.trainerName,
-          timeInDay: addingWorkoutState.timeInDay,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -335,7 +331,7 @@ function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
               <TextField
                 required
                 id="outlined-required"
-                type="date"
+                type="datetime-local"
                 sx={{ width: 250 }}
                 value={addingWorkoutState.date}
                 onChange={(e) =>
@@ -345,40 +341,6 @@ function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
                     value: e.currentTarget.value,
                   })
                 }
-              />
-              <Autocomplete
-                value={addingWorkoutState.workoutTimeInDayValue}
-                id="time-in-day"
-                freeSolo
-                options={workoutsOptions.workoutTimeInDay}
-                getOptionDisabled={(option) =>
-                  option === workoutsOptions.workoutTimeInDay[0] ||
-                  option === workoutsOptions.workoutTimeInDay[2]
-                }
-                onChange={(event, newValue) => {
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "timeInDay",
-                    value: newValue,
-                  });
-                }}
-                inputValue={addingWorkoutState.workoutTimeInDayInputValue}
-                onInputChange={(event, newInputValue) => {
-                  dispatchAddingWorkout({
-                    type: "input-value",
-                    field: "workoutTimeInDayInputValue",
-                    value: newInputValue,
-                  });
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "timeInDay",
-                    value: newInputValue,
-                  });
-                }}
-                sx={{ width: 250 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Time in day" />
-                )}
               />
             </Grid>
             <Grid className="Trainer's-name" item sm={6}>

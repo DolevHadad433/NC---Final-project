@@ -60,8 +60,7 @@ function ScheduledWorkout({
               {scheduled.workoutInfo.title}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              On <strong>{scheduled.workoutInfo.date}</strong> at{" "}
-              <strong>{scheduled.workoutInfo.timeInDay}</strong>
+              On <strong>{scheduled.workoutInfo.date}</strong>
               <br />
               {scheduled.workoutInfo.duration} minutes
               <br />
@@ -81,6 +80,12 @@ function ScheduledWorkout({
                 gutterBottom
               >
                 Student: {userName.username}
+                <br/>
+                _id: {scheduled._id}
+                <br/>
+                userId: {scheduled.userID}
+                <br/>
+                workoutID: {scheduled.workoutID}
               </Typography>
             ) : null}
           </CardContent>
@@ -93,16 +98,19 @@ function ScheduledWorkout({
                   </Button>
                   <Modal open={open} onClose={handleClose}>
                     <Box sx={style}>
-                      <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      <Typography
+                        sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
+                        color="text.secondary"
+                      >
                         Are you sure that you want to unsubscribe from{" "}
                         <Typography
-                          variant="h6"
+                          variant="h7"
                           component="span"
                           display="inline"
                         >
-                          {scheduled.workoutInfo.title}
+                          <strong>{scheduled.workoutInfo.title}</strong>
                         </Typography>{" "}
-                        workout on **ADD DATE**?
+                        workout on <strong>{scheduled.workoutInfo.date}</strong>?
                       </Typography>
                       <Container maxWidth="lg">
                         <Grid

@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import Workout from "./Workout/Workout";
-import { useUsersContext, Actions } from "../../../contexts/UsersContext";
+import { Actions, useUsersContext } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
 import { Container } from "@mui/material";
+
 //============ Imports end ============
 
 //============ Component start ============
@@ -16,21 +17,27 @@ function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
   useEffect(() => {
     fetch("/api/workouts/")
       .then((response) => response.json())
-      .then((data) => setWorkoutsList([...data]));
+      .then((data) => setWorkoutsList([...data.reverse()]));
   }, [updateWorkout]);
 
   function getUsernameFromLocalStorage(obj) {
     return obj.username;
   }
 
-  async function deleteWorkout(_id) {
-    await fetch(`/api/workouts/${_id}`, {
+  async function deleteWorkout(id) {
+    const response = await fetch(`/api/schedules/${id}`, {
       method: "DELETE",
     });
-    await fetch(`/api/schedules/${_id}`, {
+    const data = await response.json();
+    console.log(await data);
+    await fetch(`/api/workouts/${id}`, {
       method: "DELETE",
     });
-    setUpdateWorkout(`Update the ${_id} workout.`);
+    setUpdateWorkout(`Update the ${id} workout.`);
+    userContextDispatch({
+      type: Actions.updateScheduledWorkouts,
+      payload: data,
+    });
   }
 
   return (
