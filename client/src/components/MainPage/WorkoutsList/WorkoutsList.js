@@ -5,14 +5,17 @@ import Workout from "./Workout/Workout";
 import { Actions, useUsersContext } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
 import { Container } from "@mui/material";
-
+import DataFilter from "../WorkoutsCategoryChooser/DataFilter";
 //============ Imports end ============
 
 //============ Component start ============
-function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
+function WorkoutsList({ search, setSearch, updateWorkout, setUpdateWorkout }) {
   const [workoutsList, setWorkoutsList] = useState([]);
   const { userContextState, userContextDispatch } = useUsersContext();
   let { category } = useParams();
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
+  }
 
   useEffect(() => {
     fetch("/api/workouts/")
@@ -20,16 +23,11 @@ function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
       .then((data) => setWorkoutsList([...data.reverse()]));
   }, [updateWorkout]);
 
-  function getUsernameFromLocalStorage(obj) {
-    return obj.username;
-  }
-
   async function deleteWorkout(id) {
     const response = await fetch(`/api/schedules/${id}`, {
       method: "DELETE",
     });
     const data = await response.json();
-    console.log(await data);
     await fetch(`/api/workouts/${id}`, {
       method: "DELETE",
     });
@@ -44,7 +42,13 @@ function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
     <Container maxWidth="xl">
       <div className="WorkoutsList">
         <div className="workout-container-list">
-          {workoutsList
+          <DataFilter
+            workoutsList={workoutsList}
+            setWorkoutsList={setWorkoutsList}
+            search={search}
+            setSearch={setSearch}
+          />
+          {/* {workoutsList
             .filter((workout) => {
               const isInCategory =
                 category === undefined || workout.category === category;
@@ -61,7 +65,7 @@ function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
                   deleteWorkout={deleteWorkout}
                 />
               );
-            })}
+            })} */}
         </div>
       </div>
     </Container>
@@ -70,3 +74,9 @@ function WorkoutsList({ search, updateWorkout, setUpdateWorkout }) {
 //============ Component end ============
 
 export default WorkoutsList;
+
+// {isAdmin() ? (
+
+//   ) : (
+//     ""
+//   )}

@@ -1,0 +1,37 @@
+[{
+  "_id": {
+    "$oid": "623336e4fcc6b8c5f733ebe6"
+  },
+  "title": "Anaerobic",
+  "description": "Anaerobic training is a training in which the source of energy is not based on oxygen. Anaerobic exertion is performed at maximum intensity, while bouncing a pulse for a short period of time (up to three minutes). Common anaerobic workouts are weightlifting, iron ball throwing, sprint running, high or long jump and others.",
+  "duration": "1 Hour",
+  "groupSize": "16 people maximun",
+  "id": 3
+},{
+  "_id": {
+    "$oid": "623336e4fcc6b8c5f733ebe7"
+  },
+  "title": "Kids",
+  "description": "Training for kids under 12 years old and training for the whole family.",
+  "duration": "40 minutes",
+  "groupSize": "12 people maximun",
+  "id": 4
+},{
+  "_id": {
+    "$oid": "623336e4fcc6b8c5f733ebe5"
+  },
+  "title": "Aerobic",
+  "description": "Aerobic exercise is physical activity such as walking, running, cycling, swimming, squashing - and any other activity in which the cardiovascular and respiratory systems are used significantly to supply energy that activates large muscle groups in low-medium or high-intensity intensity - for a long period of time. relatively.",
+  "duration": "1 Hour",
+  "groupSize": "16 people maximun",
+  "id": 2
+},{
+  "_id": {
+    "$oid": "623336e4fcc6b8c5f733ebe4"
+  },
+  "title": "Pilates",
+  "description": "Pilates largely avoids high impact, high power output, and heavy muscular and skeletal loading.",
+  "duration": "1 Hour",
+  "groupSize": "16 people maximun",
+  "id": 1
+}]

@@ -82,16 +82,22 @@ const initialAddingWorkoutState = {
 //============ Reducer properties end ============
 
 //============ Component start ============
-function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
+function AddingWorkout({
+  handleClose,
+  updateWorkout,
+  setUpdateWorkout,
+  workoutBaseList,
+}) {
   const [addingWorkoutState, dispatchAddingWorkout] = useReducer(
     addingWorkoutReducer,
     initialAddingWorkoutState
   );
   const [categoriesList, setCategoriesList] = useState([]);
   const [workoutList, setWorkoutList] = useState([]);
+  // const [workoutBaseList, setWorkoutBaseList] = useState([]);
   const workoutsOptions = {
     categoryTitle: categoriesList.map((e) => e.title),
-    workoutTitle: workoutList.map((e) => e.title),
+    workoutTitle: workoutBaseList.map((e) => e.title),
     workoutDuration: workoutList
       .map((e) => e.duration)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
@@ -105,15 +111,22 @@ function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
 
   useEffect(() => {
     fetch("/api/categories/")
-      .then((response) => response.json())
-      .then((data) => setCategoriesList([...data]));
+      .then((responseCategories) => responseCategories.json())
+      .then((dataCategories) => setCategoriesList([...dataCategories]));
   }, []);
 
   useEffect(() => {
     fetch("/api/workouts/")
-      .then((response) => response.json())
-      .then((data) => setWorkoutList([...data]));
+      .then((responseWorkouts) => responseWorkouts.json())
+      .then((dataWorkouts) => setWorkoutList([...dataWorkouts]));
   }, []);
+
+  function filterDescription() {
+    const findDescription = workoutBaseList.find(
+      (e) => e.title === addingWorkoutState.title
+    );
+    return findDescription.description;
+  }
 
   async function onSubmitAddingWorkoutForm(e) {
     e.preventDefault();
@@ -121,22 +134,25 @@ function AddingWorkout({ handleClose, updateWorkout, setUpdateWorkout }) {
     dispatchAddingWorkout({ type: "trying-add-workout" });
 
     try {
-      await fetch("/api/workouts", {
+      const response = await fetch("/api/workouts", {
         method: "POST",
         body: JSON.stringify({
           title: addingWorkoutState.title,
           category: addingWorkoutState.category,
           duration: addingWorkoutState.duration,
           groupSize: addingWorkoutState.groupSize,
-          date: moment(addingWorkoutState.date).format(
-            "dddd[,] MMM Do[,] [ at] kk:mm[ ]A"
-          ),
+          dayInWeek: moment(addingWorkoutState.date).format("dddd"),
+          dayInMonth: moment(addingWorkoutState.date).format("MMM Do"),
+          time: moment(addingWorkoutState.date).format("kk:mm[ ]A"),
+          weekOfYear: moment(addingWorkoutState.date).format("w"),
           trainerName: addingWorkoutState.trainerName,
+          description: filterDescription(),
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
+      const data = await response.json();
       setTimeout(() => {
         dispatchAddingWorkout({ type: "stop-loading" });
         dispatchAddingWorkout({ type: "add-successfully" });

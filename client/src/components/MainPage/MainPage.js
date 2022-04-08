@@ -1,7 +1,8 @@
 //============ Imports start ============
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
-import Search from "./Search/Search";
+
+import DataFilter from "./WorkoutsCategoryChooser/DataFilter";
 import WorkoutsCategoryChooser from "./WorkoutsCategoryChooser/WorkoutsCategoryChooser";
 import ScheduledWorkoutsList from "./ScheduledWorkoutsList/ScheduledWorkoutsList";
 import WorkoutsList from "./WorkoutsList/WorkoutsList";
@@ -15,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import { Container, Grid } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import AddingWorkout from "./AddingWorkout/AddingWorkout";
+import Search from "@mui/icons-material/Search";
 
 //============ Imports end ============
 
@@ -35,6 +37,7 @@ function MainPage() {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [updateWorkout, setUpdateWorkout] = useState("");
+  const [workoutBaseList, setWorkoutBaseList] = useState([]);
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
   const clickLogOutHandler = useNavigate();
 
@@ -43,6 +46,12 @@ function MainPage() {
     userContextDispatch({ type: Actions.logOutSuccess });
     clickLogOutHandler("/");
   }
+
+  useEffect(() => {
+    fetch("/api/workoutsBase/")
+      .then((responseWorkoutsBase) => responseWorkoutsBase.json())
+      .then((dataWorkoutsBase) => setWorkoutBaseList([...dataWorkoutsBase]));
+  }, []);
 
   function getUsernameFromLocalStorage(obj) {
     return obj.username;
@@ -77,7 +86,7 @@ function MainPage() {
                 )}
                 !
               </Typography>
-              <Search currentSearch={search} onSearch={setSearch} />
+              {/* <Search currentSearch={search} onSearch={setSearch} /> */}
 
               {isAdmin() ? (
                 <>
@@ -90,6 +99,7 @@ function MainPage() {
                         handleClose={handleClose}
                         updateWorkout={updateWorkout}
                         setUpdateWorkout={setUpdateWorkout}
+                        workoutBaseList={workoutBaseList}
                       />
                     </Box>
                   </Modal>
@@ -128,12 +138,13 @@ function MainPage() {
                       element={
                         <WorkoutsList
                           search={search}
+                          setSearch={setSearch}
                           updateWorkout={updateWorkout}
                           setUpdateWorkout={setUpdateWorkout}
                         />
                       }
                     />
-                    <Route
+                    {/* <Route
                       path=":category"
                       element={
                         <WorkoutsList
@@ -142,7 +153,7 @@ function MainPage() {
                           setUpdateWorkout={setUpdateWorkout}
                         />
                       }
-                    />
+                    /> */}
                   </Routes>
                 </div>
               </Grid>
@@ -159,3 +170,4 @@ function MainPage() {
 //============ Component end ============
 
 export default MainPage;
+

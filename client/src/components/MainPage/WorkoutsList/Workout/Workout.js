@@ -97,7 +97,9 @@ function Workout({ workout, deleteWorkout }) {
             >
               Trainer: {workout.trainerName}
               <br />
-              {workout._id}
+              workoutID: {workout._id}
+              <br />
+              Description: {workout.description}
             </Typography>
           </CardContent>
           <CardActions>

@@ -34,7 +34,6 @@ function ScheduledWorkout({
   function handleOpen() {
     setOpen(true);
   }
-
   function handleClose() {
     setOpen(false);
   }
@@ -71,7 +70,13 @@ function ScheduledWorkout({
               color="text.secondary"
               gutterBottom
             >
-              Trainer: {scheduled.workoutInfo.trainerName}
+              <strong>Trainer:</strong> {scheduled.workoutInfo.trainerName}
+              <br />
+              <strong>_id:</strong> {scheduled._id}
+              <br />
+              <strong>userId:</strong> {scheduled.userID}
+              <br />
+              <strong>workoutID:</strong> {scheduled.workoutID}
             </Typography>
             {userName !== undefined ? (
               <Typography
@@ -79,15 +84,19 @@ function ScheduledWorkout({
                 color="text.secondary"
                 gutterBottom
               >
-                Student: {userName.username}
-                <br/>
-                _id: {scheduled._id}
-                <br/>
-                userId: {scheduled.userID}
-                <br/>
-                workoutID: {scheduled.workoutID}
+                <strong>Student:</strong> {userName.username}
+                <br />
               </Typography>
-            ) : null}
+            ) : (
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+              >
+                <strong>Description: </strong>
+                {scheduled.workoutInfo.description}
+              </Typography>
+            )}
           </CardContent>
           <CardActions>
             <Container>
@@ -110,7 +119,8 @@ function ScheduledWorkout({
                         >
                           <strong>{scheduled.workoutInfo.title}</strong>
                         </Typography>{" "}
-                        workout on <strong>{scheduled.workoutInfo.date}</strong>?
+                        workout on <strong>{scheduled.workoutInfo.date}</strong>
+                        ?
                       </Typography>
                       <Container maxWidth="lg">
                         <Grid

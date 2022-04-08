@@ -1,0 +1,41 @@
+[{
+  "_id": {
+    "$oid": "6233371bfcc6b8c5f733ebf5"
+  },
+  "username": "amit",
+  "password": "password"
+},{
+  "_id": {
+    "$oid": "6233374cfcc6b8c5f733ebf6"
+  },
+  "username": "dolev",
+  "password": "password"
+},{
+  "_id": {
+    "$oid": "62335b9fed5fccd856d8f6bc"
+  },
+  "username": "Admin",
+  "password": "password",
+  "phoneNumber": "0526026373"
+},{
+  "_id": {
+    "$oid": "62371606137cd662ec499b05"
+  },
+  "username": "ido",
+  "password": "password",
+  "phoneNumber": "0526026373"
+},{
+  "_id": {
+    "$oid": "6238943aee9b7a3493391bc9"
+  },
+  "username": "guy",
+  "password": "password",
+  "phoneNumber": "0526026373"
+},{
+  "_id": {
+    "$oid": "624af8005aaba4eac862434f"
+  },
+  "username": "hadad",
+  "password": "password",
+  "phoneNumber": "0526026373"
+}]
