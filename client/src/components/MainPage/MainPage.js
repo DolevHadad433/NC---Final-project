@@ -1,8 +1,6 @@
 //============ Imports start ============
 import React, { useState, useEffect } from "react";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
-
-import DataFilter from "./WorkoutsCategoryChooser/DataFilter";
 import WorkoutsCategoryChooser from "./WorkoutsCategoryChooser/WorkoutsCategoryChooser";
 import ScheduledWorkoutsList from "./ScheduledWorkoutsList/ScheduledWorkoutsList";
 import WorkoutsList from "./WorkoutsList/WorkoutsList";
@@ -126,35 +124,35 @@ function MainPage() {
             <Grid container spacing={4} direction="row">
               <Grid item sm={12}>
                 <div className="main-page-preference-container">
-                  <WorkoutsCategoryChooser />
+                  {/* <WorkoutsCategoryChooser /> */}
                 </div>
               </Grid>
-              
-              <Grid item sm={12} sx={{ marginLeft: 0 }}>
+
+              <Grid item sm={12} align="center" sx={{ marginLeft: 0 }}>
                 <div className="main-page-body">
-                  <Routes>
-                    <Route
-                      index
-                      element={
-                        <WorkoutsList
-                          search={search}
-                          setSearch={setSearch}
-                          updateWorkout={updateWorkout}
-                          setUpdateWorkout={setUpdateWorkout}
-                        />
-                      }
+                  <AppBar
+                    position="static"
+                    sx={{
+                      textAlign: "center",
+                      width: 250,
+                      borderRadius: 1,
+                      marginLeft: 3,
+                      marginBottom: 4,
+                      marginTop: -4,
+                    }}
+                  >
+                    <Typography variant="h6" component="div">
+                      Workouts this week:
+                    </Typography>
+                  </AppBar>
+                  
+                    <WorkoutsList
+                      search={search}
+                      setSearch={setSearch}
+                      updateWorkout={updateWorkout}
+                      setUpdateWorkout={setUpdateWorkout}
                     />
-                    {/* <Route
-                      path=":category"
-                      element={
-                        <WorkoutsList
-                          search={search}
-                          updateWorkout={updateWorkout}
-                          setUpdateWorkout={setUpdateWorkout}
-                        />
-                      }
-                    /> */}
-                  </Routes>
+                 
                 </div>
               </Grid>
             </Grid>
@@ -170,4 +168,3 @@ function MainPage() {
 //============ Component end ============
 
 export default MainPage;
-

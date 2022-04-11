@@ -4,8 +4,8 @@ import { v4 as uuid } from "uuid";
 import Workout from "./Workout/Workout";
 import { Actions, useUsersContext } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
-import { Container } from "@mui/material";
-import DataFilter from "../WorkoutsCategoryChooser/DataFilter";
+import { Container, Box } from "@mui/material";
+import WorkoutFilter from "../WorkoutsCategoryChooser/WorkoutFilter";
 //============ Imports end ============
 
 //============ Component start ============
@@ -39,16 +39,18 @@ function WorkoutsList({ search, setSearch, updateWorkout, setUpdateWorkout }) {
   }
 
   return (
-    <Container maxWidth="xl">
-      <div className="WorkoutsList">
-        <div className="workout-container-list">
-          <DataFilter
-            workoutsList={workoutsList}
-            setWorkoutsList={setWorkoutsList}
-            search={search}
-            setSearch={setSearch}
-          />
-          {/* {workoutsList
+    
+      <Container maxWidth="xl" sx={{}}>
+        <div className="WorkoutsList">
+          <div className="workout-container-list">
+            <WorkoutFilter
+              workoutsList={workoutsList}
+              setWorkoutsList={setWorkoutsList}
+              search={search}
+              setSearch={setSearch}
+              deleteWorkout={deleteWorkout}
+            />
+            {/* {workoutsList
             .filter((workout) => {
               const isInCategory =
                 category === undefined || workout.category === category;
@@ -66,9 +68,10 @@ function WorkoutsList({ search, setSearch, updateWorkout, setUpdateWorkout }) {
                 />
               );
             })} */}
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    
   );
 }
 //============ Component end ============
