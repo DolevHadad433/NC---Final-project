@@ -135,9 +135,9 @@ export default function DataFilter({
         headerName: "Actions",
         width: 150,
         editable: false,
-        renderCell: () =>{
-          return workoutAction()
-        },
+        // renderCell: () =>{
+        //   return workoutAction()
+        // },
       },
     ],
   };
