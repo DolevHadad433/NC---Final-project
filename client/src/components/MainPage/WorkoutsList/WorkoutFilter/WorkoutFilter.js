@@ -264,7 +264,7 @@ function WorkoutFilter({
                   }}
                   columnVisibilityModel={initLocalStorage()}
                   hideFooter
-                  sx={{bgcolor:"#F6F1ED", borderColor:"black"}}
+                  sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
                 />
               </div>
             </div>
