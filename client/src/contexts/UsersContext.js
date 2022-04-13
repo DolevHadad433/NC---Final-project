@@ -90,7 +90,7 @@ function UsersProvider({ children }) {
       getUsernameFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
         "Admin" &&
       getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))) ===
-        "62335b9fed5fccd856d8f6bc"
+        "62563bfb437e7853468303f4"
     ) {
       return true;
     } else return false;

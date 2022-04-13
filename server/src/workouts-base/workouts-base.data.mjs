@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 // GET - Workouts collection
 async function getWorkoutsBaseCollection() {
   const db = await getDB();
-  return db.collection("Workouts-Base");
+  return db.collection("WorkoutsBase");
 }
 
 // READ - Get all workouts
