@@ -8,6 +8,8 @@ import {
   TextField,
   Typography,
   Autocomplete,
+  Box,
+  AppBar,
 } from "@mui/material";
 import moment from "moment";
 //============ Imports end ============
@@ -200,9 +202,6 @@ function AddingWorkout({
     return (
       <Container sx={{ textAlign: "center" }}>
         <form onSubmit={onSubmitAddingWorkoutForm}>
-          <Typography variant="h4" component="div">
-            Please enter workout details:
-          </Typography>
           <Grid
             container
             direction="row"
@@ -211,208 +210,239 @@ function AddingWorkout({
             spacing={2}
             sx={{ marginTop: 1, width: 600 }}
           >
-            <Grid className="title" item sm={6}>
-              <Autocomplete
-                value={addingWorkoutState.workoutTitleValue}
-                required
-                freeSolo
-                onChange={(event, newValue) => {
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "title",
-                    value: newValue,
-                  });
-                }}
-                inputValue={addingWorkoutState.workoutTitleInputValue}
-                onInputChange={(event, newInputValue) => {
-                  dispatchAddingWorkout({
-                    type: "input-value",
-                    field: "workoutTitleInputValue",
-                    value: newInputValue,
-                  });
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "title",
-                    value: newInputValue,
-                  });
-                }}
-                id="workout-title-auto-complete"
-                options={workoutsOptions.workoutTitle}
-                sx={{ width: 250 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Workout title" />
-                )}
-              />
-            </Grid>
-            <Grid className="category" item sm={6}>
-              <Autocomplete
-                value={addingWorkoutState.categoryValue}
-                required
-                freeSolo
-                onChange={(event, newValue) => {
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "category",
-                    value: newValue,
-                  });
-                }}
-                inputValue={addingWorkoutState.categoryInputValue}
-                onInputChange={(event, newInputValue) => {
-                  dispatchAddingWorkout({
-                    type: "input-value",
-                    field: "categoryInputValue",
-                    value: newInputValue,
-                  });
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "category",
-                    value: newInputValue,
-                  });
-                }}
-                id="category-auto-complete"
-                options={workoutsOptions.categoryTitle}
-                sx={{ width: 250 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Category" />
-                )}
-              />
-            </Grid>
-            <Grid className="duration" item sm={6}>
-              <Autocomplete
-                value={addingWorkoutState.workoutDurationValue}
-                required
-                freeSolo
-                onChange={(event, newValue) => {
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "duration",
-                    value: newValue,
-                  });
-                }}
-                inputValue={addingWorkoutState.workoutDurationInputValue}
-                onInputChange={(event, newInputValue) => {
-                  dispatchAddingWorkout({
-                    type: "input-value",
-                    field: "workoutDurationInputValue",
-                    value: newInputValue,
-                  });
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "duration",
-                    value: newInputValue,
-                  });
-                }}
-                id="workout-duration-auto-complete"
-                options={workoutsOptions.workoutDuration}
-                sx={{ width: 250 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Workout duration in minutes" />
-                )}
-              />
-            </Grid>
-            <Grid className="Group-size" item sm={6}>
-              <Autocomplete
-                value={addingWorkoutState.workoutGroupSizeValue}
-                required
-                freeSolo
-                onChange={(event, newValue) => {
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "groupSize",
-                    value: newValue,
-                  });
-                }}
-                inputValue={addingWorkoutState.workoutGroupSizeInputValue}
-                onInputChange={(event, newInputValue) => {
-                  dispatchAddingWorkout({
-                    type: "input-value",
-                    field: "workoutGroupSizeInputValue",
-                    value: newInputValue,
-                  });
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "groupSize",
-                    value: newInputValue,
-                  });
-                }}
-                id="workout-group-size-auto-complete"
-                options={workoutsOptions.workoutGroupSize}
-                sx={{ width: 250 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Workout group size" />
-                )}
-              />
-            </Grid>
-            <Grid className="date" item sm={6}>
-              <TextField
-                required
-                id="outlined-required"
-                type="datetime-local"
-                sx={{ width: 250 }}
-                value={addingWorkoutState.date}
-                onChange={(e) =>
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "date",
-                    value: e.currentTarget.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid className="Trainer's-name" item sm={6}>
-              <Autocomplete
-                value={addingWorkoutState.workoutTrainerNameValue}
-                required
-                freeSolo
-                onChange={(event, newValue) => {
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "trainerName",
-                    value: newValue,
-                  });
-                }}
-                inputValue={addingWorkoutState.workoutTrainerNameInputValue}
-                onInputChange={(event, newInputValue) => {
-                  dispatchAddingWorkout({
-                    type: "input-value",
-                    field: "workoutTrainerNameInputValue",
-                    value: newInputValue,
-                  });
-                  dispatchAddingWorkout({
-                    type: "field",
-                    field: "trainerName",
-                    value: newInputValue,
-                  });
-                }}
-                id="workout-trainer's-name-auto-complete"
-                options={workoutsOptions.workoutTrainerName}
-                sx={{ width: 250 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Trainer's name" />
-                )}
-              />
-            </Grid>
-            <Grid className="btn-cancel" item sm={3}>
-              <Button
-                variant="outlined"
-                sx={{ mt: 3, ml: 1 }}
-                onClick={() => handleClose(uuid())}
-              >
-                Cancel
-              </Button>
-            </Grid>
-            <Grid className="btn-submit" item sm={4}>
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{ mt: 3, ml: 1 }}
-                disabled={addingWorkoutState.isLoading}
-              >
-                {addingWorkoutState.isLoading
-                  ? "Adding workout..."
-                  : "Add workout"}
-              </Button>
-            </Grid>
+            <Box
+              sx={{
+                "& .MuiTextField-root": { m: 2, width: "50ch" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <Grid className="title-of-page" item sm={6}>
+                <AppBar
+                  position="static"
+                  sx={{
+                    textAlign: "center",
+                    width: 450,
+                    borderRadius: 1,
+                    marginBottom: 4,
+                    marginLeft: 5,
+                  }}
+                >
+                  <Typography variant="h5" component="div">
+                    Please enter workout details:
+                  </Typography>
+                </AppBar>
+              </Grid>
+              <Grid className="title" item sm={6}>
+                <Autocomplete
+                  value={addingWorkoutState.workoutTitleValue}
+                  required
+                  freeSolo
+                  onChange={(event, newValue) => {
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "title",
+                      value: newValue,
+                    });
+                  }}
+                  inputValue={addingWorkoutState.workoutTitleInputValue}
+                  onInputChange={(event, newInputValue) => {
+                    dispatchAddingWorkout({
+                      type: "input-value",
+                      field: "workoutTitleInputValue",
+                      value: newInputValue,
+                    });
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "title",
+                      value: newInputValue,
+                    });
+                  }}
+                  id="workout-title-auto-complete"
+                  options={workoutsOptions.workoutTitle}
+                  sx={{ width: 250 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Workout title" />
+                  )}
+                />
+              </Grid>
+              <Grid className="category" item sm={6}>
+                <Autocomplete
+                  value={addingWorkoutState.categoryValue}
+                  required
+                  freeSolo
+                  onChange={(event, newValue) => {
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "category",
+                      value: newValue,
+                    });
+                  }}
+                  inputValue={addingWorkoutState.categoryInputValue}
+                  onInputChange={(event, newInputValue) => {
+                    dispatchAddingWorkout({
+                      type: "input-value",
+                      field: "categoryInputValue",
+                      value: newInputValue,
+                    });
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "category",
+                      value: newInputValue,
+                    });
+                  }}
+                  id="category-auto-complete"
+                  options={workoutsOptions.categoryTitle}
+                  sx={{ width: 250 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Category" />
+                  )}
+                />
+              </Grid>
+              <Grid className="duration" item sm={6}>
+                <Autocomplete
+                  value={addingWorkoutState.workoutDurationValue}
+                  required
+                  freeSolo
+                  onChange={(event, newValue) => {
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "duration",
+                      value: newValue,
+                    });
+                  }}
+                  inputValue={addingWorkoutState.workoutDurationInputValue}
+                  onInputChange={(event, newInputValue) => {
+                    dispatchAddingWorkout({
+                      type: "input-value",
+                      field: "workoutDurationInputValue",
+                      value: newInputValue,
+                    });
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "duration",
+                      value: newInputValue,
+                    });
+                  }}
+                  id="workout-duration-auto-complete"
+                  options={workoutsOptions.workoutDuration}
+                  sx={{ width: 250 }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Workout duration in minutes"
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid className="Group-size" item sm={6}>
+                <Autocomplete
+                  value={addingWorkoutState.workoutGroupSizeValue}
+                  required
+                  freeSolo
+                  onChange={(event, newValue) => {
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "groupSize",
+                      value: newValue,
+                    });
+                  }}
+                  inputValue={addingWorkoutState.workoutGroupSizeInputValue}
+                  onInputChange={(event, newInputValue) => {
+                    dispatchAddingWorkout({
+                      type: "input-value",
+                      field: "workoutGroupSizeInputValue",
+                      value: newInputValue,
+                    });
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "groupSize",
+                      value: newInputValue,
+                    });
+                  }}
+                  id="workout-group-size-auto-complete"
+                  options={workoutsOptions.workoutGroupSize}
+                  sx={{ width: 250 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Workout group size" />
+                  )}
+                />
+              </Grid>
+              <Grid className="date" item sm={6}>
+                <TextField
+                  required
+                  id="datetime-local"
+                  type="datetime-local"
+                  sx={{ width: 250 }}
+                  value={addingWorkoutState.date}
+                  onChange={(e) =>
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "date",
+                      value: e.currentTarget.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid className="Trainer's-name" item sm={6}>
+                <Autocomplete
+                  value={addingWorkoutState.workoutTrainerNameValue}
+                  required
+                  freeSolo
+                  onChange={(event, newValue) => {
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "trainerName",
+                      value: newValue,
+                    });
+                  }}
+                  inputValue={addingWorkoutState.workoutTrainerNameInputValue}
+                  onInputChange={(event, newInputValue) => {
+                    dispatchAddingWorkout({
+                      type: "input-value",
+                      field: "workoutTrainerNameInputValue",
+                      value: newInputValue,
+                    });
+                    dispatchAddingWorkout({
+                      type: "field",
+                      field: "trainerName",
+                      value: newInputValue,
+                    });
+                  }}
+                  id="workout-trainer's-name-auto-complete"
+                  options={workoutsOptions.workoutTrainerName}
+                  sx={{ width: 250 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Trainer's name" />
+                  )}
+                />
+              </Grid>
+              <Grid item sm={12}>
+                <Grid container>
+                  <Grid className="btn-cancel" item sm={6}>
+                    <Button
+                      variant="outlined"
+                      sx={{ mt: 3, ml: 1 }}
+                      onClick={() => handleClose(uuid())}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                  <Grid className="btn-submit" item sm={6}>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      sx={{ mt: 3, ml: 1 }}
+                      disabled={addingWorkoutState.isLoading}
+                    >
+                      {addingWorkoutState.isLoading
+                        ? "Adding workout..."
+                        : "Add workout"}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Box>
           </Grid>
         </form>
       </Container>

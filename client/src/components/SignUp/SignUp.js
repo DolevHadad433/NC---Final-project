@@ -1,4 +1,6 @@
 //============ Imports start ============
+import { Button, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
@@ -106,59 +108,77 @@ function SignUp() {
   return (
     <div className="SignUp">
       <div className="sigup-container">
-        <form className="signup-form" onSubmit={onSubmitSignUpHandler}>
-          {signUpState.error && <p className="error">{signUpState.error}</p>}
-          <p>Please Sign-up</p>
-          <input
-            type="text"
-            placeholder="User Name"
-            value={signUpState.username}
-            onChange={(e) =>
-              dispatchSignUp({
-                type: "field",
-                field: "username",
-                value: e.currentTarget.value,
-              })
-            }
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={signUpState.password}
-            onChange={(e) =>
-              dispatchSignUp({
-                type: "field",
-                field: "password",
-                value: e.currentTarget.value,
-              })
-            }
-          />
-          <input
-            type="tel"
-            placeholder="Phone number"
-            value={signUpState.phoneNumber}
-            onChange={(e) =>
-              dispatchSignUp({
-                type: "field",
-                field: "phoneNumber",
-                value: e.currentTarget.value,
-              })
-            }
-          />
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={signUpState.isLoading}
-          >
-            {signUpState.isLoading ? "Please wait..." : "Sign Up"}
-          </button>
-        </form>
-        <button
-          className="login-link-button"
-          onClick={onAlreadyHaveUserClickHandler}
+        <Box
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "34ch" },
+          }}
         >
-          Already have a user? Click here to login!
-        </button>
+          <form className="signup-form" onSubmit={onSubmitSignUpHandler}>
+            {signUpState.error && <p className="error">{signUpState.error}</p>}
+
+            <Typography variant="h5" gutterBottom component="div">
+              Please Sign-up
+            </Typography>
+            <TextField
+              required
+              placeholder="User Name"
+              type="text"
+              value={signUpState.username}
+              onChange={(e) =>
+                dispatchSignUp({
+                  type: "field",
+                  field: "username",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+
+            <TextField
+              required
+              placeholder="password"
+              type="password"
+              value={signUpState.password}
+              onChange={(e) =>
+                dispatchSignUp({
+                  type: "field",
+                  field: "password",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+
+            <TextField
+              required
+              placeholder="Phone number"
+              type="tel"
+              value={signUpState.phoneNumber}
+              onChange={(e) =>
+                dispatchSignUp({
+                  type: "field",
+                  field: "phoneNumber",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ mt: 3, ml: 1 }}
+              disabled={signUpState.isLoading}
+            >
+              {signUpState.isLoading ? "Please wait..." : "Sign Up"}
+            </Button>
+          </form>
+
+          <Button
+            variant="outlined"
+            sx={{ mt: 3, ml: 1 }}
+            onClick={onAlreadyHaveUserClickHandler}
+          >
+            Already have a user? Click here to login!
+          </Button>
+        </Box>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 //============ Imports start ============
 import React, { useState, useEffect } from "react";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
-import WorkoutsCategoryChooser from "./WorkoutsCategoryChooser/WorkoutsCategoryChooser";
+import WorkoutsCategoryChooser from "./Actions/WorkoutsCategoryChooser";
 import ScheduledWorkoutsList from "./ScheduledWorkoutsList/ScheduledWorkoutsList";
 import WorkoutsList from "./WorkoutsList/WorkoutsList";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import { Container, Grid } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import AddingWorkout from "./AddingWorkout/AddingWorkout";
 import Search from "@mui/icons-material/Search";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 //============ Imports end ============
 
@@ -36,6 +37,8 @@ function MainPage() {
   const [open, setOpen] = useState(false);
   const [updateWorkout, setUpdateWorkout] = useState("");
   const [workoutBaseList, setWorkoutBaseList] = useState([]);
+  const [forUnsubscribeButton, setForUnsubscribeButton] = useState("");
+  const [updateScheduled, setUpdateScheduled] = useState("");
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
   const clickLogOutHandler = useNavigate();
 
@@ -78,7 +81,7 @@ function MainPage() {
                 sx={{ mr: 2 }}
               ></IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Hello!!!!{" "}
+                Hello{" "}
                 {getUsernameFromLocalStorage(
                   JSON.parse(localStorage.getItem("User"))
                 )}
@@ -105,9 +108,9 @@ function MainPage() {
               ) : (
                 ""
               )}
-              <Button color="inherit" onClick={onLogOutButtonClick}>
-                Log out
-              </Button>
+              <IconButton color="inherit" onClick={onLogOutButtonClick}>
+                <LogoutIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
         </Box>
@@ -151,13 +154,20 @@ function MainPage() {
                     setSearch={setSearch}
                     updateWorkout={updateWorkout}
                     setUpdateWorkout={setUpdateWorkout}
+                    forUnsubscribeButton={forUnsubscribeButton}
+                    updateScheduled={updateScheduled}
+                    setUpdateScheduled={setUpdateScheduled}
                   />
                 </div>
               </Grid>
             </Grid>
           </Grid>
           <Grid item sm={5}>
-            <ScheduledWorkoutsList />
+            <ScheduledWorkoutsList
+              setUpdateScheduled={setUpdateScheduled}
+              updateScheduled={updateScheduled}
+              setForUnsubscribeButton={setForUnsubscribeButton}
+            />
           </Grid>
         </Grid>
       </Container>

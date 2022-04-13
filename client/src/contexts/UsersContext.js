@@ -36,6 +36,7 @@ function userReducer(state, action) {
         phoneNumber: "",
         userID: "",
         scheduledWorkouts: "",
+        subscribedWorkouts: [],
       };
     case Actions.signUpSuccess:
       return {
@@ -53,7 +54,7 @@ function userReducer(state, action) {
     case Actions.updateScheduledWorkouts:
       return {
         ...state,
-        updatedOrDeletedScheduledWorkout: action.payload,
+        subscribedWorkouts: action.payload,
       };
     case Actions.isAdmin:
       return {
@@ -73,6 +74,7 @@ const initialState = {
   updatedOrDeletedScheduledWorkout: "",
   isLoading: false,
   isAdmin: false,
+  subscribedWorkouts: [],
 };
 //============ Reducer properties end ============
 
@@ -91,7 +93,7 @@ function UsersProvider({ children }) {
         "62335b9fed5fccd856d8f6bc"
     ) {
       return true;
-    }
+    } else return false;
   });
 
   const value = useMemo(
@@ -109,7 +111,6 @@ function UsersProvider({ children }) {
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
   }
-
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 //============ Context end ============

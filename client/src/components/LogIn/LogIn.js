@@ -1,4 +1,6 @@
 //============ Imports start ============
+import { Button, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
@@ -103,44 +105,62 @@ function LogIn() {
   return (
     <div className="LogIn">
       <div className="login-container">
-        <form className="login-form" onSubmit={onLogInSubmit}>
-          {loginState.error && <p className="error">{loginState.error}</p>}
-          <p>Please Login</p>
-          <input
-            type="text"
-            placeholder="User Name"
-            value={loginState.username}
-            onChange={(e) =>
-              dispatchLogIn({
-                type: "field",
-                field: "username",
-                value: e.currentTarget.value,
-              })
-            }
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={loginState.password}
-            onChange={(e) =>
-              dispatchLogIn({
-                type: "field",
-                field: "password",
-                value: e.currentTarget.value,
-              })
-            }
-          />
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={loginState.isLoading}
+        <Box
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "34ch" },
+          }}
+        >
+          <form className="login-form" onSubmit={onLogInSubmit}>
+            {loginState.error && <p className="error">{loginState.error}</p>}
+            
+            <Typography variant="h5" gutterBottom component="div">
+              Please Login
+            </Typography>
+
+            <TextField
+              required
+              placeholder="User Name"
+              type="text"
+              value={loginState.username}
+              onChange={(e) =>
+                dispatchLogIn({
+                  type: "field",
+                  field: "username",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <TextField
+              required
+              placeholder="password"
+              type="password"
+              value={loginState.password}
+              onChange={(e) =>
+                dispatchLogIn({
+                  type: "field",
+                  field: "password",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ mt: 3, ml: 1 }}
+              disabled={loginState.isLoading}
+            >
+              {loginState.isLoading ? "Logging in..." : "Log In"}
+            </Button>
+          </form>
+
+          <Button
+            variant="outlined"
+            sx={{ mt: 3, ml: 1 }}
+            onClick={onDontHaveUserHandler}
           >
-            {loginState.isLoading ? "Logging in..." : "Log In"}
-          </button>
-        </form>
-        <button className="sign-up-link-button" onClick={onDontHaveUserHandler}>
-          Don't have a user? Click here to sign up!
-        </button>
+            Don't have a user? Click here to sign up!
+          </Button>
+        </Box>
       </div>
     </div>
   );

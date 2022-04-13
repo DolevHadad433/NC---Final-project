@@ -1,18 +1,22 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import ScheduledWorkout from "./ScheduledWorkout/ScheduledWorkout";
+
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import { Container, Grid } from "@mui/material";
+import ScheduledWorkoutsFilter from "./ScheduledWorkoutsFilter/ScheduledWorkoutsFilter";
 
 //============ Imports end ============
 
 //============ Component start ============
-function ScheduledWorkoutsList() {
+function ScheduledWorkoutsList({
+  setForUnsubscribeButton,
+  updateScheduled,
+  setUpdateScheduled,
+}) {
   const [schedules, setScheduled] = useState([]);
-  const [updateScheduled, setUpdateScheduled] = useState("");
   const [userNames, setUserNames] = useState([]);
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
 
@@ -47,8 +51,11 @@ function ScheduledWorkoutsList() {
         },
       });
       const data = await response.json();
-
+      const responseUserName = await fetch("/api/users");
+      const dataUserName = await responseUserName.json();
+      setUserNames([...dataUserName]);
       setScheduled(data.reverse());
+      setForUnsubscribeButton(data.reverse());
     }
   }, [updateScheduled, userContextState]);
 
@@ -59,30 +66,37 @@ function ScheduledWorkoutsList() {
     return obj.userID;
   }
 
-  async function unsubscribeScheduledWorkout(_id) {
-    const response = await fetch(`/api/schedules/${_id}`, {
-      method: "DELETE",
-    });
-    const data = await response.json();
-    console.log(await data);
-    setUpdateScheduled(`Delete scheduled workout: ${_id}.`);
-  }
-
   function whatIsYourUserName(userId) {
     const username = userNames.find((e) => e._id === userId);
-    return username;
+    if (username !== undefined) {
+      return username.username;
+    } else return "";
   }
 
   function ifThereIsScheduled() {
     if (schedules !== "") {
-      return schedules.map((scheduled) => (
-        <ScheduledWorkout
-          key={uuid()}
-          scheduled={scheduled}
-          unsubscribeScheduledWorkout={unsubscribeScheduledWorkout}
-          userName={whatIsYourUserName(scheduled.userID)}
+      const scheduledWorkoutsID = schedules.map(
+        (scheduled) => scheduled.workoutID
+      );
+      (function updateLocalStorage() {
+        let user = localStorage.getItem("User");
+        user = user ? JSON.parse(user) : {};
+        user["subscribedWorkouts"] = scheduledWorkoutsID;
+        localStorage.setItem(
+          "User",
+          JSON.stringify({
+            ...user,
+          })
+        );
+      })();
+      return (
+        <ScheduledWorkoutsFilter
+          schedulesList={schedules}
+          setScheduledList={setScheduled}
+          setUpdateScheduled={setUpdateScheduled}
+          username={whatIsYourUserName}
         />
-      ));
+      );
     } else return "Not subscribed yet";
   }
 
@@ -105,7 +119,7 @@ function ScheduledWorkoutsList() {
             </Typography>
           </AppBar>
         </Grid>
-        <Grid item sm={12}>
+        <Grid item sm={12} sx={{ height: 200 }}>
           {ifThereIsScheduled()}
         </Grid>
       </Grid>

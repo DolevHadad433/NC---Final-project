@@ -1,15 +1,22 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import Workout from "./Workout/Workout";
 import { Actions, useUsersContext } from "../../../contexts/UsersContext";
 import { useParams } from "react-router-dom";
 import { Container, Box } from "@mui/material";
-import WorkoutFilter from "../WorkoutsCategoryChooser/WorkoutFilter";
+import WorkoutFilter from "./WorkoutFilter/WorkoutFilter";
 //============ Imports end ============
 
 //============ Component start ============
-function WorkoutsList({ search, setSearch, updateWorkout, setUpdateWorkout }) {
+function WorkoutsList({
+  search,
+  setSearch,
+  updateWorkout,
+  setUpdateWorkout,
+  forUnsubscribeButton,
+  setUpdateScheduled,
+  updateScheduled
+}) {
   const [workoutsList, setWorkoutsList] = useState([]);
   const { userContextState, userContextDispatch } = useUsersContext();
   let { category } = useParams();
@@ -21,7 +28,7 @@ function WorkoutsList({ search, setSearch, updateWorkout, setUpdateWorkout }) {
     fetch("/api/workouts/")
       .then((response) => response.json())
       .then((data) => setWorkoutsList([...data.reverse()]));
-  }, [updateWorkout]);
+  }, [updateWorkout, updateScheduled]);
 
   async function deleteWorkout(id) {
     const response = await fetch(`/api/schedules/${id}`, {
@@ -39,47 +46,24 @@ function WorkoutsList({ search, setSearch, updateWorkout, setUpdateWorkout }) {
   }
 
   return (
-    
-      <Container maxWidth="xl" sx={{}}>
-        <div className="WorkoutsList">
-          <div className="workout-container-list">
-            <WorkoutFilter
-              workoutsList={workoutsList}
-              setWorkoutsList={setWorkoutsList}
-              search={search}
-              setSearch={setSearch}
-              deleteWorkout={deleteWorkout}
-            />
-            {/* {workoutsList
-            .filter((workout) => {
-              const isInCategory =
-                category === undefined || workout.category === category;
-              const isInSearch = workout.title
-                .toLowerCase()
-                .includes(search.toLowerCase());
-              return isInCategory && isInSearch;
-            })
-            .map((workout) => {
-              return (
-                <Workout
-                  key={uuid()}
-                  workout={workout}
-                  deleteWorkout={deleteWorkout}
-                />
-              );
-            })} */}
-          </div>
+    <Container maxWidth="xl" sx={{}}>
+      <div className="WorkoutsList">
+        <div className="workout-container-list">
+          <WorkoutFilter
+            workoutsList={workoutsList}
+            setWorkoutsList={setWorkoutsList}
+            search={search}
+            setSearch={setSearch}
+            deleteWorkout={deleteWorkout}
+            setUpdateScheduled={setUpdateScheduled}
+            forUnsubscribeButton={forUnsubscribeButton}
+          />
         </div>
-      </Container>
-    
+      </div>
+    </Container>
   );
 }
 //============ Component end ============
 
 export default WorkoutsList;
 
-// {isAdmin() ? (
-
-//   ) : (
-//     ""
-//   )}
