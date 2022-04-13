@@ -10,16 +10,22 @@ const theme = createTheme({
   palette: {
     primary: {
       light: "#c2b0e2",
-      main: "#337066",
+      main: "#648dae",
       dark: "#7d6d99",
       contrastText: "#fff",
     },
     secondary: {
-      light: "#a6d4fa",
-      main: "#90caf9",
+      light: "#81a18f",
+      main: "#81a18f",
       dark: "#648dae",
       contrastText: "#000",
     },
+  },
+});
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
   },
 });
 

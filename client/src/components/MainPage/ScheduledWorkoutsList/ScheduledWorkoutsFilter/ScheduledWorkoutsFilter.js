@@ -64,8 +64,8 @@ function ScheduledWorkoutsFilter({
         headerName: "Username",
         width: 100,
       },
-      { field: "id", headerName: "schedule id", width: 220 },
-      { field: "workoutID", headerName: "workout id", width: 220 },
+      // { field: "id", headerName: "schedule id", width: 220 },
+      // { field: "workoutID", headerName: "workout id", width: 220 },
       { field: "title", headerName: "Title", width: 150, editable: isAdmin() },
       {
         field: "Time",
@@ -76,37 +76,37 @@ function ScheduledWorkoutsFilter({
       {
         field: "dayInMonth",
         headerName: "Day in month",
-        width: 150,
+        width: 110,
         editable: isAdmin(),
       },
       {
         field: "trainerName",
         headerName: "Trainer",
-        width: 100,
+        width: 80,
         editable: isAdmin(),
       },
       {
         field: "category",
         headerName: "Category",
-        width: 100,
+        width: 80,
         editable: isAdmin(),
       },
       {
         field: "groupSize",
         headerName: "Group size",
-        width: 150,
+        width: 90,
         editable: isAdmin(),
       },
-      {
-        field: "description",
-        headerName: "Description",
-        width: 150,
-        editable: isAdmin(),
-      },
+      // {
+      //   field: "description",
+      //   headerName: "Description",
+      //   width: 150,
+      //   editable: isAdmin(),
+      // },
       {
         field: "duration",
         headerName: "Duration",
-        width: 150,
+        width: 100,
         editable: isAdmin(),
       },
     ],
@@ -136,7 +136,7 @@ function ScheduledWorkoutsFilter({
       trainerName: scheduled.workoutInfo.trainerName,
       groupSize: scheduled.workoutInfo.groupSize,
       description: scheduled.workoutInfo.description,
-      duration: scheduled.workoutInfo.duration,
+      duration: scheduled.workoutInfo.duration + " minutes",
       username: username(scheduled.userID),
       actions: scheduledAction(scheduled),
     };
@@ -159,7 +159,6 @@ function ScheduledWorkoutsFilter({
             <DataGrid
               experimentalFeatures={{ newEditingApi: true }}
               editMode="row"
-              checkboxSelection
               rowHeight={50}
               rows={data.rows}
               columns={data.columns}
@@ -172,6 +171,7 @@ function ScheduledWorkoutsFilter({
               }}
               columnVisibilityModel={initLocalStorage()}
               hideFooter
+              sx={{bgcolor:"#F6F1ED", borderColor:"black"}}
             />
           </div>
         </div>

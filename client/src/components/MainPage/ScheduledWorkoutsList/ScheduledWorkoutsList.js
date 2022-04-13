@@ -108,13 +108,13 @@ function ScheduledWorkoutsList({
             position="static"
             sx={{
               textAlign: "center",
-              width: 250,
-              borderRadius: 1,
+              width: 300,
+              borderRadius: 2,
               marginLeft: 3,
               marginBottom: 4,
             }}
           >
-            <Typography variant="h6" component="div">
+            <Typography variant="h5" component="div">
               {isAdmin() ? "Workouts subscriptions:" : "My workouts:"}
             </Typography>
           </AppBar>

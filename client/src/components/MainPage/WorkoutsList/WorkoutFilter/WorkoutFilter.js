@@ -7,7 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { Grid, IconButton } from "@mui/material";
+import { AppBar, Grid, IconButton, Typography } from "@mui/material";
 import moment from "moment";
 import { DataGrid } from "@mui/x-data-grid";
 import DeleteWorkout from "../../Actions/DeleteWorkout";
@@ -82,7 +82,7 @@ function WorkoutFilter({
           return params.row.actions;
         },
       },
-      { field: "id", headerName: "workout id", width: 220 },
+      // { field: "id", headerName: "workout id", width: 220 },
       { field: "title", headerName: "Title", width: 150, editable: isAdmin() },
       {
         field: "Time",
@@ -90,12 +90,12 @@ function WorkoutFilter({
         width: 110,
         editable: isAdmin(),
       },
-      {
-        field: "dayInMonth",
-        headerName: "Day in month",
-        width: 150,
-        editable: isAdmin(),
-      },
+      // {
+      //   field: "dayInMonth",
+      //   headerName: "Day in month",
+      //   width: 150,
+      //   editable: isAdmin(),
+      // },
       {
         field: "trainerName",
         headerName: "Trainer",
@@ -111,15 +111,15 @@ function WorkoutFilter({
       {
         field: "groupSize",
         headerName: "Group size",
-        width: 150,
+        width: 85,
         editable: isAdmin(),
       },
-      {
-        field: "description",
-        headerName: "Description",
-        width: 150,
-        editable: isAdmin(),
-      },
+      // {
+      //   field: "description",
+      //   headerName: "Description",
+      //   width: 150,
+      //   editable: isAdmin(),
+      // },
       {
         field: "duration",
         headerName: "Duration",
@@ -183,7 +183,7 @@ function WorkoutFilter({
       trainerName: workout.trainerName,
       groupSize: workout.groupSize,
       description: workout.description,
-      duration: workout.duration,
+      duration: workout.duration + " minutes",
       actions: workoutAction(workout),
     };
     return workoutValue;
@@ -215,7 +215,7 @@ function WorkoutFilter({
         sx={{
           pr: 5,
           borderRight: 1,
-          borderColor: "#EEEBEB",
+          borderColor: "#D6D6D6",
         }}
       >
         {week.map((day) => {
@@ -225,23 +225,33 @@ function WorkoutFilter({
               style={{
                 display: "flex",
                 height: 325,
-                width: "100%",
+                width: "90%",
                 marginBottom: 100,
               }}
               key={uuid()}
             >
               <div style={{ flexGrow: 1 }}>
                 <div style={{ display: "flex", alignSelf: "flex-start" }}>
-                  <strong>
-                    {day + ", " + matchDayInMonth[0]}
-                    {": "}
-                  </strong>
+                  <AppBar
+                    position="static"
+                    sx={{
+                      textAlign: "center",
+                      width: 200,
+                      height: 20,
+                      borderRadius: 2,
+                      bgcolor:"#EEE7E2"
+                    }}
+                  >
+                    <Typography variant="h7" component="div" fontWeight='bold' color="black" >
+                      {day + ", " + matchDayInMonth[0]}
+                      {": "}
+                    </Typography>
+                  </AppBar>
                 </div>
                 <br />
                 <DataGrid
                   experimentalFeatures={{ newEditingApi: true }}
                   editMode="row"
-                  checkboxSelection
                   rowHeight={50}
                   rows={matchDayInWeek(day)}
                   columns={data.columns}
@@ -254,6 +264,7 @@ function WorkoutFilter({
                   }}
                   columnVisibilityModel={initLocalStorage()}
                   hideFooter
+                  sx={{bgcolor:"#F6F1ED", borderColor:"black"}}
                 />
               </div>
             </div>

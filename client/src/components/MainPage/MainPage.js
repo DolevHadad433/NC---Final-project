@@ -131,13 +131,13 @@ function MainPage() {
                     sx={{
                       textAlign: "center",
                       width: 250,
-                      borderRadius: 1,
+                      borderRadius: 2,
                       marginLeft: 3,
                       marginBottom: 4,
                       marginTop: -4,
                     }}
                   >
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h5" component="div">
                       Workouts this week:
                     </Typography>
                   </AppBar>

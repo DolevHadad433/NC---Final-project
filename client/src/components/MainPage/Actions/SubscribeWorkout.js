@@ -68,7 +68,7 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
         size="small"
-        color="primary"
+        color="secondary"
         variant="contained"
         onClick={handleOpen}
       >
