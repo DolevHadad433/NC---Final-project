@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Container, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
+import Popover from "@mui/material/Popover";
 
 const style = {
   position: "absolute",
@@ -20,6 +21,7 @@ const style = {
 
 function EditWorkout({ workout, deleteWorkout }) {
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
     setOpen(true);
   }
@@ -28,9 +30,45 @@ function EditWorkout({ workout, deleteWorkout }) {
     setOpen(false);
   }
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+
   return (
     <div>
-      <IconButton>
+      <Popover
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: "none",
+        }}
+        open={openPopover}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 1 }}>Edit workout</Typography>
+      </Popover>
+      <IconButton
+        aria-owns={openPopover ? "mouse-over-popover" : undefined}
+        aria-haspopup="true"
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+        onClick={handleOpen}
+      >
         <EditIcon />
       </IconButton>
       {/* <Modal open={open} onClose={handleClose}>

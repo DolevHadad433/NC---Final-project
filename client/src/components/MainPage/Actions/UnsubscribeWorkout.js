@@ -4,8 +4,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import RemoveIcon from '@mui/icons-material/Remove';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import RemoveIcon from "@mui/icons-material/Remove";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import Popover from "@mui/material/Popover";
 
 const style = {
   position: "absolute",
@@ -21,6 +22,7 @@ const style = {
 
 function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
     setOpen(true);
   }
@@ -28,6 +30,16 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
   function handleClose() {
     setOpen(false);
   }
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
 
   async function unsubscribeScheduledWorkout(_id) {
     const response = await fetch(`/api/schedules/${_id}`, {
@@ -39,7 +51,36 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
 
   return (
     <div>
-      <IconButton size="small" color="error" variant="contained" onClick={handleOpen}>
+      <Popover
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: "none",
+        }}
+        open={openPopover}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 1 }}>Unsubscribe workout</Typography>
+      </Popover>
+      <IconButton
+        aria-owns={openPopover ? "mouse-over-popover" : undefined}
+        aria-haspopup="true"
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+        size="small"
+        color="error"
+        variant="contained"
+        onClick={handleOpen}
+      >
         <HighlightOffIcon />
       </IconButton>
       <Modal open={open} onClose={handleClose}>

@@ -4,7 +4,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
+import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import Popover from "@mui/material/Popover";
 
 const style = {
   position: "absolute",
@@ -20,7 +21,7 @@ const style = {
 
 function SubscribeWorkout({ workout, subscribeHandler }) {
   const [open, setOpen] = useState(false);
-
+  const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
     setOpen(true);
   }
@@ -29,9 +30,48 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
     setOpen(false);
   }
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+
   return (
     <div>
-      <IconButton size="small" color="primary" variant="contained" onClick={handleOpen}>
+      <Popover
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: "none",
+        }}
+        open={openPopover}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 1 }}>Subscribe workout</Typography>
+      </Popover>
+      <IconButton
+        aria-owns={openPopover ? "mouse-over-popover" : undefined}
+        aria-haspopup="true"
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+        size="small"
+        color="primary"
+        variant="contained"
+        onClick={handleOpen}
+      >
         <AddBoxRoundedIcon />
       </IconButton>
       <Modal open={open} onClose={handleClose}>

@@ -170,30 +170,43 @@ function AddingWorkout({
   if (addingWorkoutState.addWorkoutSuccessfully) {
     return (
       <Container>
-        <Grid container>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          sx={{ marginTop: 1, width: 550 }}
+        >
           <div className="successfully-add-workout-container">
-            <Grid item>
-              <Typography variant="h4" component="div">
-                Please enter workout details:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                sx={{ mt: 3, ml: 1 }}
-                onClick={() => dispatchAddingWorkout({ type: "add-another" })}
-              >
-                Add another workout!
-              </Button>
+            <Box
+              sx={{
+                "& .MuiTextField-root": { m: 2, width: "50ch" },
+              }}
+            >
+              <Grid item>
+                <Typography variant="h4" component="div">
+                  Workout added successfully!
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  sx={{ mt: 3, ml: 3 }}
+                  onClick={() => dispatchAddingWorkout({ type: "add-another" })}
+                >
+                  Add another workout!
+                </Button>
 
-              <Button
-                variant="contained"
-                sx={{ mt: 3, ml: 1 }}
-                onClick={() => handleClose(uuid())}
-              >
-                Back to main page
-              </Button>
-            </Grid>
+                <Button
+                  variant="outlined"
+                  sx={{ mt: 3, ml: 3 }}
+                  onClick={() => handleClose(uuid())}
+                >
+                  Back to main page
+                </Button>
+              </Grid>
+            </Box>
           </div>
         </Grid>
       </Container>
