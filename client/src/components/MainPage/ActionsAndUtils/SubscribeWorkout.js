@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useUsersContext } from "../../../contexts/UsersContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import Popover from "@mui/material/Popover";
 
 const style = {
@@ -19,9 +20,24 @@ const style = {
   p: 4,
 };
 
-function DeleteWorkout({ workout, deleteWorkout }) {
+function SubscribeWorkout({ workout }) {
+  const { userContextState } = useUsersContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  function subscribeHandler(id) {
+    fetch("/api/schedules/create", {
+      method: "POST",
+      body: JSON.stringify({
+        userID: userContextState.userID,
+        workoutID: id,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+  }
+
   function handleOpen() {
     setOpen(true);
   }
@@ -60,17 +76,19 @@ function DeleteWorkout({ workout, deleteWorkout }) {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography sx={{ p: 1 }}>Delete workout</Typography>
+        <Typography sx={{ p: 1 }}>Subscribe workout</Typography>
       </Popover>
       <IconButton
         aria-owns={openPopover ? "mouse-over-popover" : undefined}
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        aria-label="delete"
+        size="small"
+        color="primary"
+        variant="contained"
         onClick={handleOpen}
       >
-        <DeleteIcon />
+        <AddBoxRoundedIcon />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -78,13 +96,12 @@ function DeleteWorkout({ workout, deleteWorkout }) {
             sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
             color="text.secondary"
           >
-            Are you sure that you want to delete the{" "}
+            Please confirm your subscribing to{" "}
             <Typography variant="h7" component="span" display="inline">
               <strong>{workout.title}</strong>
             </Typography>{" "}
-            workout on <strong>{workout.date}</strong>?
+            workout on <strong>{workout.date}</strong>.
           </Typography>
-
           <Container maxWidth="lg">
             <Grid
               container
@@ -94,19 +111,17 @@ function DeleteWorkout({ workout, deleteWorkout }) {
             >
               <Grid item sm={4} sx={{ marginLeft: 7.5 }}>
                 <Button
-                  size="small"
                   variant="contained"
-                  startIcon={<DeleteIcon />}
+                  size="small"
                   onClick={() => {
-                    deleteWorkout(workout._id);
+                    subscribeHandler(workout._id);
                   }}
-                  color="error"
                 >
-                  Delete
+                  Confirm
                 </Button>
               </Grid>
               <Grid item sm={4}>
-                <Button variant="contained" size="small" onClick={handleClose}>
+                <Button variant="outlined" size="small" onClick={handleClose}>
                   Cancel
                 </Button>
               </Grid>
@@ -118,4 +133,4 @@ function DeleteWorkout({ workout, deleteWorkout }) {
   );
 }
 
-export default DeleteWorkout;
+export default SubscribeWorkout;

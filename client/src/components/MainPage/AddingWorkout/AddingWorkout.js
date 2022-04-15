@@ -1,5 +1,6 @@
 //============ Imports start ============
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useReducer } from "react";
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import { v4 as uuid } from "uuid";
 import {
   Button,
@@ -12,6 +13,7 @@ import {
   AppBar,
 } from "@mui/material";
 import moment from "moment";
+
 //============ Imports end ============
 
 //============ Reducer properties start ============
@@ -84,44 +86,32 @@ const initialAddingWorkoutState = {
 //============ Reducer properties end ============
 
 //============ Component start ============
-function AddingWorkout({
-  handleClose,
-  updateWorkout,
-  setUpdateWorkout,
-  workoutBaseList,
-}) {
+function AddingWorkout({ handleClose, setOpen, handleMenuClose }) {
   const [addingWorkoutState, dispatchAddingWorkout] = useReducer(
     addingWorkoutReducer,
     initialAddingWorkoutState
   );
-  const [categoriesList, setCategoriesList] = useState([]);
-  const [workoutList, setWorkoutList] = useState([]);
-  // const [workoutBaseList, setWorkoutBaseList] = useState([]);
+  const { workoutsList, workoutBaseList, categoriesList, setUpdateWorkout } =
+    useWorkoutsContext();
+
+  function handleAddNewWorkOutModalClose(id) {
+    setOpen(false);
+    setUpdateWorkout(`Update the ${id} workout.`);
+  }
+
   const workoutsOptions = {
     categoryTitle: categoriesList.map((e) => e.title),
     workoutTitle: workoutBaseList.map((e) => e.title),
-    workoutDuration: workoutList
+    workoutDuration: workoutsList
       .map((e) => e.duration)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
-    workoutGroupSize: workoutList
+    workoutGroupSize: workoutsList
       .map((e) => e.groupSize)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
-    workoutTrainerName: workoutList
+    workoutTrainerName: workoutsList
       .map((e) => e.trainerName)
       .filter((e, index, self) => index === self.findIndex((t) => t === e)),
   };
-
-  useEffect(() => {
-    fetch("/api/categories/")
-      .then((responseCategories) => responseCategories.json())
-      .then((dataCategories) => setCategoriesList([...dataCategories]));
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/workouts/")
-      .then((responseWorkouts) => responseWorkouts.json())
-      .then((dataWorkouts) => setWorkoutList([...dataWorkouts]));
-  }, []);
 
   function filterDescription() {
     const findDescription = workoutBaseList.find(
@@ -154,7 +144,6 @@ function AddingWorkout({
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      const data = await response.json();
       setTimeout(() => {
         dispatchAddingWorkout({ type: "stop-loading" });
         dispatchAddingWorkout({ type: "add-successfully" });
@@ -201,7 +190,10 @@ function AddingWorkout({
                 <Button
                   variant="outlined"
                   sx={{ mt: 3, ml: 3 }}
-                  onClick={() => handleClose(uuid())}
+                  onClick={() => {
+                    handleAddNewWorkOutModalClose(uuid());
+                    handleMenuClose();
+                  }}
                 >
                   Back to main page
                 </Button>
@@ -227,8 +219,6 @@ function AddingWorkout({
               sx={{
                 "& .MuiTextField-root": { m: 2, width: "50ch" },
               }}
-              noValidate
-              autoComplete="off"
             >
               <Grid className="title-of-page" item sm={6}>
                 <AppBar
@@ -261,13 +251,13 @@ function AddingWorkout({
                   inputValue={addingWorkoutState.workoutTitleInputValue}
                   onInputChange={(event, newInputValue) => {
                     dispatchAddingWorkout({
-                      type: "input-value",
-                      field: "workoutTitleInputValue",
+                      type: "field",
+                      field: "title",
                       value: newInputValue,
                     });
                     dispatchAddingWorkout({
-                      type: "field",
-                      field: "title",
+                      type: "input-value",
+                      field: "workoutTitleInputValue",
                       value: newInputValue,
                     });
                   }}
@@ -436,7 +426,10 @@ function AddingWorkout({
                     <Button
                       variant="outlined"
                       sx={{ mt: 3, ml: 1 }}
-                      onClick={() => handleClose(uuid())}
+                      onClick={() => {
+                        handleAddNewWorkOutModalClose(uuid());
+                        handleMenuClose();
+                      }}
                     >
                       Cancel
                     </Button>

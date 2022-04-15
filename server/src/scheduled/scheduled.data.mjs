@@ -98,14 +98,14 @@ export async function deleteSchedule(id) {
   const schedule = await getScheduledCollection();
 
   async function scheduleToReturnByEnteredScheduledID(
-    entered_id,
+    enteredSchedule_id,
     enterWorkoutID
   ) {
     const getSchedule = await getScheduledCollection();
     const getWorkoutInfo = await getSchedule
       .aggregate([
         {
-          $match: { _id: entered_id },
+          $match: { _id: enteredSchedule_id },
         },
         {
           $lookup: {
@@ -163,11 +163,6 @@ export async function deleteSchedule(id) {
       },
     ])
     .toArray();
-
-  // console.log(
-  //   (await schedule.findOne({ _id: ObjectId(id) })) === null &&
-  //     deleteFromWorkouts.length === 0
-  // );
 
   if (
     (await schedule.findOne({ _id: ObjectId(id) })) === null &&

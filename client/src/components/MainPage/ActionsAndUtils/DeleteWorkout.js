@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import useDeleteWorkout from "../../../utils/useDeleteWorkout";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import RemoveIcon from "@mui/icons-material/Remove";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Popover from "@mui/material/Popover";
 
 const style = {
@@ -20,7 +20,8 @@ const style = {
   p: 4,
 };
 
-function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
+function DeleteWorkout({ workout }) {
+  const { deleteWorkoutHandler } = useDeleteWorkout(workout._id);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
@@ -40,14 +41,6 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
   };
 
   const openPopover = Boolean(anchorEl);
-
-  async function unsubscribeScheduledWorkout(_id) {
-    const response = await fetch(`/api/schedules/${_id}`, {
-      method: "DELETE",
-    });
-    const data = await response.json();
-    setUpdateScheduled(`Delete scheduled workout: ${_id}.`);
-  }
 
   return (
     <div>
@@ -69,19 +62,17 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography sx={{ p: 1 }}>Unsubscribe workout</Typography>
+        <Typography sx={{ p: 1 }}>Delete workout</Typography>
       </Popover>
       <IconButton
         aria-owns={openPopover ? "mouse-over-popover" : undefined}
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        size="small"
-        color="error"
-        variant="contained"
+        aria-label="delete"
         onClick={handleOpen}
       >
-        <HighlightOffIcon />
+        <DeleteIcon />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -89,12 +80,13 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
             sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
             color="text.secondary"
           >
-            Are you sure that you want to unsubscribe from{" "}
+            Are you sure that you want to delete the{" "}
             <Typography variant="h7" component="span" display="inline">
-              <strong>{scheduled.workoutInfo.title}</strong>
+              <strong>{workout.title}</strong>
             </Typography>{" "}
-            workout on <strong>{scheduled.workoutInfo.date}</strong>?
+            workout on <strong>{workout.date}</strong>?
           </Typography>
+
           <Container maxWidth="lg">
             <Grid
               container
@@ -104,14 +96,13 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
             >
               <Grid item sm={4} sx={{ marginLeft: 7.5 }}>
                 <Button
-                  variant="contained"
                   size="small"
+                  variant="contained"
+                  startIcon={<DeleteIcon />}
+                  onClick={deleteWorkoutHandler}
                   color="error"
-                  onClick={() => {
-                    unsubscribeScheduledWorkout(scheduled._id);
-                  }}
                 >
-                  Confirm
+                  Delete
                 </Button>
               </Grid>
               <Grid item sm={4}>
@@ -127,4 +118,4 @@ function UnsubscribeWorkout({ scheduled, setUpdateScheduled }) {
   );
 }
 
-export default UnsubscribeWorkout;
+export default DeleteWorkout;

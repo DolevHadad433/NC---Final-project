@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Container, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import RemoveIcon from "@mui/icons-material/Remove";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Popover from "@mui/material/Popover";
 
 const style = {
@@ -19,7 +21,8 @@ const style = {
   p: 4,
 };
 
-function SubscribeWorkout({ workout, subscribeHandler }) {
+function UnsubscribeWorkout({ scheduled }) {
+  const { setUpdateScheduled } = useWorkoutsContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
@@ -39,6 +42,14 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
   };
 
   const openPopover = Boolean(anchorEl);
+
+  async function unsubscribeScheduledWorkout(_id) {
+    const response = await fetch(`/api/schedules/${_id}`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+    setUpdateScheduled(`Delete scheduled workout: ${_id}.`);
+  }
 
   return (
     <div>
@@ -60,7 +71,7 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography sx={{ p: 1 }}>Subscribe workout</Typography>
+        <Typography sx={{ p: 1 }}>Unsubscribe workout</Typography>
       </Popover>
       <IconButton
         aria-owns={openPopover ? "mouse-over-popover" : undefined}
@@ -68,11 +79,11 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
         size="small"
-        color="secondary"
+        color="error"
         variant="contained"
         onClick={handleOpen}
       >
-        <AddBoxRoundedIcon />
+        <HighlightOffIcon />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -80,11 +91,11 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
             sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
             color="text.secondary"
           >
-            Please confirm your subscribing to{" "}
+            Are you sure that you want to unsubscribe from{" "}
             <Typography variant="h7" component="span" display="inline">
-              <strong>{workout.title}</strong>
+              <strong>{scheduled.workoutInfo.title}</strong>
             </Typography>{" "}
-            workout on <strong>{workout.date}</strong>.
+            workout on <strong>{scheduled.workoutInfo.date}</strong>?
           </Typography>
           <Container maxWidth="lg">
             <Grid
@@ -97,15 +108,16 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
                 <Button
                   variant="contained"
                   size="small"
+                  color="error"
                   onClick={() => {
-                    subscribeHandler(workout._id);
+                    unsubscribeScheduledWorkout(scheduled._id);
                   }}
                 >
                   Confirm
                 </Button>
               </Grid>
               <Grid item sm={4}>
-                <Button variant="outlined" size="small" onClick={handleClose}>
+                <Button variant="contained" size="small" onClick={handleClose}>
                   Cancel
                 </Button>
               </Grid>
@@ -117,4 +129,4 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
   );
 }
 
-export default SubscribeWorkout;
+export default UnsubscribeWorkout;

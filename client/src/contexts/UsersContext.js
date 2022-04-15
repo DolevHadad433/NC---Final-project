@@ -15,7 +15,6 @@ export const Actions = {
   logOutSuccess: "log-out-from-main-page",
   signUpSuccess: "sign-up-success",
   getLocalStorage: "get-localstorage",
-  updateScheduledWorkouts: "update-or-delete-scheduled-workouts",
   isAdmin: "is-admin",
 };
 function userReducer(state, action) {
@@ -51,11 +50,6 @@ function userReducer(state, action) {
         ...state,
         username: action.payload,
       };
-    case Actions.updateScheduledWorkouts:
-      return {
-        ...state,
-        subscribedWorkouts: action.payload,
-      };
     case Actions.isAdmin:
       return {
         ...state,
@@ -71,10 +65,8 @@ const initialState = {
   password: "",
   phoneNumber: "",
   userID: "",
-  updatedOrDeletedScheduledWorkout: "",
   isLoading: false,
   isAdmin: false,
-  subscribedWorkouts: [],
 };
 //============ Reducer properties end ============
 
@@ -96,14 +88,11 @@ function UsersProvider({ children }) {
     } else return false;
   });
 
-  const value = useMemo(
-    () => ({
-      userContextState,
-      userContextDispatch,
-      isAdmin,
-    }),
-    [userContextState]
-  );
+  const value = {
+    userContextState,
+    userContextDispatch,
+    isAdmin,
+  };
 
   function getUsernameFromLocalStorage(obj) {
     return obj.username;

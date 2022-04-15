@@ -1,12 +1,25 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { UsersProvider } from "../contexts/UsersContext";
+import { WorkoutsProvider } from "../contexts/WorkoutsContext";
 import LogIn from "./LogIn/LogIn";
 import MainPage from "./MainPage/MainPage";
 import SignUp from "./SignUp/SignUp";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CheckResponsive from "./CheckResponsive";
+import { breakpoints } from "@mui/system";
+import MyWorkouts from "./MainPage/WorkoutsList/MyWorkouts/MyWorkouts";
 
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      laptop: 1024,
+      desktop: 1200,
+    },
+  },
+
   palette: {
     primary: {
       light: "#c2b0e2",
@@ -23,26 +36,34 @@ const theme = createTheme({
   },
 });
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
-
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <UsersProvider>
+    // <ThemeProvider theme={theme} breakpoints={breakpoints}>
+    <UsersProvider>
+      <WorkoutsProvider>
         <div className="App">
           <div className="header"></div>
           <Routes>
             <Route path="/" element={<LogIn />} />
-            <Route path="/main-page/*" element={<MainPage />} />
+            <Route path="/main-page//*" element={<MainPage />}>
+              {/* <Route
+            path="my-workouts"
+            element={
+              <MyWorkouts
+                // updateWorkout={updateWorkout}
+                // setUpdateWorkout={setUpdateWorkout}
+                // workoutBaseList={workoutBaseList}
+              />
+            }
+          /> */}
+            </Route>
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/responsive" element={<CheckResponsive />} />
           </Routes>
         </div>
-      </UsersProvider>
-    </ThemeProvider>
+      </WorkoutsProvider>
+    </UsersProvider>
+    // </ThemeProvider>
   );
 }
 

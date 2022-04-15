@@ -1,8 +1,8 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
-
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
+import { v4 as uuid } from "uuid";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import { Container, Grid } from "@mui/material";
@@ -11,70 +11,19 @@ import ScheduledWorkoutsFilter from "./ScheduledWorkoutsFilter/ScheduledWorkouts
 //============ Imports end ============
 
 //============ Component start ============
-function ScheduledWorkoutsList({
-  setForUnsubscribeButton,
-  updateScheduled,
-  setUpdateScheduled,
-}) {
-  const [schedules, setScheduled] = useState([]);
-  const [userNames, setUserNames] = useState([]);
-  const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
+function ScheduledWorkoutsList() {
+  const {
+    schedulesForAdmin,
+    schedulesForUsers,
+    userNamesForSchedules,
+    deletedWorkout,
+  } = useWorkoutsContext();
+  const { isAdmin } = useUsersContext();
 
-  //get the schedules workouts by user (the post request send the userID to the server and recieve the data)
-  useEffect(async () => {
-    // if you are an admin you will get all schedules, if you are an ordinery user you will get just your schedules.
-    if (isAdmin()) {
-      const response = await fetch("/api/schedules", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const data = await response.json();
-
-      //getting the usernames of all users and match them to the right scheduled.
-      const responseUserName = await fetch("/api/users");
-      const dataUserName = await responseUserName.json();
-      setUserNames([...dataUserName]);
-
-      setScheduled(data.reverse());
-    } else {
-      const response = await fetch("/api/schedules/userID", {
-        method: "POST",
-        body: JSON.stringify({
-          userID: getUserIdFromLocalStorage(
-            JSON.parse(localStorage.getItem("User"))
-          ),
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const data = await response.json();
-      const responseUserName = await fetch("/api/users");
-      const dataUserName = await responseUserName.json();
-      setUserNames([...dataUserName]);
-      setScheduled(data.reverse());
-      setForUnsubscribeButton(data.reverse());
-    }
-  }, [updateScheduled, userContextState]);
-
-  function getUsernameFromLocalStorage(obj) {
-    return obj.username;
-  }
-  function getUserIdFromLocalStorage(obj) {
-    return obj.userID;
-  }
-
-  function whatIsYourUserName(userId) {
-    const username = userNames.find((e) => e._id === userId);
-    if (username !== undefined) {
-      return username.username;
-    } else return "";
-  }
+  const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
 
   function ifThereIsScheduled() {
-    if (schedules !== "") {
+    if (schedules.length > 0) {
       const scheduledWorkoutsID = schedules.map(
         (scheduled) => scheduled.workoutID
       );
@@ -92,12 +41,24 @@ function ScheduledWorkoutsList({
       return (
         <ScheduledWorkoutsFilter
           schedulesList={schedules}
-          setScheduledList={setScheduled}
-          setUpdateScheduled={setUpdateScheduled}
           username={whatIsYourUserName}
         />
       );
     } else return "Not subscribed yet";
+  }
+
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
+  }
+  function getUserIdFromLocalStorage(obj) {
+    return obj.userID;
+  }
+
+  function whatIsYourUserName(userId) {
+    const username = userNamesForSchedules.find((e) => e._id === userId);
+    if (username !== undefined) {
+      return username.username;
+    } else return "";
   }
 
   return (

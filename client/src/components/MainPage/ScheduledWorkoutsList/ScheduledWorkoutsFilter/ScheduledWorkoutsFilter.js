@@ -9,21 +9,20 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { Grid } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import UnsubscribeWorkout from "../../Actions/UnsubscribeWorkout";
+import UnsubscribeWorkout from "../../ActionsAndUtils/UnsubscribeWorkout";
 
 function ScheduledWorkoutsFilter({
   schedulesList,
-  setScheduledList,
+  username,
   search,
   setSearch,
-  setUpdateScheduled,
-  username,
 }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     localStorage.getItem("schedulesColumnVisibilityModel")
   );
+  const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
 
-  function initLocalStorage() {
+  function initLocalStorageColumnVisibility() {
     if (
       JSON.parse(localStorage.getItem("schedulesColumnVisibilityModel")) ===
       null
@@ -37,7 +36,6 @@ function ScheduledWorkoutsFilter({
     return JSON.parse(localStorage.getItem("schedulesColumnVisibilityModel"));
   }
 
-  const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
 
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
@@ -115,10 +113,7 @@ function ScheduledWorkoutsFilter({
   function scheduledAction(scheduled) {
     return (
       <Grid item sm={2}>
-        <UnsubscribeWorkout
-          scheduled={scheduled}
-          setUpdateScheduled={setUpdateScheduled}
-        />
+        <UnsubscribeWorkout scheduled={scheduled} />
       </Grid>
     );
   }
@@ -152,7 +147,7 @@ function ScheduledWorkoutsFilter({
             height: 450,
             width: "100%",
             marginBottom: 100,
-            marginTop:35
+            marginTop: 35,
           }}
         >
           <div style={{ flexGrow: 1 }}>
@@ -169,9 +164,9 @@ function ScheduledWorkoutsFilter({
                 );
                 setColumnVisibilityModel(newModel);
               }}
-              columnVisibilityModel={initLocalStorage()}
+              columnVisibilityModel={initLocalStorageColumnVisibility()}
               hideFooter
-              sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
+              // sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
             />
           </div>
         </div>
