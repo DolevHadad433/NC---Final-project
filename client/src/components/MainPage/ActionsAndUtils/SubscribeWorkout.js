@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import { useUsersContext } from "../../../contexts/UsersContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -20,23 +21,11 @@ const style = {
   p: 4,
 };
 
-function SubscribeWorkout({ workout }) {
+function SubscribeWorkout({ workout, subscribeHandler }) {
+  // const { subscribeHandler } = useWorkoutsContext();
   const { userContextState } = useUsersContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
-  function subscribeHandler(id) {
-    fetch("/api/schedules/create", {
-      method: "POST",
-      body: JSON.stringify({
-        userID: userContextState.userID,
-        workoutID: id,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-  }
 
   function handleOpen() {
     setOpen(true);
@@ -55,7 +44,7 @@ function SubscribeWorkout({ workout }) {
   };
 
   const openPopover = Boolean(anchorEl);
-
+  console.log(userContextState.userID);
   return (
     <div>
       <Popover
@@ -114,7 +103,7 @@ function SubscribeWorkout({ workout }) {
                   variant="contained"
                   size="small"
                   onClick={() => {
-                    subscribeHandler(workout._id);
+                    subscribeHandler(workout._id, userContextState.userID);
                   }}
                 >
                   Confirm

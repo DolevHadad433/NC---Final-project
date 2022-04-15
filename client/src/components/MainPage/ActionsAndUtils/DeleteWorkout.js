@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useDeleteWorkout from "../../../utils/useDeleteWorkout";
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -21,7 +21,7 @@ const style = {
 };
 
 function DeleteWorkout({ workout }) {
-  const { deleteWorkoutHandler } = useDeleteWorkout(workout._id);
+  const { deleteWorkoutHandler } = useWorkoutsContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
@@ -99,7 +99,7 @@ function DeleteWorkout({ workout }) {
                   size="small"
                   variant="contained"
                   startIcon={<DeleteIcon />}
-                  onClick={deleteWorkoutHandler}
+                  onClick={() => deleteWorkoutHandler(workout._id)}
                   color="error"
                 >
                   Delete

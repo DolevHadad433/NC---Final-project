@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function useSchedulesForAdmin({ deletedWorkout, updateScheduled }) {
+function useSchedulesForAdmin({ updateSubscribe, updateUnsubscribe }) {
   const [schedules, setScheduled] = useState([]);
   useEffect(() => {
     fetch("/api/schedules", {
@@ -11,7 +11,7 @@ function useSchedulesForAdmin({ deletedWorkout, updateScheduled }) {
     })
       .then((response) => response.json())
       .then((data) => setScheduled([...data.reverse()]));
-  }, [deletedWorkout, updateScheduled]);
+  }, [updateSubscribe, updateUnsubscribe]);
 
   return schedules;
 }

@@ -7,6 +7,7 @@ import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import { Container, Grid } from "@mui/material";
 import ScheduledWorkoutsFilter from "./ScheduledWorkoutsFilter/ScheduledWorkoutsFilter";
+import useUpdateWorkout from "../../../utils/useUpdateWorkout";
 
 //============ Imports end ============
 
@@ -17,7 +18,12 @@ function ScheduledWorkoutsList() {
     schedulesForUsers,
     userNamesForSchedules,
     deletedWorkout,
+    subscribeHandler,
+    unsubscribeHandler,
   } = useWorkoutsContext();
+
+  // const { updateScheduled } = useUpdateWorkout();
+
   const { isAdmin } = useUsersContext();
 
   const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
@@ -63,13 +69,18 @@ function ScheduledWorkoutsList() {
 
   return (
     <Container maxWidth="xxl" sx={{ alignItems: "center" }}>
-      <Grid container direction="row" justifyContent="center">
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        sx={{ width: "100%" }}
+      >
         <Grid item sm={6}>
           <AppBar
             position="static"
             sx={{
               textAlign: "center",
-              width: 300,
+              width: "100%",
               borderRadius: 2,
               marginLeft: 3,
               marginBottom: 4,
@@ -80,7 +91,7 @@ function ScheduledWorkoutsList() {
             </Typography>
           </AppBar>
         </Grid>
-        <Grid item sm={12} sx={{ height: 200 }}>
+        <Grid item sm={12} sx={{ height: 200, width: "100%" }}>
           {ifThereIsScheduled()}
         </Grid>
       </Grid>

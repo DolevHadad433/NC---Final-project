@@ -10,6 +10,15 @@ const Context = React.createContext({});
 //============ Imports and properties end ============
 
 //============ Reducer properties start ============
+
+function getUsernameFromLocalStorage(obj) {
+  return obj.username;
+}
+
+function getUserIdFromLocalStorage(obj) {
+  return obj.userID;
+}
+
 export const Actions = {
   logInSuccess: "log-in-success",
   logOutSuccess: "log-out-from-main-page",
@@ -22,10 +31,12 @@ function userReducer(state, action) {
     case Actions.logInSuccess:
       return {
         ...state,
-        username: action.payload.username,
-        password: action.payload.password,
-        phoneNumber: action.payload.phoneNumber,
-        userID: action.payload._id,
+        username: getUsernameFromLocalStorage(
+          JSON.parse(localStorage.getItem("User"))
+        ),
+        userID: getUserIdFromLocalStorage(
+          JSON.parse(localStorage.getItem("User"))
+        ),
       };
     case Actions.logOutSuccess:
       return {
@@ -41,7 +52,7 @@ function userReducer(state, action) {
       return {
         ...state,
         username: action.payload.username,
-        password: action.payload.password,
+
         phoneNumber: action.payload.phoneNumber,
         userID: action.payload.userID,
       };
@@ -61,10 +72,12 @@ function userReducer(state, action) {
   }
 }
 const initialState = {
-  username: "",
+  username: getUsernameFromLocalStorage(
+    JSON.parse(localStorage.getItem("User"))
+  ),
   password: "",
   phoneNumber: "",
-  userID: "",
+  userID: getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))),
   isLoading: false,
   isAdmin: false,
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function useSchedulesForUsers({ deletedWorkout, updateScheduled }) {
+function useSchedulesForUsers({ updateSubscribe, updateUnsubscribe }) {
   const [schedules, setScheduled] = useState([]);
 
   function getUserIdFromLocalStorage(obj) {
@@ -21,7 +21,7 @@ function useSchedulesForUsers({ deletedWorkout, updateScheduled }) {
     })
       .then((response) => response.json())
       .then((data) => setScheduled([...data.reverse()]));
-  }, [deletedWorkout, updateScheduled]);
+  }, [updateSubscribe, updateUnsubscribe]);
 
   return schedules;
 }

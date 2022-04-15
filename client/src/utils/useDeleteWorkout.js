@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-function useDeleteWorkout({ id }) {
+function useDeleteWorkout() {
   const [deletedWorkout, setDeletedWorkout] = useState("");
 
-  function deleteWorkoutHandler() {
+  function deleteWorkoutHandler(id) {
     fetch(`/api/schedules/${id}`, {
       method: "DELETE",
     });
@@ -13,7 +13,7 @@ function useDeleteWorkout({ id }) {
     setDeletedWorkout(`Delete the ${id} workout successfully.`);
   }
 
-  return {deleteWorkoutHandler, deletedWorkout, setDeletedWorkout};
+  return { deleteWorkoutHandler, deletedWorkout };
 }
 
 export default useDeleteWorkout;

@@ -1,5 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { useWorkoutsContext } from "../../../../contexts/WorkoutsContext";
+import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
+import useSubscribeWorkout from "../../../../utils/useSubscribeWorkout";
+import useUnsubscribeWorkout from "../../../../utils/useUnsubscribeWorkout";
+
 import { v4 as uuid } from "uuid";
 import moment from "moment";
 import DeleteWorkout from "../../ActionsAndUtils/DeleteWorkout";
@@ -10,7 +14,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { AppBar, Grid, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -61,6 +64,11 @@ function WorkoutFilter({ search, setSearch }) {
 
   //========
 
+  const [updateSubscribe, subscribeHandler] = useSubscribeWorkout("");
+  const [updateUnsubscribe, unsubscribeHandler] = useUnsubscribeWorkout({
+    scheduledID: "",
+  });
+
   const { workoutsList, schedulesForAdmin, schedulesForUsers } =
     useWorkoutsContext();
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
@@ -92,7 +100,7 @@ function WorkoutFilter({ search, setSearch }) {
           return params.row.actions;
         },
       },
-      // { field: "id", headerName: "workout id", width: 220 },
+      { field: "id", headerName: "workout id", width: 220 },
       {
         field: "title",
         headerName: "Title",
@@ -192,16 +200,24 @@ function WorkoutFilter({ search, setSearch }) {
       if (schedules.find((e) => e === workout._id) === undefined) {
         return (
           <Grid item sm={2}>
-            <SubscribeWorkout workout={workout} />
+            <SubscribeWorkout
+              workout={workout}
+              subscribeHandler={subscribeHandler}
+            />
           </Grid>
         );
       } else {
-        const scheduled = schedules.find((e) => e.workoutID === workout._id);
-        return (
-          <Grid item sm={2}>
-            <UnsubscribeWorkout scheduled={scheduled} />
-          </Grid>
-        );
+        if (schedules.find((e) => e.workoutID === workout._id) !== undefined) {
+          const scheduled = schedules.find((e) => e.workoutID === workout._id);
+          return (
+            <Grid item sm={2}>
+              <UnsubscribeWorkout
+                scheduled={scheduled}
+                unsubscribeHandler={unsubscribeHandler}
+              />
+            </Grid>
+          );
+        }
       }
     }
   }
@@ -218,7 +234,7 @@ function WorkoutFilter({ search, setSearch }) {
   }
 
   console.log("WorkoutFilter is render");
-  
+
   function getDayInMonth(day) {
     return data.rows
       .filter(

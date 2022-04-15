@@ -73,10 +73,6 @@ function LogIn() {
       const userData = await response.json();
 
       if (userData !== undefined) {
-        userContextDispatch({
-          type: Actions.logInSuccess,
-          payload: { ...userData },
-        });
         localStorage.setItem(
           "User",
           JSON.stringify({
@@ -84,6 +80,10 @@ function LogIn() {
             userID: userData._id,
           })
         );
+        // userContextDispatch({
+        //   type: Actions.logInSuccess,
+        //   payload: {...userData},
+        // });
 
         setTimeout(() => {
           dispatchLogIn({ type: "stop_loading" });
@@ -112,7 +112,7 @@ function LogIn() {
         >
           <form className="login-form" onSubmit={onLogInSubmit}>
             {loginState.error && <p className="error">{loginState.error}</p>}
-            
+
             <Typography variant="h5" gutterBottom component="div">
               Please Login
             </Typography>

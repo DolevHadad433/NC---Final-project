@@ -21,8 +21,8 @@ const style = {
   p: 4,
 };
 
-function UnsubscribeWorkout({ scheduled }) {
-  const { setUpdateScheduled } = useWorkoutsContext();
+function UnsubscribeWorkout({ scheduled, unsubscribeHandler }) {
+  // const { unsubscribeHandler } = useWorkoutsContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
@@ -42,14 +42,6 @@ function UnsubscribeWorkout({ scheduled }) {
   };
 
   const openPopover = Boolean(anchorEl);
-
-  async function unsubscribeScheduledWorkout(_id) {
-    const response = await fetch(`/api/schedules/${_id}`, {
-      method: "DELETE",
-    });
-    const data = await response.json();
-    setUpdateScheduled(`Delete scheduled workout: ${_id}.`);
-  }
 
   return (
     <div>
@@ -110,7 +102,7 @@ function UnsubscribeWorkout({ scheduled }) {
                   size="small"
                   color="error"
                   onClick={() => {
-                    unsubscribeScheduledWorkout(scheduled._id);
+                    unsubscribeHandler(scheduled._id);
                   }}
                 >
                   Confirm

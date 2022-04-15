@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
+import { useWorkoutsContext } from "../../../../contexts/WorkoutsContext";
+import useUnsubscribeWorkout from "../../../../utils/useUnsubscribeWorkout";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -20,6 +22,11 @@ function ScheduledWorkoutsFilter({
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     localStorage.getItem("schedulesColumnVisibilityModel")
   );
+
+  const [updateUnsubscribe, unsubscribeHandler] = useUnsubscribeWorkout({
+    scheduledID: "",
+  });
+
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
 
   function initLocalStorageColumnVisibility() {
@@ -35,7 +42,6 @@ function ScheduledWorkoutsFilter({
 
     return JSON.parse(localStorage.getItem("schedulesColumnVisibilityModel"));
   }
-
 
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
@@ -62,8 +68,8 @@ function ScheduledWorkoutsFilter({
         headerName: "Username",
         width: 100,
       },
-      // { field: "id", headerName: "schedule id", width: 220 },
-      // { field: "workoutID", headerName: "workout id", width: 220 },
+      { field: "id", headerName: "schedule id", width: 220 },
+      { field: "workoutID", headerName: "workout id", width: 220 },
       { field: "title", headerName: "Title", width: 150, editable: isAdmin() },
       {
         field: "Time",
@@ -113,7 +119,10 @@ function ScheduledWorkoutsFilter({
   function scheduledAction(scheduled) {
     return (
       <Grid item sm={2}>
-        <UnsubscribeWorkout scheduled={scheduled} />
+        <UnsubscribeWorkout
+          scheduled={scheduled}
+          unsubscribeHandler={unsubscribeHandler}
+        />
       </Grid>
     );
   }
@@ -150,7 +159,9 @@ function ScheduledWorkoutsFilter({
             marginTop: 35,
           }}
         >
-          <div style={{ flexGrow: 1 }}>
+          <div
+            style={{ flexGrow: 1, display: "flex", height: 450, width: "100%" }}
+          >
             <DataGrid
               experimentalFeatures={{ newEditingApi: true }}
               editMode="row"

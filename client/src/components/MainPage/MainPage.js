@@ -76,7 +76,7 @@ function MainPage() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item sm={5}>
+          <Grid item sm={12}>
             <ScheduledWorkoutsList />
           </Grid>
         </Grid>
