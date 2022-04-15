@@ -1,9 +1,11 @@
 //============ Imports start ============
 import React, { useState, useEffect } from "react";
+import useSubscribeWorkout from "../../utils/useSubscribeWorkout";
+import useUnsubscribeWorkout from "../../utils/useUnsubscribeWorkout";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
 import { Route, Routes, Outlet } from "react-router-dom";
 import ScheduledWorkoutsList from "./ScheduledWorkoutsList/ScheduledWorkoutsList";
-import WorkoutsList from "./WorkoutsList/WorkoutsList";
+import WorkoutsList from "./WorkoutsList/WorkoutList";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -25,6 +27,7 @@ function MainPage() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const [search, setSearch] = useState("");
+  const [refresh, setRefreshe] = useState("");
 
   return (
     <div className="MainPage">
@@ -48,9 +51,7 @@ function MainPage() {
           <Grid item sm={12}>
             <Grid container spacing={4} direction="row">
               <Grid item sm={12}>
-                <div className="main-page-preference-container">
-                  {/* <WorkoutsCategoryChooser /> */}
-                </div>
+                <div className="main-page-preference-container"></div>
               </Grid>
 
               <Grid item sm={12} align="center" sx={{ marginLeft: 0 }}>
@@ -71,20 +72,18 @@ function MainPage() {
                     </Typography>
                   </AppBar>
 
-                  <WorkoutsList search={search} setSearch={setSearch} />
+                  <WorkoutsList
+                    search={search}
+                    setSearch={setSearch}/>
                 </div>
               </Grid>
             </Grid>
           </Grid>
           <Grid item sm={12}>
-            <ScheduledWorkoutsList />
+            
           </Grid>
         </Grid>
       </Container>
-      <Routes>
-        <Route path="/my-workouts" element={<MyWorkouts />} />
-      </Routes>
-      <Outlet />
     </div>
   );
 }

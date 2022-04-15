@@ -13,16 +13,8 @@ import useUpdateWorkout from "../../../utils/useUpdateWorkout";
 
 //============ Component start ============
 function ScheduledWorkoutsList() {
-  const {
-    schedulesForAdmin,
-    schedulesForUsers,
-    userNamesForSchedules,
-    deletedWorkout,
-    subscribeHandler,
-    unsubscribeHandler,
-  } = useWorkoutsContext();
-
-  // const { updateScheduled } = useUpdateWorkout();
+  const { schedulesForAdmin, schedulesForUsers, userNames, deletedWorkout } =
+    useWorkoutsContext();
 
   const { isAdmin } = useUsersContext();
 
@@ -53,15 +45,8 @@ function ScheduledWorkoutsList() {
     } else return "Not subscribed yet";
   }
 
-  function getUsernameFromLocalStorage(obj) {
-    return obj.username;
-  }
-  function getUserIdFromLocalStorage(obj) {
-    return obj.userID;
-  }
-
   function whatIsYourUserName(userId) {
-    const username = userNamesForSchedules.find((e) => e._id === userId);
+    const username = userNames.find((e) => e._id === userId);
     if (username !== undefined) {
       return username.username;
     } else return "";
@@ -82,8 +67,7 @@ function ScheduledWorkoutsList() {
               textAlign: "center",
               width: "100%",
               borderRadius: 2,
-              marginLeft: 3,
-              marginBottom: 4,
+              marginTop: 5,
             }}
           >
             <Typography variant="h5" component="div">

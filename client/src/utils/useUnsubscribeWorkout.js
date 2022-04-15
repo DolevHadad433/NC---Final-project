@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 function useUnsubscribeWorkout() {
-  const [updateUnsubscribe, setUpdateUnsubscribe] = useState("");
-
-  function unsubscribeHandler(scheduledID) {
+  const unsubscribeHandler = useCallback((scheduledID) => {
     fetch(`/api/schedules/${scheduledID}`, {
       method: "DELETE",
     });
-    setUpdateUnsubscribe(
-      `Unsubscribe the ${scheduledID} workout successfully.`
-    );
-  }
+  }, []);
 
-  return [updateUnsubscribe, unsubscribeHandler];
+  // function unsubscribeHandler(scheduledID) {
+  //   fetch(`/api/schedules/${scheduledID}`, {
+  //     method: "DELETE",
+  //   });
+  // }
+
+  return unsubscribeHandler;
 }
 
 export default useUnsubscribeWorkout;

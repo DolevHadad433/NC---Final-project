@@ -28,6 +28,7 @@ function MainMenu() {
   const [openAddNewWorkOut, setOpenAddNewWorkOut] = useState(false);
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
   const clickMyWorkoutsButtonHandler = useNavigate();
+  const clickAllScheduledWorkoutsButtonHandler = useNavigate()
   const clickLogOutHandler = useNavigate();
 
   const openMenu = Boolean(anchorMenu);
@@ -96,11 +97,20 @@ function MainMenu() {
         >
           Add new workout
         </MenuItem>
-        <MenuItem onClick={handleMenuClose} sx={{ display: showOnlyForAdmin }}>
+        <MenuItem
+          onClick={() => {
+            clickAllScheduledWorkoutsButtonHandler("/all-scheduled-workouts");
+            handleMenuClose();
+          }}
+          sx={{ display: showOnlyForAdmin }}
+        >
           All scheduled workouts
         </MenuItem>
         <MenuItem
-          onClick={() => clickMyWorkoutsButtonHandler("/main-page/my-workouts")}
+          onClick={() => {
+            clickMyWorkoutsButtonHandler("/my-workouts");
+            handleMenuClose();
+          }}
           sx={{ display: showOnlyForUsers }}
         >
           My workouts

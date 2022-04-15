@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-function useSchedulesForUsers({ updateSubscribe, updateUnsubscribe }) {
-  const [schedules, setScheduled] = useState([]);
-
+function useSchedulesForUsers() {
+  const [schedulesForUsers, setScheduledForUsers] = useState([]);
+  const [state, setState] = useState();
   function getUserIdFromLocalStorage(obj) {
     return obj.userID;
   }
@@ -20,10 +20,10 @@ function useSchedulesForUsers({ updateSubscribe, updateUnsubscribe }) {
       },
     })
       .then((response) => response.json())
-      .then((data) => setScheduled([...data.reverse()]));
-  }, [updateSubscribe, updateUnsubscribe]);
+      .then((data) => setScheduledForUsers([...data.reverse()]));
+  }, [state]);
 
-  return schedules;
+  return [schedulesForUsers, setState];
 }
 
 export default useSchedulesForUsers;

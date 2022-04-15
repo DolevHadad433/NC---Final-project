@@ -45,18 +45,9 @@ function App() {
           <div className="header"></div>
           <Routes>
             <Route path="/" element={<LogIn />} />
-            <Route path="/main-page//*" element={<MainPage />}>
-              {/* <Route
-            path="my-workouts"
-            element={
-              <MyWorkouts
-                // updateWorkout={updateWorkout}
-                // setUpdateWorkout={setUpdateWorkout}
-                // workoutBaseList={workoutBaseList}
-              />
-            }
-          /> */}
-            </Route>
+            <Route path="/main-page//*" element={<MainPage />} />
+            <Route path="/my-workouts" element={<MyWorkouts />} />
+            <Route path="/all-scheduled-workouts" element={<MyWorkouts />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/responsive" element={<CheckResponsive />} />
           </Routes>

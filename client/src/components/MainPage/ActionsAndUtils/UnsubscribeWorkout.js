@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
+import useUnsubscribeWorkout from "../../../utils/useUnsubscribeWorkout";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -21,16 +22,23 @@ const style = {
   p: 4,
 };
 
-function UnsubscribeWorkout({ scheduled, unsubscribeHandler }) {
-  // const { unsubscribeHandler } = useWorkoutsContext();
+function UnsubscribeWorkout({
+  scheduled,
+}) {
+  const unsubscribeHandler = useUnsubscribeWorkout();
+  const { setWorkoutsList, setScheduledForAdmin, setScheduledForUsers } =
+    useWorkoutsContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
     setOpen(true);
   }
 
-  function handleClose() {
+  function handleClose(id) {
     setOpen(false);
+    setWorkoutsList(`Update the ${id} workout.`);
+    setScheduledForAdmin(`Update the ${id} workout.`);
+    setScheduledForUsers(`Update the ${id} workout.`);
   }
 
   const handlePopoverOpen = (event) => {
@@ -42,7 +50,7 @@ function UnsubscribeWorkout({ scheduled, unsubscribeHandler }) {
   };
 
   const openPopover = Boolean(anchorEl);
-
+  console.log("Unubscribe action render");
   return (
     <div>
       <Popover
@@ -103,6 +111,7 @@ function UnsubscribeWorkout({ scheduled, unsubscribeHandler }) {
                   color="error"
                   onClick={() => {
                     unsubscribeHandler(scheduled._id);
+                    handleClose(scheduled._id);
                   }}
                 >
                   Confirm

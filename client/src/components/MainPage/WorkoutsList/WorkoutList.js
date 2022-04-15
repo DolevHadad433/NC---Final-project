@@ -1,26 +1,38 @@
 import React, { useState, useMemo } from "react";
-import { useWorkoutsContext } from "../../../../contexts/WorkoutsContext";
-import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
-import useSubscribeWorkout from "../../../../utils/useSubscribeWorkout";
-import useUnsubscribeWorkout from "../../../../utils/useUnsubscribeWorkout";
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
+import { useUsersContext, Actions } from "../../../contexts/UsersContext";
+import useSubscribeWorkout from "../../../utils/useSubscribeWorkout";
+import useUnsubscribeWorkout from "../../../utils/useUnsubscribeWorkout";
 
 import { v4 as uuid } from "uuid";
 import moment from "moment";
-import DeleteWorkout from "../../ActionsAndUtils/DeleteWorkout";
-import SubscribeWorkout from "../../ActionsAndUtils/SubscribeWorkout";
-import UnsubscribeWorkout from "../../ActionsAndUtils/UnsubscribeWorkout";
-import EditWorkout from "../../ActionsAndUtils/EditWorkout";
+import DeleteWorkout from "../ActionsAndUtils/DeleteWorkout";
+import SubscribeWorkout from "../ActionsAndUtils/SubscribeWorkout";
+import UnsubscribeWorkout from "../ActionsAndUtils/UnsubscribeWorkout";
+import EditWorkout from "../ActionsAndUtils/EditWorkout";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { AppBar, Grid, IconButton } from "@mui/material";
+import { AppBar, Button, Grid, IconButton, Modal } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import AddingWorkout from "../AddingWorkout/AddingWorkout";
 
 const week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 600,
+  bgcolor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 8,
+};
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,26 +67,27 @@ function a11yProps(index) {
   };
 }
 
-function WorkoutFilter({ search, setSearch }) {
+function WorkoutList({ search, setSearch }) {
   //========
   const [value, setValue] = useState(0);
+  const [openAddNewWorkOut, setOpenAddNewWorkOut] = useState(false);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   //========
 
-  const [updateSubscribe, subscribeHandler] = useSubscribeWorkout("");
-  const [updateUnsubscribe, unsubscribeHandler] = useUnsubscribeWorkout({
-    scheduledID: "",
-  });
+  const {
+    workoutsList,
+    setWorkoutsList,
+    schedulesForAdmin,
+    schedulesForUsers,
+  } = useWorkoutsContext();
 
-  const { workoutsList, schedulesForAdmin, schedulesForUsers } =
-    useWorkoutsContext();
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     localStorage.getItem("workoutColumnVisibilityModel")
   );
-  const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
+  const { isAdmin } = useUsersContext();
 
   const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
 
@@ -176,14 +189,6 @@ function WorkoutFilter({ search, setSearch }) {
     return workoutValue;
   });
 
-  function getUserIdFromLocalStorage(obj) {
-    return obj.userID;
-  }
-
-  function getSubscribedWorkoutsFromLocalStorage(obj) {
-    return obj.subscribedWorkouts;
-  }
-
   function workoutAction(workout) {
     if (isAdmin()) {
       return (
@@ -197,13 +202,10 @@ function WorkoutFilter({ search, setSearch }) {
         </Grid>
       );
     } else {
-      if (schedules.find((e) => e === workout._id) === undefined) {
+      if (schedules.find((e) => e.workoutID === workout._id) === undefined) {
         return (
           <Grid item sm={2}>
-            <SubscribeWorkout
-              workout={workout}
-              subscribeHandler={subscribeHandler}
-            />
+            <SubscribeWorkout workout={workout} />
           </Grid>
         );
       } else {
@@ -211,15 +213,40 @@ function WorkoutFilter({ search, setSearch }) {
           const scheduled = schedules.find((e) => e.workoutID === workout._id);
           return (
             <Grid item sm={2}>
-              <UnsubscribeWorkout
-                scheduled={scheduled}
-                unsubscribeHandler={unsubscribeHandler}
-              />
+              <UnsubscribeWorkout scheduled={scheduled} />
             </Grid>
           );
         }
       }
     }
+  }
+
+  function addNewWorkoutsWhenThereAreNoOnTable() {
+    const showOnlyForAdmin = {
+      display: isAdmin() ? "flex" : "none",
+    };
+    function handleAddNewWorkOutModalOpen() {
+      setOpenAddNewWorkOut(true);
+    }
+    return (
+      <>
+        <Button
+          variant="contained"
+          onClick={handleAddNewWorkOutModalOpen}
+          sx={{ display: showOnlyForAdmin, marginTop: -30 }}
+        >
+          Add new workout?
+        </Button>
+        <Modal
+          open={openAddNewWorkOut}
+          // onClose={() => setWorkoutsList(`Update the ${uuid()} workout.`)}
+        >
+          <Box sx={style}>
+            <AddingWorkout setOpen={setOpenAddNewWorkOut} />
+          </Box>
+        </Modal>
+      </>
+    );
   }
 
   function matchDayInWeek(day) {
@@ -233,7 +260,7 @@ function WorkoutFilter({ search, setSearch }) {
     return rowArr;
   }
 
-  console.log("WorkoutFilter is render");
+  console.log("WorkoutList is render");
 
   function getDayInMonth(day) {
     return data.rows
@@ -242,7 +269,9 @@ function WorkoutFilter({ search, setSearch }) {
           row.weekOfYear === String(Number(moment().format("w"))) &&
           row.dayInWeek === day
       )
-      .map((row) => row.dayInMonth);
+      .map((row) => {
+        return row.dayInMonth;
+      });
   }
   return (
     <>
@@ -250,6 +279,7 @@ function WorkoutFilter({ search, setSearch }) {
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs value={value} onChange={handleChange}>
+              {/* <Tab label="All week" {...a11yProps(5)} /> */}
               <Tab label="Sunday" {...a11yProps(0)} />
               <Tab label="Monday" {...a11yProps(1)} />
               <Tab label="Tuesday" {...a11yProps(2)} />
@@ -284,10 +314,13 @@ function WorkoutFilter({ search, setSearch }) {
               // sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
             />
           </div>
+          {matchDayInWeek(value).length !== 0
+            ? ""
+            : addNewWorkoutsWhenThereAreNoOnTable()}
         </Box>
       </div>
     </>
   );
 }
 
-export default WorkoutFilter;
+export default WorkoutList;

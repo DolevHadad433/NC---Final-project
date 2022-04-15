@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-function useSchedulesForAdmin({ updateSubscribe, updateUnsubscribe }) {
-  const [schedules, setScheduled] = useState([]);
+function useSchedulesForAdmin() {
+  const [schedulesForAdmin, setScheduledForAdmin] = useState([]);
+  const [state, setState] = useState();
   useEffect(() => {
     fetch("/api/schedules", {
       method: "POST",
@@ -10,10 +11,10 @@ function useSchedulesForAdmin({ updateSubscribe, updateUnsubscribe }) {
       },
     })
       .then((response) => response.json())
-      .then((data) => setScheduled([...data.reverse()]));
-  }, [updateSubscribe, updateUnsubscribe]);
+      .then((data) => setScheduledForAdmin([...data.reverse()]));
+  }, [state]);
 
-  return schedules;
+  return [schedulesForAdmin, setState];
 }
 
 export default useSchedulesForAdmin;

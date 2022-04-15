@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback } from "react";
 
 function useDeleteWorkout() {
-  const [deletedWorkout, setDeletedWorkout] = useState("");
-
-  function deleteWorkoutHandler(id) {
+  const deleteWorkoutHandler = useCallback((id) => {
     fetch(`/api/schedules/${id}`, {
       method: "DELETE",
     });
     fetch(`/api/workouts/${id}`, {
       method: "DELETE",
     });
-    setDeletedWorkout(`Delete the ${id} workout successfully.`);
-  }
+  }, []);
 
-  return { deleteWorkoutHandler, deletedWorkout };
+  // function deleteWorkoutHandler(id) {
+  //   fetch(`/api/schedules/${id}`, {
+  //     method: "DELETE",
+  //   });
+  //   fetch(`/api/workouts/${id}`, {
+  //     method: "DELETE",
+  //   });
+  // }
+
+  return deleteWorkoutHandler;
 }
 
 export default useDeleteWorkout;

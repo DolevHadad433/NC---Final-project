@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
 import { useWorkoutsContext } from "../../../../contexts/WorkoutsContext";
 import useUnsubscribeWorkout from "../../../../utils/useUnsubscribeWorkout";
@@ -14,20 +14,16 @@ import { DataGrid } from "@mui/x-data-grid";
 import UnsubscribeWorkout from "../../ActionsAndUtils/UnsubscribeWorkout";
 
 function ScheduledWorkoutsFilter({
-  schedulesList,
   username,
   search,
   setSearch,
+  schedulesList,
 }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     localStorage.getItem("schedulesColumnVisibilityModel")
   );
 
-  const [updateUnsubscribe, unsubscribeHandler] = useUnsubscribeWorkout({
-    scheduledID: "",
-  });
-
-  const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
+  const { isAdmin } = useUsersContext();
 
   function initLocalStorageColumnVisibility() {
     if (
@@ -41,14 +37,6 @@ function ScheduledWorkoutsFilter({
     }
 
     return JSON.parse(localStorage.getItem("schedulesColumnVisibilityModel"));
-  }
-
-  function getUserIdFromLocalStorage(obj) {
-    return obj.userID;
-  }
-
-  function getSubscribedWorkoutsFromLocalStorage(obj) {
-    return obj.subscribedWorkouts;
   }
 
   const data = {
@@ -119,10 +107,7 @@ function ScheduledWorkoutsFilter({
   function scheduledAction(scheduled) {
     return (
       <Grid item sm={2}>
-        <UnsubscribeWorkout
-          scheduled={scheduled}
-          unsubscribeHandler={unsubscribeHandler}
-        />
+        <UnsubscribeWorkout scheduled={scheduled} />
       </Grid>
     );
   }
@@ -146,6 +131,8 @@ function ScheduledWorkoutsFilter({
     };
     return scheduledValue;
   });
+
+  console.log("ScheduledWorkoutsFilter is render");
 
   return (
     <div style={{ height: 450, width: "100%" }}>

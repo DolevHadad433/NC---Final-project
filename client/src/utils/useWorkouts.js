@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-function useWorkouts({ updateSubscribe, updateUnsubscribe }) {
+function useWorkouts() {
   const [workoutsList, setWorkoutsList] = useState([]);
+  const [state, setState] = useState();
   useEffect(() => {
     fetch("/api/workouts/")
       .then((response) => response.json())
       .then((data) => setWorkoutsList([...data.reverse()]));
-  }, [updateSubscribe, updateUnsubscribe]);
+  }, [state]);
 
-  return workoutsList;
+  return [workoutsList, setState];
 }
 
 export default useWorkouts;

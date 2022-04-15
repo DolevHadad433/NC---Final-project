@@ -91,12 +91,12 @@ function AddingWorkout({ handleClose, setOpen, handleMenuClose }) {
     addingWorkoutReducer,
     initialAddingWorkoutState
   );
-  const { workoutsList, workoutBaseList, categoriesList, setUpdateWorkout } =
+  const { workoutsList, workoutBaseList, categoriesList, setWorkoutsList } =
     useWorkoutsContext();
 
   function handleAddNewWorkOutModalClose(id) {
     setOpen(false);
-    setUpdateWorkout(`Update the ${id} workout.`);
+    setWorkoutsList(`Update the ${id} workout.`);
   }
 
   const workoutsOptions = {
@@ -192,7 +192,9 @@ function AddingWorkout({ handleClose, setOpen, handleMenuClose }) {
                   sx={{ mt: 3, ml: 3 }}
                   onClick={() => {
                     handleAddNewWorkOutModalClose(uuid());
-                    handleMenuClose();
+                    return handleMenuClose !== undefined
+                      ? handleMenuClose()
+                      : null;
                   }}
                 >
                   Back to main page

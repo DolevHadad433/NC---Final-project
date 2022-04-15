@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import { useUsersContext } from "../../../contexts/UsersContext";
+import useSubscribeWorkout from "../../../utils/useSubscribeWorkout";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -21,9 +22,11 @@ const style = {
   p: 4,
 };
 
-function SubscribeWorkout({ workout, subscribeHandler }) {
-  // const { subscribeHandler } = useWorkoutsContext();
+function SubscribeWorkout({ workout }) {
+  const subscribeHandler = useSubscribeWorkout();
   const { userContextState } = useUsersContext();
+  const { setWorkoutsList, setScheduledForAdmin, setScheduledForUsers } =
+    useWorkoutsContext();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -31,8 +34,11 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
     setOpen(true);
   }
 
-  function handleClose() {
+  function handleClose(id) {
     setOpen(false);
+    setWorkoutsList(`Update the ${id} workout.`);
+    setScheduledForAdmin(`Update the ${id} workout.`);
+    setScheduledForUsers(`Update the ${id} workout.`);
   }
 
   const handlePopoverOpen = (event) => {
@@ -44,7 +50,7 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
   };
 
   const openPopover = Boolean(anchorEl);
-  console.log(userContextState.userID);
+  console.log("Subscribe action render");
   return (
     <div>
       <Popover
@@ -104,6 +110,7 @@ function SubscribeWorkout({ workout, subscribeHandler }) {
                   size="small"
                   onClick={() => {
                     subscribeHandler(workout._id, userContextState.userID);
+                    handleClose(workout._id);
                   }}
                 >
                   Confirm
