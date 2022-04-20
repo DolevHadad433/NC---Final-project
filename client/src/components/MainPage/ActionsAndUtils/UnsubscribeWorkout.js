@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import useUnsubscribeWorkout from "../../../utils/useUnsubscribeWorkout";
+import useResponsive from "../../../utils/useResponsive";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -22,12 +23,27 @@ const style = {
   p: 4,
 };
 
-function UnsubscribeWorkout({
-  scheduled,
-}) {
+function UnsubscribeWorkout({ scheduled }) {
   const unsubscribeHandler = useUnsubscribeWorkout();
   const { setWorkoutsList, setScheduledForAdmin, setScheduledForUsers } =
     useWorkoutsContext();
+  const {
+    showInMobileOnly,
+    showInTabletOnly,
+    showInTabletVerticalOnly,
+    showInTabletHorizontalOnly,
+    showInTabletVerticalAndBelow,
+    showInTabletHorizontalAndBelow,
+    showInLaptopOnly,
+    showInLaptopAndBelow,
+    showInLaptopToTabletVertical,
+    showInLaptopToTabletHorizontalOnly,
+    showInDesktopToTabletVerticalOnly,
+    showInDesktopToTabletHorizontalOnly,
+    showInDesktopToLaptopOnly,
+    showInDesktopOnly,
+    showInAllWidth,
+  } = useResponsive();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   function handleOpen() {
@@ -52,81 +68,209 @@ function UnsubscribeWorkout({
   const openPopover = Boolean(anchorEl);
   console.log("Unubscribe action render");
   return (
-    <div>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none",
-        }}
-        open={openPopover}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <Typography sx={{ p: 1 }}>Unsubscribe workout</Typography>
-      </Popover>
-      <IconButton
-        aria-owns={openPopover ? "mouse-over-popover" : undefined}
-        aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-        size="small"
-        color="error"
-        variant="contained"
-        onClick={handleOpen}
-      >
-        <HighlightOffIcon />
-      </IconButton>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <Typography
-            sx={{ mb: 1.5, textAlign: "center", marginBottom: 5 }}
-            color="text.secondary"
-          >
-            Are you sure that you want to unsubscribe from{" "}
-            <Typography variant="h7" component="span" display="inline">
-              <strong>{scheduled.workoutInfo.title}</strong>
-            </Typography>{" "}
-            workout on <strong>{scheduled.workoutInfo.date}</strong>?
-          </Typography>
-          <Container maxWidth="lg">
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-              sx={{ marginLeft: 0, width: 1 }}
+    <>
+      <Container maxWidth={"xs"} sx={{ p: 0 }} style={showInMobileOnly}>
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <IconButton
+              aria-owns={openPopover ? "mouse-over-popover" : undefined}
+              aria-haspopup="true"
+              onMouseEnter={handlePopoverOpen}
+              onMouseLeave={handlePopoverClose}
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={handleOpen}
             >
-              <Grid item sm={4} sx={{ marginLeft: 7.5 }}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  color="error"
-                  onClick={() => {
-                    unsubscribeHandler(scheduled._id);
-                    handleClose(scheduled._id);
-                  }}
-                >
-                  Confirm
-                </Button>
-              </Grid>
-              <Grid item sm={4}>
-                <Button variant="contained" size="small" onClick={handleClose}>
-                  Cancel
-                </Button>
-              </Grid>
-            </Grid>
-          </Container>
-        </Box>
-      </Modal>
-    </div>
+              <HighlightOffIcon />
+            </IconButton>
+            <Modal open={open} onClose={handleClose} style={showInMobileOnly}>
+              <Container
+                maxWidth="xs"
+                sx={{
+                  textAlign: "center",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 300,
+                  bgcolor: "white",
+                  border: "2px solid #000",
+                  boxShadow: 24,
+                  paddingBottom: 4,
+                  paddingTop: 2,
+                }}
+              >
+                <Grid container rowSpacing={6}>
+                  <Grid item xs={12}>
+                    <Typography sx={{ width: "100%" }} color="text.secondary">
+                      Are you sure that you want to unsubscribe from{" "}
+                      <Typography
+                        variant="h7"
+                        component="span"
+                        display="inline"
+                      >
+                        <strong>{scheduled.workoutInfo.title}</strong>
+                      </Typography>{" "}
+                      workout on <strong>{scheduled.workoutInfo.date}</strong>?
+                    </Typography>
+                  </Grid>
+                  <Grid className="Buttons" item xs={12}>
+                    <Grid
+                      container
+                      spacing={1}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item xs={8}>
+                        <Button
+                          sx={{ width: "90%" }}
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          onClick={() => {
+                            unsubscribeHandler(scheduled._id);
+                            handleClose(scheduled._id);
+                          }}
+                        >
+                          Confirm
+                        </Button>
+                      </Grid>
+
+                      <Grid item xs={8}>
+                        <Button
+                          sx={{ width: "90%" }}
+                          variant="contained"
+                          size="small"
+                          onClick={handleClose}
+                        >
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Container>
+            </Modal>
+          </Grid>
+        </Grid>
+      </Container>
+
+      <Container
+        maxWidth={"lg"}
+        sx={{ p: 0 }}
+        style={showInDesktopToTabletVerticalOnly}
+      >
+        <Grid container spacing={0}>
+          <Grid item sm={12}>
+            <Popover
+              id="mouse-over-popover"
+              sx={{
+                pointerEvents: "none",
+              }}
+              open={openPopover}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
+            >
+              <Typography sx={{ p: 1 }}>Unsubscribe workout</Typography>
+            </Popover>
+            <IconButton
+              aria-owns={openPopover ? "mouse-over-popover" : undefined}
+              aria-haspopup="true"
+              onMouseEnter={handlePopoverOpen}
+              onMouseLeave={handlePopoverClose}
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={handleOpen}
+            >
+              <HighlightOffIcon />
+            </IconButton>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              style={showInDesktopToTabletVerticalOnly}
+            >
+              <Container
+                maxWidth="lg"
+                sx={{
+                  textAlign: "center",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 450,
+                  bgcolor: "white",
+                  border: "2px solid #000",
+                  boxShadow: 24,
+                  paddingBottom: 4,
+                  paddingTop: 4,
+                  paddingLeft: 2,
+                  paddingRight: 4,
+                }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item sm={12}>
+                    <Typography sx={{ width: "100%" }} color="text.secondary">
+                      Are you sure that you want to unsubscribe from{" "}
+                      <Typography
+                        variant="h7"
+                        component="span"
+                        display="inline"
+                      >
+                        <strong>{scheduled.workoutInfo.title}</strong>
+                      </Typography>{" "}
+                      workout on <strong>{scheduled.workoutInfo.date}</strong>?
+                    </Typography>
+                  </Grid>
+                  <Grid className="Buttons" item sm={12}>
+                    <Grid
+                      container
+                      spacing={1}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item sm={6}>
+                        <Button
+                          sx={{ width: "70%" }}
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          onClick={() => {
+                            unsubscribeHandler(scheduled._id);
+                            handleClose(scheduled._id);
+                          }}
+                        >
+                          Confirm
+                        </Button>
+                      </Grid>
+
+                      <Grid item sm={6}>
+                        <Button
+                          sx={{ width: "70%" }}
+                          variant="contained"
+                          size="small"
+                          onClick={handleClose}
+                        >
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Container>
+            </Modal>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
+import useResponsive from "../../../utils/useResponsive";
 import AddingWorkout from "../AddingWorkout/AddingWorkout";
 import { useNavigate } from "react-router-dom";
 
@@ -7,41 +8,36 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { Box } from "@mui/system";
-import { Modal } from "@mui/material";
+import { Modal, Typography } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "white",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 8,
-};
 
 function MainMenu() {
   const [anchorMenu, setAnchorMenu] = useState(null);
-  const [openAddNewWorkOut, setOpenAddNewWorkOut] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false)
+  const [openAddNewWorkout, setOpenAddNewWorkout] = useState(false);
   const { userContextState, userContextDispatch, isAdmin } = useUsersContext();
+  const { showInMobileOnly, showInDesktopToTabletVerticalOnly } =
+    useResponsive();
   const clickMyWorkoutsButtonHandler = useNavigate();
-  const clickAllScheduledWorkoutsButtonHandler = useNavigate()
+  const clickHomeButtonHandler = useNavigate();
+  const clickAllScheduledWorkoutsButtonHandler = useNavigate();
   const clickLogOutHandler = useNavigate();
 
-  const openMenu = Boolean(anchorMenu);
+  // const openMenu = Boolean(anchorMenu);
 
   const handleMenuClick = (event) => {
     setAnchorMenu(event.currentTarget);
+    setOpenMenu(true)
   };
   const handleMenuClose = () => {
     setAnchorMenu(null);
+    setOpenMenu(false)
   };
 
-  function handleAddNewWorkOutModalOpen() {
-    setOpenAddNewWorkOut(true);
+  function handleAddNewWorkoutModalOpen() {
+    setOpenAddNewWorkout(true);
   }
 
   const showOnlyForAdmin = {
@@ -58,12 +54,16 @@ function MainMenu() {
     clickLogOutHandler("/", { replace: true });
   }
 
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
+  }
+
   return (
     <div>
       <IconButton
+        style={showInMobileOnly}
         size="large"
         edge="start"
-        color="inherit"
         aria-label="menu"
         sx={{ mr: 2 }}
         id="basic-button"
@@ -72,7 +72,23 @@ function MainMenu() {
         aria-expanded={openMenu ? "true" : undefined}
         onClick={handleMenuClick}
       >
-        <MenuIcon />
+        {openMenu ? <MenuOpenIcon /> : <MenuIcon />}
+      </IconButton>
+
+      <IconButton
+        style={showInDesktopToTabletVerticalOnly}
+        size="large"
+        color="inherit"
+        edge="start"
+        aria-label="menu"
+        sx={{ mr: 2 }}
+        id="basic-button"
+        aria-controls={openMenu ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={openMenu ? "true" : undefined}
+        onClick={handleMenuClick}
+      >
+        {openMenu ? <MenuOpenIcon /> : <MenuIcon />}
       </IconButton>
       <Menu
         id="basic-menu"
@@ -83,20 +99,42 @@ function MainMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Modal open={openAddNewWorkOut}>
-          <Box sx={style}>
-            <AddingWorkout
-              setOpen={setOpenAddNewWorkOut}
-              handleMenuClose={handleMenuClose}
-            />
-          </Box>
-        </Modal>
         <MenuItem
-          onClick={handleAddNewWorkOutModalOpen}
+          style={showInMobileOnly}
+          sx={{
+            fontWeight: "bold",
+            fontSize: "large",
+            color: "text.secondary",
+          }}
+        >
+          Hello{" "}
+          {getUsernameFromLocalStorage(
+            JSON.parse(localStorage.getItem("User"))
+          )}
+          !
+        </MenuItem>
+
+        <MenuItem
+          style={showInMobileOnly}
+          onClick={() => clickHomeButtonHandler("/main-page")}
+        >
+          Workouts this week
+        </MenuItem>
+        <MenuItem
+          onClick={handleAddNewWorkoutModalOpen}
           sx={{ display: showOnlyForAdmin }}
         >
           Add new workout
         </MenuItem>
+
+        {openAddNewWorkout ? (
+          <AddingWorkout
+            open={openAddNewWorkout}
+            setOpen={setOpenAddNewWorkout}
+            handleMenuClose={handleMenuClose}
+          />
+        ) : null}
+
         <MenuItem
           onClick={() => {
             clickAllScheduledWorkoutsButtonHandler("/all-scheduled-workouts");

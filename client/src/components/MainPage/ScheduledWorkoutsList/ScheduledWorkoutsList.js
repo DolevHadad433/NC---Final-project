@@ -12,7 +12,7 @@ import useUpdateWorkout from "../../../utils/useUpdateWorkout";
 //============ Imports end ============
 
 //============ Component start ============
-function ScheduledWorkoutsList() {
+function ScheduledWorkoutsList({whatIsYourUserName}) {
   const { schedulesForAdmin, schedulesForUsers, userNames, deletedWorkout } =
     useWorkoutsContext();
 
@@ -45,12 +45,7 @@ function ScheduledWorkoutsList() {
     } else return "Not subscribed yet";
   }
 
-  function whatIsYourUserName(userId) {
-    const username = userNames.find((e) => e._id === userId);
-    if (username !== undefined) {
-      return username.username;
-    } else return "";
-  }
+ 
 
   return (
     <Container maxWidth="xxl" sx={{ alignItems: "center" }}>
@@ -60,21 +55,6 @@ function ScheduledWorkoutsList() {
         justifyContent="center"
         sx={{ width: "100%" }}
       >
-        <Grid item sm={6}>
-          <AppBar
-            position="static"
-            sx={{
-              textAlign: "center",
-              width: "100%",
-              borderRadius: 2,
-              marginTop: 5,
-            }}
-          >
-            <Typography variant="h5" component="div">
-              {isAdmin() ? "Workouts subscriptions:" : "My workouts:"}
-            </Typography>
-          </AppBar>
-        </Grid>
         <Grid item sm={12} sx={{ height: 200, width: "100%" }}>
           {ifThereIsScheduled()}
         </Grid>

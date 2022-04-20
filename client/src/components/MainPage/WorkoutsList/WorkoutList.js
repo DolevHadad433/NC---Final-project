@@ -3,8 +3,9 @@ import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
 import { useUsersContext, Actions } from "../../../contexts/UsersContext";
 import useSubscribeWorkout from "../../../utils/useSubscribeWorkout";
 import useUnsubscribeWorkout from "../../../utils/useUnsubscribeWorkout";
-
+import useResponsive from "../../../utils/useResponsive";
 import { v4 as uuid } from "uuid";
+import WorkoutListForMobile from "./WorkoutListForMobile";
 import moment from "moment";
 import DeleteWorkout from "../ActionsAndUtils/DeleteWorkout";
 import SubscribeWorkout from "../ActionsAndUtils/SubscribeWorkout";
@@ -12,7 +13,15 @@ import UnsubscribeWorkout from "../ActionsAndUtils/UnsubscribeWorkout";
 import EditWorkout from "../ActionsAndUtils/EditWorkout";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { AppBar, Button, Grid, IconButton, Modal } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  Modal,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -68,14 +77,30 @@ function a11yProps(index) {
 }
 
 function WorkoutList({ search, setSearch }) {
-  //========
   const [value, setValue] = useState(0);
-  const [openAddNewWorkOut, setOpenAddNewWorkOut] = useState(false);
+  const [openAddNewWorkout, setOpenAddNewWorkout] = useState(false);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  //========
+  const {
+    showInMobileOnly,
+    showInTabletOnly,
+    showInTabletVerticalOnly,
+    showInTabletHorizontalOnly,
+    showInTabletVerticalAndBelow,
+    showInTabletHorizontalAndBelow,
+    showInLaptopOnly,
+    showInLaptopAndBelow,
+    showInLaptopToTabletVertical,
+    showInLaptopToTabletHorizontalOnly,
+    showInDesktopToTabletVerticalOnly,
+    showInDesktopToTabletHorizontalOnly,
+    showInDesktopToLaptopOnly,
+    showInDesktopOnly,
+    showInAllWidth,
+  } = useResponsive();
 
   const {
     workoutsList,
@@ -193,10 +218,10 @@ function WorkoutList({ search, setSearch }) {
     if (isAdmin()) {
       return (
         <Grid container>
-          <Grid item sm={6}>
+          <Grid item xs={2}>
             <EditWorkout />
           </Grid>
-          <Grid item sm={6}>
+          <Grid item xs={2}>
             <DeleteWorkout workout={workout} />
           </Grid>
         </Grid>
@@ -204,7 +229,7 @@ function WorkoutList({ search, setSearch }) {
     } else {
       if (schedules.find((e) => e.workoutID === workout._id) === undefined) {
         return (
-          <Grid item sm={2}>
+          <Grid item xs={2}>
             <SubscribeWorkout workout={workout} />
           </Grid>
         );
@@ -212,7 +237,7 @@ function WorkoutList({ search, setSearch }) {
         if (schedules.find((e) => e.workoutID === workout._id) !== undefined) {
           const scheduled = schedules.find((e) => e.workoutID === workout._id);
           return (
-            <Grid item sm={2}>
+            <Grid item xs={2}>
               <UnsubscribeWorkout scheduled={scheduled} />
             </Grid>
           );
@@ -221,30 +246,27 @@ function WorkoutList({ search, setSearch }) {
     }
   }
 
-  function addNewWorkoutsWhenThereAreNoOnTable() {
-    const showOnlyForAdmin = {
-      display: isAdmin() ? "flex" : "none",
-    };
-    function handleAddNewWorkOutModalOpen() {
-      setOpenAddNewWorkOut(true);
+  function showAddNewWorkoutButton() {
+    function handleAddNewWorkoutModalOpen() {
+      setOpenAddNewWorkout(true);
     }
+
     return (
       <>
         <Button
+          sx={{ width: "100%" }}
           variant="contained"
-          onClick={handleAddNewWorkOutModalOpen}
-          sx={{ display: showOnlyForAdmin, marginTop: -30 }}
+          onClick={handleAddNewWorkoutModalOpen}
         >
-          Add new workout?
+          Add new workout ?
         </Button>
-        <Modal
-          open={openAddNewWorkOut}
-          // onClose={() => setWorkoutsList(`Update the ${uuid()} workout.`)}
-        >
-          <Box sx={style}>
-            <AddingWorkout setOpen={setOpenAddNewWorkOut} />
-          </Box>
-        </Modal>
+
+        {openAddNewWorkout ? (
+          <AddingWorkout
+            open={openAddNewWorkout}
+            setOpen={setOpenAddNewWorkout}
+          />
+        ) : null}
       </>
     );
   }
@@ -260,6 +282,17 @@ function WorkoutList({ search, setSearch }) {
     return rowArr;
   }
 
+  function matchDayInWeekForMobile(day) {
+    const matchWorkouts = workoutsList.filter((workout) => {
+      const dayInNum = Number(moment(workout.dayInWeek, "dddd").format("d"));
+      return (
+        dayInNum === day &&
+        workout.weekOfYear === String(Number(moment().format("w")))
+      );
+    });
+    return matchWorkouts;
+  }
+
   console.log("WorkoutList is render");
 
   function getDayInMonth(day) {
@@ -273,53 +306,88 @@ function WorkoutList({ search, setSearch }) {
         return row.dayInMonth;
       });
   }
+
   return (
-    <>
-      <div style={{ height: 325, width: "100%" }}>
-        <Box sx={{ width: "100%" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs value={value} onChange={handleChange}>
-              {/* <Tab label="All week" {...a11yProps(5)} /> */}
-              <Tab label="Sunday" {...a11yProps(0)} />
-              <Tab label="Monday" {...a11yProps(1)} />
-              <Tab label="Tuesday" {...a11yProps(2)} />
-              <Tab label="Wednesday" {...a11yProps(3)} />
-              <Tab label="Thursday" {...a11yProps(4)} />
-            </Tabs>
-          </Box>
-          <div
-            style={{
-              display: "flex",
-              height: 325,
-              width: "100%",
-              marginBottom: 100,
-            }}
-            key={uuid()}
-          >
-            <DataGrid
-              experimentalFeatures={{ newEditingApi: true }}
-              editMode="row"
-              rowHeight={50}
-              rows={matchDayInWeek(value)}
-              columns={data.columns}
-              onColumnVisibilityModelChange={(newModel) => {
-                localStorage.setItem(
-                  "workoutColumnVisibilityModel",
-                  JSON.stringify(newModel)
-                );
-                setColumnVisibilityModel(newModel);
-              }}
-              columnVisibilityModel={initLocalStorageColumnVisibility()}
-              hideFooter
-              // sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
-            />
-          </div>
-          {matchDayInWeek(value).length !== 0
-            ? ""
-            : addNewWorkoutsWhenThereAreNoOnTable()}
-        </Box>
-      </div>
-    </>
+    <Container maxWidth={"lg"} sx={{ p: 0 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} style={showInMobileOnly} sx={{ mt: -2 }}>
+          <Grid container rowSpacing={2}>
+            <Grid item xs={12}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="scrollable"
+                scrollButtons={true}
+                allowScrollButtonsMobile
+              >
+                <Tab label="Sunday" {...a11yProps(0)} />
+                <Tab label="Monday" {...a11yProps(1)} />
+                <Tab label="Tuesday" {...a11yProps(2)} />
+                <Tab label="Wednesday" {...a11yProps(3)} />
+                <Tab label="Thursday" {...a11yProps(4)} />
+              </Tabs>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{ alignSelf: "center", justifySelf: "center" }}
+            >
+              <WorkoutListForMobile
+                workouts={matchDayInWeekForMobile(value)}
+                showAddNewWorkoutButton={showAddNewWorkoutButton}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid
+          item
+          sm={12}
+          style={showInDesktopToTabletVerticalOnly}
+          sx={{ width: "100%" }}
+        >
+          <Grid container spacing={2}>
+            <Grid item sm={12}>
+              <Tabs value={value} onChange={handleChange}>
+                <Tab label="Sunday" {...a11yProps(0)} />
+                <Tab label="Monday" {...a11yProps(1)} />
+                <Tab label="Tuesday" {...a11yProps(2)} />
+                <Tab label="Wednesday" {...a11yProps(3)} />
+                <Tab label="Thursday" {...a11yProps(4)} />
+              </Tabs>
+            </Grid>
+            <Grid item sm={12} sx={{ height: 400 }}>
+              <DataGrid
+                experimentalFeatures={{ newEditingApi: true }}
+                editMode="row"
+                rowHeight={50}
+                rows={matchDayInWeek(value)}
+                columns={data.columns}
+                onColumnVisibilityModelChange={(newModel) => {
+                  localStorage.setItem(
+                    "workoutColumnVisibilityModel",
+                    JSON.stringify(newModel)
+                  );
+                  setColumnVisibilityModel(newModel);
+                }}
+                columnVisibilityModel={initLocalStorageColumnVisibility()}
+                hideFooter
+                // sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
+              />
+            </Grid>
+            <Grid
+              item
+              sm={12}
+              sx={{ alignSelf: "center", justifySelf: "center" }}
+            >
+              {matchDayInWeek(value).length === 0
+                ? showAddNewWorkoutButton()
+                : null}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

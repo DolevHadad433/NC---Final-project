@@ -1,10 +1,22 @@
 //============ Imports start ============
-import { Button, TextField, Typography } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  Container,
+  Grid,
+  Popover,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
 import "./SignUp.css";
+import LoginIcon from "@mui/icons-material/Login";
+import IconButton from "@mui/material/IconButton";
+import useResponsive from "../../utils/useResponsive";
 //============ Imports end ============
 
 //============ Reducer properties start ============
@@ -51,6 +63,20 @@ function SignUp() {
     signUpReducer,
     initialSignUpState
   );
+
+  const { showInMobileOnly, showInDesktopToTabletVerticalOnly } =
+    useResponsive();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+  const openPopover = Boolean(anchorEl);
+
   const { userContextState, userContextDispatch } = useUsersContext();
   const clickSignUpHandler = useNavigate();
   const clickAlreadyHaveUserHandler = useNavigate();
@@ -106,81 +132,303 @@ function SignUp() {
   }
 
   return (
-    <div className="SignUp">
-      <div className="sigup-container">
-        <Box
+    <>
+      <Container maxWidth={"md"}>
+        <Grid
+          container
+          spacing={2}
+          style={showInDesktopToTabletVerticalOnly}
           sx={{
-            "& .MuiTextField-root": { m: 1, width: "34ch" },
+            pt: 4,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
-          <form className="signup-form" onSubmit={onSubmitSignUpHandler}>
-            {signUpState.error && <p className="error">{signUpState.error}</p>}
-
-            <Typography variant="h5" gutterBottom component="div">
-              Please Sign-up
-            </Typography>
-            <TextField
-              required
-              placeholder="User Name"
-              type="text"
-              value={signUpState.username}
-              onChange={(e) =>
-                dispatchSignUp({
-                  type: "field",
-                  field: "username",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-
-            <TextField
-              required
-              placeholder="password"
-              type="password"
-              value={signUpState.password}
-              onChange={(e) =>
-                dispatchSignUp({
-                  type: "field",
-                  field: "password",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-
-            <TextField
-              required
-              placeholder="Phone number"
-              type="tel"
-              value={signUpState.phoneNumber}
-              onChange={(e) =>
-                dispatchSignUp({
-                  type: "field",
-                  field: "phoneNumber",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-
-            <Button
-              variant="contained"
-              type="submit"
-              sx={{ mt: 3, ml: 1 }}
-              disabled={signUpState.isLoading}
+          <Grid item sm={10}>
+            <Popover
+              id="mouse-over-popover"
+              sx={{
+                pointerEvents: "none",
+              }}
+              open={openPopover}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
             >
-              {signUpState.isLoading ? "Please wait..." : "Sign Up"}
-            </Button>
-          </form>
+              <Typography sx={{ p: 1 }}>Login!</Typography>
+            </Popover>
+            <AppBar>
+              <Toolbar>
+                <Typography
+                  variant="h6"
+                  color="inherit"
+                  component="div"
+                  sx={{ width: "100%", textAlign: "center" }}
+                >
+                  Welcome to My Training Manager!
+                </Typography>
 
-          <Button
-            variant="outlined"
-            sx={{ mt: 3, ml: 1 }}
-            onClick={onAlreadyHaveUserClickHandler}
-          >
-            Already have a user? Click here to login!
-          </Button>
-        </Box>
-      </div>
-    </div>
+                <IconButton
+                  color="inherit"
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                  onClick={onAlreadyHaveUserClickHandler}
+                >
+                  <LoginIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+          </Grid>
+          <Grid item sm={10} sx={{ mt: 4 }}>
+            <form onSubmit={onSubmitSignUpHandler} style={{ padding: 0 }}>
+              <Grid
+                container
+                rowSpacing={2}
+                sx={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  pb: 4,
+                }}
+              >
+                <Grid item sm={12} sx={{ width: "100%" }}>
+                {signUpState.error && (
+                    <p className="error">{signUpState.error}</p>
+                  )}
+                </Grid>
+                <Grid
+                  container
+                  rowSpacing={2}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Grid item sm={12} sx={{ mt: 2 }}>
+                    <Typography
+                      variant="h5"
+                      color="text.secondary"
+                      component="div"
+                      sx={{ width: "100%", textAlign: "center" }}
+                    >
+                      Please Sign-up
+                    </Typography>
+                  </Grid>
+
+                  <Grid item sm={10}>
+                    <TextField
+                      required
+                      sx={{ width: "100%" }}
+                      placeholder="User Name"
+                      type="text"
+                      value={signUpState.username}
+                      onChange={(e) =>
+                        dispatchSignUp({
+                          type: "field",
+                          field: "username",
+                          value: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item sm={10}>
+                    <TextField
+                      required
+                      sx={{ width: "100%" }}
+                      placeholder="password"
+                      type="password"
+                      value={signUpState.password}
+                      onChange={(e) =>
+                        dispatchSignUp({
+                          type: "field",
+                          field: "password",
+                          value: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item sm={10}>
+                    <TextField
+                      required
+                      sx={{ width: "100%" }}
+                      placeholder="Phone number"
+                      type="tel"
+                      value={signUpState.phoneNumber}
+                      onChange={(e) =>
+                        dispatchSignUp({
+                          type: "field",
+                          field: "phoneNumber",
+                          value: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item sm={4}>
+                    <Button
+                      variant="outlined"
+                      type="submit"
+                      sx={{ width: "100%" }}
+                      disabled={signUpState.isLoading}
+                    >
+                      {signUpState.isLoading ? "Please wait..." : "Sign Up"}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+        </Grid>
+      </Container>
+
+      <Container maxWidth="xs">
+        <Grid
+          container
+          spacing={2}
+          style={showInMobileOnly}
+          sx={{
+            pt: 8,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <Grid item xs={12}>
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              component="div"
+              sx={{ width: "100%", textAlign: "center" }}
+            >
+              Welcome to My Training Manager!
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sx={{ mt: 4 }}>
+            <form onSubmit={onSubmitSignUpHandler} style={{ padding: 0 }}>
+              <Grid
+                container
+                rowSpacing={2}
+                sx={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  pb: 4,
+                }}
+              >
+                <Grid item xs={12} sx={{ width: "100%" }}>
+                  {signUpState.error && (
+                    <p className="error">{signUpState.error}</p>
+                  )}
+                </Grid>
+                <Grid
+                  container
+                  rowSpacing={2}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Grid item xs={12} sx={{ mt: 2 }}>
+                    <Typography
+                      variant="h5"
+                      color="text.secondary"
+                      component="div"
+                      sx={{ width: "100%", textAlign: "center" }}
+                    >
+                      Please Sign-up
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      sx={{ width: "100%" }}
+                      placeholder="User Name"
+                      type="text"
+                      value={signUpState.username}
+                      onChange={(e) =>
+                        dispatchSignUp({
+                          type: "field",
+                          field: "username",
+                          value: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      sx={{ width: "100%" }}
+                      placeholder="password"
+                      type="password"
+                      value={signUpState.password}
+                      onChange={(e) =>
+                        dispatchSignUp({
+                          type: "field",
+                          field: "password",
+                          value: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      sx={{ width: "100%" }}
+                      placeholder="Phone number"
+                      type="tel"
+                      value={signUpState.phoneNumber}
+                      onChange={(e) =>
+                        dispatchSignUp({
+                          type: "field",
+                          field: "phoneNumber",
+                          value: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      sx={{ width: "100%" }}
+                      disabled={signUpState.isLoading}
+                    >
+                      {signUpState.isLoading ? "Please wait..." : "Sign Up"}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+
+          <Grid item xs={8}>
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{ width: "100%" }}
+              onClick={onAlreadyHaveUserClickHandler}
+            >
+              Already have a user?
+              <br />
+              Click here to login!
+            </Button>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 }
 //============ Component end ============

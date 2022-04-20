@@ -16,35 +16,33 @@ function AppBarMain() {
     return obj.username;
   }
   return (
-    <Box>
-      <AppBar position="static">
-        <Toolbar>
-          <MainMenu />
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, marginLeft: -2 }}
-          >
-            Hello{" "}
-            {getUsernameFromLocalStorage(
-              JSON.parse(localStorage.getItem("User"))
-            )}
-            !
-          </Typography>
-          {/* <Search currentSearch={search} onSearch={setSearch} /> */}
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="Home-button"
-            sx={{ mr: 2 }}
-            onClick={() => clickHomeButtonHandler("/main-page")}
-          >
-            <HomeRoundedIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <AppBar>
+      <Toolbar>
+        <MainMenu />
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, marginLeft: -2 }}
+        >
+          Hello{" "}
+          {getUsernameFromLocalStorage(
+            JSON.parse(localStorage.getItem("User"))
+          )}
+          !
+        </Typography>
+        {/* <Search currentSearch={search} onSearch={setSearch} /> */}
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="Home-button"
+          sx={{ mr: 2 }}
+          onClick={() => clickHomeButtonHandler("/main-page")}
+        >
+          <HomeRoundedIcon />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   );
 }
 

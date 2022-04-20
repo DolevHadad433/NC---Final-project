@@ -5,3 +5,7 @@ function getUserIdFromLocalStorage(obj) {
   function getSubscribedWorkoutsFromLocalStorage(obj) {
     return obj.subscribedWorkouts;
   }
+
+  function getUsernameFromLocalStorage(obj) {
+    return obj.username;
+  }

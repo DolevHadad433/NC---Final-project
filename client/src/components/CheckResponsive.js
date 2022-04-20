@@ -1,70 +1,178 @@
 import React, { useState, useEffect } from "react";
+import useResponsive from "../utils/useResponsive";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Container, Grid, ListItem } from "@mui/material";
 import { border } from "@mui/system";
 
 function CheckResponsive() {
-  //   const theme = useTheme();
-  //   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
-  const [width, setWindowWidth] = useState(0);
-  useEffect(() => {
-    updateDimensions();
-
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
-  const updateDimensions = () => {
-    const width = window.innerWidth;
-    setWindowWidth(width);
-  };
-  const responsive = {
-    showTopNavMenu: width > 1023,
-  };
-
-  const showNav = {
-    display: responsive.showTopNavMenu ? "flex" : "none",
-  };
-  const showMenuIcon = {
-    display: responsive.showTopNavMenu ? "none" : "flex",
-  };
+  const {
+    showInMobileOnly,
+    showInTabletOnly,
+    showInTabletVerticalOnly,
+    showInTabletHorizontalOnly,
+    showInTabletVerticalAndBelow,
+    showInTabletHorizontalAndBelow,
+    showInLaptopOnly,
+    showInLaptopAndBelow,
+    showInLaptopToTabletVertical,
+    showInLaptopToTabletHorizontalOnly,
+    showInDesktopToTabletVerticalOnly,
+    showInDesktopToTabletHorizontalOnly,
+    showInDesktopToLaptopOnly,
+    showInDesktopOnly,
+    showInAllWidth,
+  } = useResponsive();
 
   return (
     <Container maxWidth="lg">
-      <header style={{ width: responsive.showTopNavMenu }} />
       <Grid container spacing={2} rowSpacing={2}>
-        <Grid item xs={3} sm={4} md={6}  style={showMenuIcon}>
+        <Grid item xs={12} style={showInMobileOnly}>
           <ListItem
             sx={{
-              bgcolor: "green",
+              bgcolor: "#44ff00",
             }}
           >
-            Menu Icon
+            Mobile only
           </ListItem>
         </Grid>
-        <Grid item xs={12} style={showNav}>
+        <Grid item xs={12} style={showInTabletOnly}>
           <ListItem
             sx={{
-              bgcolor: "orange",
+              bgcolor: "#001aff",
             }}
           >
-            Nav Bar
+            Tablet only
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInTabletVerticalOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#2b7b9e",
+            }}
+          >
+            Tablet vertical only
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInTabletHorizontalOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#82b4fa",
+            }}
+          >
+            Tablet horizontal only
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInTabletVerticalAndBelow}>
+          <ListItem
+            sx={{
+              bgcolor: "#012547",
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            Tablet vertical and below
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInTabletHorizontalAndBelow}>
+          <ListItem
+            sx={{
+              bgcolor: "#1f66ff",
+            }}
+          >
+            Tablet horizontal and below
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInLaptopOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#ff1100",
+            }}
+          >
+            Leptop only
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInLaptopAndBelow}>
+          <ListItem
+            sx={{
+              bgcolor: "#fff700",
+            }}
+          >
+            Leptop and below
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInLaptopToTabletVertical}>
+          <ListItem
+            sx={{
+              bgcolor: "#301203",
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            Leptop to tablet vertical
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInLaptopToTabletHorizontalOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#5e2f1d",
+            }}
+          >
+            Leptop to tablet horizontal only
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInDesktopToTabletVerticalOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#2e2d2d",
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            Desktop to tablet vertical (Tablet vertical and higher)
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInDesktopToTabletHorizontalOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#808080",
+            }}
+          >
+            Desktop to tablet horizontal only (Tablet horizontal and higher)
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInDesktopToLaptopOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#000000",
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            Desktop to leptop only (Leptop and higher)
+          </ListItem>
+        </Grid>
+        <Grid item xs={12} style={showInDesktopOnly}>
+          <ListItem
+            sx={{
+              bgcolor: "#ff9100",
+            }}
+          >
+            Desktop only
           </ListItem>
         </Grid>
 
-        <Grid item xs={12}>
-          <main>
-            <ListItem
-              sx={{
-                bgcolor: "navy",
-                color: "white",
-                fontWeight: "bold",
-              }}
-            >
-              body
-            </ListItem>
-          </main>
+        <Grid item xs={12} style={showInAllWidth}>
+          <ListItem
+            sx={{
+              bgcolor: "#7b00ff",
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            Desktop and below (All width)
+          </ListItem>
         </Grid>
       </Grid>
     </Container>
@@ -73,45 +181,4 @@ function CheckResponsive() {
 
 export default CheckResponsive;
 
-{
-  /* <Grid item xs sm md lg>
-          <ListItem
-            sx={{
-              bgcolor: "red",
-            }}
-          >
-            red
-          </ListItem>
-        </Grid>
-        <Grid item minWidth="sm" md lg>
-          <ListItem
-            sx={{
-              bgcolor: "blue",
-            }}
-          >
-            blue
-          </ListItem>
-        </Grid> */
-}
-{
-  /* <Grid item xs={2} sm={4} md={6} lg={8}>
-              <ListItem
-                sx={{
-                  bgcolor: "yellow",
-                }}
-              >
-                yellow
-              </ListItem>
-            </Grid> */
-}
-{
-  /* <Grid item xs={2} sm={4} md={6} lg={8}>
-              <ListItem
-                sx={{
-                  bgcolor: "pink",
-                }}
-              >
-                pink
-              </ListItem>
-            </Grid> */
-}
+
