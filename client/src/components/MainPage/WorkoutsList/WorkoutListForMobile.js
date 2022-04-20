@@ -16,7 +16,8 @@ import DeleteWorkout from "../ActionsAndUtils/DeleteWorkout";
 import EditWorkout from "../ActionsAndUtils/EditWorkout";
 import SubscribeWorkout from "../ActionsAndUtils/SubscribeWorkout";
 import UnsubscribeWorkout from "../ActionsAndUtils/UnsubscribeWorkout";
-import { Container } from "@mui/material";
+import { Container, Switch } from "@mui/material";
+import { Link } from "@mui/material";
 
 function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
   const { schedulesForAdmin, schedulesForUsers } = useWorkoutsContext();
@@ -119,23 +120,50 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                 >
                   <SettingsIcon />
                 </IconButton>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorMenu}
-                  open={openMenu}
-                  onClose={handleMenuClose}
-                >
-                  <MenuItem>
-                    <Checkbox
-                      checked={secondary}
-                      onChange={(event) => {
-                        setSecondary(event.target.checked);
-                        handleMenuClose();
-                      }}
-                    />
-                    More information
-                  </MenuItem>
-                </Menu>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container sx={{ justifyContent: "flex-end" }}>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorMenu}
+                    open={openMenu}
+                    onClose={handleMenuClose}
+                  >
+                    <Grid item xs={12}>
+                      <MenuItem>
+                        <Switch
+                          checked={secondary}
+                          onChange={(event) => {
+                            setSecondary(event.target.checked);
+                          }}
+                        />
+                        More information
+                      </MenuItem>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Grid
+                        container
+                        sx={{
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <Grid
+                          item
+                          xs={3}
+                          sx={{ paddingTop: 1, paddingBottom: 1 }}
+                        >
+                          <Link
+                            href="#"
+                            underline="hover"
+                            onClick={handleMenuClose}
+                          >
+                            close
+                          </Link>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Menu>
+                </Grid>
               </Grid>
               <Grid item xs={10} sx={{ alignSelf: "center" }}>
                 <Grid container spacing={0} sx={{ justifyContent: "center" }}>

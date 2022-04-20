@@ -18,7 +18,7 @@ import {
 import moment from "moment";
 import { width } from "@mui/system";
 // import { MobileDateTimePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import EventIcon from "@mui/icons-material/Event";
@@ -1085,7 +1085,7 @@ function AddingWorkout({ setOpen, handleMenuClose, open }) {
                   />
                 </Grid>
                 <Grid className="date" item xs={10}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
                     <DateTimePicker
                       label="Date"
                       required
