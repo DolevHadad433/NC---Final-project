@@ -202,7 +202,7 @@ function SignUp() {
                 }}
               >
                 <Grid item sm={12} sx={{ width: "100%" }}>
-                {signUpState.error && (
+                  {signUpState.error && (
                     <p className="error">{signUpState.error}</p>
                   )}
                 </Grid>

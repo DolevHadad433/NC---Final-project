@@ -70,7 +70,6 @@ function LogIn() {
   const { userContextState, userContextDispatch } = useUsersContext();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  
   async function onLogInSubmit(e) {
     e.preventDefault();
 
