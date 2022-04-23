@@ -5,6 +5,7 @@ import { CategoriesRouters } from "./categories/categories.routes.mjs";
 import { SchedulesRouters } from "./scheduled/scheduled.routes.mjs";
 import { UsersRouters } from "./users/users.routes.mjs";
 import { WorkoutsBaseRouters } from "./workouts-base/workouts-base.routes.mjs";
+import { HistoryScheduledRouters } from "./history-scheduled/history-scheduled.routes.mjs";
 
 export const AppRouter = Router();
 
@@ -13,3 +14,4 @@ AppRouter.use("/categories", CategoriesRouters);
 AppRouter.use("/schedules", SchedulesRouters);
 AppRouter.use("/users", UsersRouters);
 AppRouter.use("/workoutsBase", WorkoutsBaseRouters);
+AppRouter.use("/history-scheduled", HistoryScheduledRouters);

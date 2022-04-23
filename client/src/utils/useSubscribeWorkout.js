@@ -14,19 +14,6 @@ function useSubscribeWorkout() {
     });
   }, []);
 
-  // function subscribeHandler(workoutID, userID) {
-  //   fetch("/api/schedules/create", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       userID,
-  //       workoutID,
-  //     }),
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //     },
-  //   });
-  // }
-
   return subscribeHandler;
 }
 

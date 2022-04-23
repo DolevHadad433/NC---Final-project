@@ -8,7 +8,7 @@ import SignUp from "./SignUp/SignUp";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CheckResponsive from "./CheckResponsive";
 import { breakpoints } from "@mui/system";
-import MyWorkouts from "./MainPage/WorkoutsList/MyWorkouts/MyWorkouts";
+import MyWorkouts from "./MainPage/MyWorkouts/MyWorkouts";
 
 const theme = createTheme({
   breakpoints: {
@@ -37,6 +37,7 @@ const theme = createTheme({
 });
 
 function App() {
+  
   return (
     // <ThemeProvider theme={theme} breakpoints={breakpoints}>
     <UsersProvider>

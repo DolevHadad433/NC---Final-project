@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 function useResponsive() {
   const [width, setWindowWidth] = useState(0);
-  useEffect(() => {
-    updateDimensions();
 
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
   const updateDimensions = () => {
     const width = window.innerWidth;
     setWindowWidth(width);
   };
+
+  useEffect(() => {
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   const responsive = {
     showInMobileOnly: width < 600,
     showInTabletOnly: width <= 1239 && width >= 600,
@@ -77,23 +79,34 @@ function useResponsive() {
     display: responsive.showInAllWidth ? "flex" : "none",
   };
 
-  return {
-    showInMobileOnly,
-    showInTabletOnly,
-    showInTabletVerticalOnly,
-    showInTabletHorizontalOnly,
-    showInTabletVerticalAndBelow,
-    showInTabletHorizontalAndBelow,
-    showInLaptopOnly,
-    showInLaptopAndBelow,
-    showInLaptopToTabletVertical,
-    showInLaptopToTabletHorizontalOnly,
-    showInDesktopToTabletVerticalOnly,
-    showInDesktopToTabletHorizontalOnly,
-    showInDesktopToLaptopOnly,
-    showInDesktopOnly,
-    showInAllWidth,
-  };
+  const displayOrNot = useCallback((displayState) => {
+    if (displayState.display === "flex") {
+      return true;
+    } else return false;
+  }, []);
+
+  const responsiveValues = useMemo(() => {
+    return {
+      displayOrNot,
+      showInMobileOnly,
+      showInTabletOnly,
+      showInTabletVerticalOnly,
+      showInTabletHorizontalOnly,
+      showInTabletVerticalAndBelow,
+      showInTabletHorizontalAndBelow,
+      showInLaptopOnly,
+      showInLaptopAndBelow,
+      showInLaptopToTabletVertical,
+      showInLaptopToTabletHorizontalOnly,
+      showInDesktopToTabletVerticalOnly,
+      showInDesktopToTabletHorizontalOnly,
+      showInDesktopToLaptopOnly,
+      showInDesktopOnly,
+      showInAllWidth,
+    };
+  });
+
+  return { ...responsiveValues };
 }
 
 export default useResponsive;

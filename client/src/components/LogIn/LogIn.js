@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, padding } from "@mui/system";
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import useResponsive from "../../utils/useResponsive";
 import { useNavigate } from "react-router-dom";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
@@ -26,12 +26,12 @@ function loginReducer(state, action) {
       return {
         ...state,
         isLoading: true,
-        error: "",
+        errorMessage: false,
       };
     case "error":
       return {
         ...state,
-        error: "Incorrect username or password!",
+        errorMessage: true,
       };
     case "stop_loading":
       return {
@@ -52,7 +52,7 @@ const initialLoginState = {
   username: "",
   password: "",
   isLoading: false,
-  error: "",
+  errorMessage: false,
 };
 //============ Reducer properties end ============
 
@@ -62,12 +62,21 @@ function LogIn() {
     loginReducer,
     initialLoginState
   );
+  const { userContextState, userContextDispatch } = useUsersContext();
+  useEffect(() => {
+    localStorage.setItem(
+      "User",
+      JSON.stringify({
+        username: userContextState.username,
+        userID: userContextState.userID,
+      })
+    );
+  }, []);
 
   const { showInMobileOnly, showInDesktopToTabletVerticalOnly } =
     useResponsive();
   const clickLogInHandler = useNavigate();
   const clickDontHaveUserHandler = useNavigate();
-  const { userContextState, userContextDispatch } = useUsersContext();
   const [anchorEl, setAnchorEl] = useState(null);
 
   async function onLogInSubmit(e) {
@@ -96,7 +105,7 @@ function LogIn() {
             userID: userData._id,
           })
         );
-
+        userContextDispatch({ type: Actions.logInSuccess });
         setTimeout(() => {
           dispatchLogIn({ type: "stop_loading" });
           clickLogInHandler("/main-page");
@@ -302,11 +311,6 @@ function LogIn() {
                   pb: 4,
                 }}
               >
-                <Grid item xs={12} sx={{ width: "100%" }}>
-                  {loginState.error && (
-                    <p className="error">{loginState.error}</p>
-                  )}
-                </Grid>
                 <Grid
                   container
                   rowSpacing={2}
@@ -330,6 +334,7 @@ function LogIn() {
                   <Grid item xs={12}>
                     <TextField
                       required
+                      error={loginState.errorMessage}
                       sx={{ width: "100%" }}
                       placeholder="User Name"
                       type="text"
@@ -346,6 +351,10 @@ function LogIn() {
                   <Grid item xs={12}>
                     <TextField
                       required
+                      error={loginState.errorMessage}
+                      helperText={
+                        loginState.errorMessage ? "Incorrect entry." : null
+                      }
                       sx={{ width: "100%" }}
                       placeholder="password"
                       type="password"

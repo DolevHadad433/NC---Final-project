@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import AppBarMain from "../../ActionsAndUtils/AppBarMain";
-import ScheduledWorkoutsList from "../../ScheduledWorkoutsList/ScheduledWorkoutsList";
-import useResponsive from "../../../../utils/useResponsive";
-import { useWorkoutsContext } from "../../../../contexts/WorkoutsContext";
-import { useUsersContext } from "../../../../contexts/UsersContext";
-import MainMenu from "../../ActionsAndUtils/MainMenu";
-import ScheduledWorkoutsForMobile from "../../ScheduledWorkoutsList/ScheduledWorkoutsForMobile";
+import React, { useEffect, useState } from "react";
+import AppBarMain from "../ActionsAndUtils/AppBarMain";
+import ScheduledWorkoutsList from "./ScheduledWorkouts/ScheduledWorkoutsForDesktop/ScheduledWorkoutsList";
+import useResponsive from "../../../utils/useResponsive";
+import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
+import { useUsersContext } from "../../../contexts/UsersContext";
+import MainMenu from "../ActionsAndUtils/MainMenu";
+import ScheduledWorkoutsForMobile from "./ScheduledWorkouts/ScheduledWorkoutsForMobile/ScheduledWorkoutsForMobile";
+import useUpdateHistoryScheduled from "../../../utils/useUpdateHistoryScheduled";
+
 import {
   AppBar,
   Button,
@@ -57,40 +59,29 @@ function a11yProps(index) {
 }
 
 function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
-  const {
-    showInMobileOnly,
-    showInTabletOnly,
-    showInTabletVerticalOnly,
-    showInTabletHorizontalOnly,
-    showInTabletVerticalAndBelow,
-    showInTabletHorizontalAndBelow,
-    showInLaptopOnly,
-    showInLaptopAndBelow,
-    showInLaptopToTabletVertical,
-    showInLaptopToTabletHorizontalOnly,
-    showInDesktopToTabletVerticalOnly,
-    showInDesktopToTabletHorizontalOnly,
-    showInDesktopToLaptopOnly,
-    showInDesktopOnly,
-    showInAllWidth,
-  } = useResponsive();
+  const UpdateHistoryScheduledHandler = useUpdateHistoryScheduled();
+
+  const { displayOrNot, showInMobileOnly } = useResponsive();
   const { isAdmin } = useUsersContext();
-  const { schedulesForAdmin, schedulesForUsers, userNames } =
-    useWorkoutsContext();
+  const {
+    schedulesForAdmin,
+    schedulesForUsers,
+    setScheduledForAdmin,
+    setScheduledForUsers,
+    historyScheduledList,
+    setHistoryScheduledList,
+  } = useWorkoutsContext();
 
   const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
+  const setSchedules = isAdmin() ? setScheduledForAdmin : setScheduledForUsers;
+  useEffect(() => {
+    UpdateHistoryScheduledHandler(schedules);
+  }, [historyScheduledList]);
 
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  function whatIsYourUserName(userId) {
-    const username = userNames.find((e) => e._id === userId);
-    if (username !== undefined) {
-      return username.username;
-    } else return "";
-  }
 
   function matchDayInWeekForMobile(day) {
     const matchSchedules = schedules.filter((scheduled) => {
@@ -106,13 +97,17 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
     return matchSchedules;
   }
 
-  return (
-    <div>
-      <Container maxWidth={"lg"}>
+  if (displayOrNot(showInMobileOnly)) {
+    return (
+      <Container maxWidth={"sm"}>
         <Grid container>
-          <Grid item xs={12} style={showInMobileOnly}>
+          <Grid item xs={12}>
             <Grid container>
-              <Grid item xs={12} sx={{ justifySelf: "flex-start" }}>
+              <Grid
+                item
+                xs={12}
+                sx={{ justifySelf: "flex-start", mt: 1, ml: 1 }}
+              >
                 <MainMenu />
               </Grid>
               <Grid container>
@@ -141,15 +136,24 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
                   sx={{ alignSelf: "center", justifySelf: "center" }}
                 >
                   <ScheduledWorkoutsForMobile
-                    whatIsYourUserName={whatIsYourUserName}
+                    schedules={schedules}
+                    historyScheduledList={historyScheduledList}
+                    setHistoryScheduledList={setHistoryScheduledList}
+                    setSchedules={setSchedules}
                   />
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-
-          <Grid item sm={12} style={showInDesktopToTabletVerticalOnly}>
-            <Grid container >
+        </Grid>
+      </Container>
+    );
+  } else {
+    return (
+      <Container maxWidth={"lg"}>
+        <Grid container>
+          <Grid item sm={12}>
+            <Grid container>
               <Grid container rowSpacing={12}>
                 <Grid item sm={12}>
                   <AppBarMain />
@@ -178,7 +182,10 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
                   sx={{ alignSelf: "center", justifySelf: "center" }}
                 >
                   <ScheduledWorkoutsList
-                    whatIsYourUserName={whatIsYourUserName}
+                    schedules={schedules}
+                    historyScheduledList={historyScheduledList}
+                    setHistoryScheduledList={setHistoryScheduledList}
+                    setSchedules={setSchedules}
                   />
                 </Grid>
               </Grid>
@@ -186,8 +193,8 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
           </Grid>
         </Grid>
       </Container>
-    </div>
-  );
+    );
+  }
 }
 
 export default MyWorkouts;

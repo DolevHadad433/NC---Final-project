@@ -17,10 +17,9 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import { width } from "@mui/system";
-// import { MobileDateTimePicker } from "@mui/x-date-pickers";
+import { MobileDateTimePicker, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import EventIcon from "@mui/icons-material/Event";
 
 //============ Imports end ============
@@ -564,21 +563,36 @@ function AddingWorkout({ setOpen, handleMenuClose, open }) {
                     )}
                   />
                 </Grid>
-                <Grid className="date" item sm={11}>
-                  <TextField
-                    required
-                    id="datetime-local"
-                    type="datetime-local"
-                    sx={{ width: "100%" }}
-                    value={addingWorkoutState.date}
-                    onChange={(e) =>
-                      dispatchAddingWorkout({
-                        type: "field",
-                        field: "date",
-                        value: e.currentTarget.value,
-                      })
-                    }
-                  />
+                <Grid className="date" item sm={10}>
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DateTimePicker
+                      label="Date"
+                      required
+                      clearable
+                      showTodayButton
+                      disableIgnoringDatePartForTimeValidation
+                      minDate={moment()}
+                      minTime={moment(addingWorkoutState.date).hour(8)}
+                      maxTime={moment(addingWorkoutState.date).hour(21)}
+                      minutesStep={5}
+                      value={addingWorkoutState.date}
+                      inputFormat="DD/MM/yyyy ,  HH:mm"
+                      onChange={(newValue) => {
+                        dispatchAddingWorkout({
+                          type: "field",
+                          field: "date",
+                          value: newValue,
+                        });
+                      }}
+                      renderInput={(props) => (
+                        <TextField
+                          sx={{ width: "100%" }}
+                          size="small"
+                          {...props}
+                        />
+                      )}
+                    />
+                  </LocalizationProvider>
                 </Grid>
                 <Grid className="Trainer's-name" item sm={11}>
                   <Autocomplete
@@ -824,20 +838,35 @@ function AddingWorkout({ setOpen, handleMenuClose, open }) {
                   />
                 </Grid>
                 <Grid className="date" item sm={10}>
-                  <TextField
-                    required
-                    id="datetime-local"
-                    type="datetime-local"
-                    sx={{ width: "100%" }}
-                    value={addingWorkoutState.date}
-                    onChange={(e) =>
-                      dispatchAddingWorkout({
-                        type: "field",
-                        field: "date",
-                        value: e.currentTarget.value,
-                      })
-                    }
-                  />
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DateTimePicker
+                      label="Date"
+                      required
+                      clearable
+                      showTodayButton
+                      disableIgnoringDatePartForTimeValidation
+                      minDate={moment()}
+                      minTime={moment(addingWorkoutState.date).hour(8)}
+                      maxTime={moment(addingWorkoutState.date).hour(21)}
+                      minutesStep={5}
+                      value={addingWorkoutState.date}
+                      inputFormat="DD/MM/yyyy ,  HH:mm"
+                      onChange={(newValue) => {
+                        dispatchAddingWorkout({
+                          type: "field",
+                          field: "date",
+                          value: newValue,
+                        });
+                      }}
+                      renderInput={(props) => (
+                        <TextField
+                          sx={{ width: "100%" }}
+                          size="small"
+                          {...props}
+                        />
+                      )}
+                    />
+                  </LocalizationProvider>
                 </Grid>
                 <Grid className="Trainer's-name" item sm={10}>
                   <Autocomplete
@@ -1086,17 +1115,18 @@ function AddingWorkout({ setOpen, handleMenuClose, open }) {
                 </Grid>
                 <Grid className="date" item xs={10}>
                   <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <DateTimePicker
+                    <MobileDateTimePicker
                       label="Date"
                       required
                       clearable
                       showTodayButton
-                      minDate={new Date()}
-                      minTime={new Date(0, 0, 0, 8)}
-                      maxTime={new Date(0, 0, 0, 20, 0)}
+                      disableIgnoringDatePartForTimeValidation
+                      minDate={moment()}
+                      minTime={moment(addingWorkoutState.date).hour(8)}
+                      maxTime={moment(addingWorkoutState.date).hour(21)}
                       minutesStep={5}
                       value={addingWorkoutState.date}
-                      inputFormat="dd/MM/yyyy ,  HH:mm"
+                      inputFormat="DD/MM/yyyy ,  HH:mm"
                       onChange={(newValue) => {
                         dispatchAddingWorkout({
                           type: "field",

@@ -5,7 +5,7 @@ import useUnsubscribeWorkout from "../../utils/useUnsubscribeWorkout";
 import useResponsive from "../../utils/useResponsive";
 import { useUsersContext, Actions } from "../../contexts/UsersContext";
 import { Route, Routes, Outlet } from "react-router-dom";
-import ScheduledWorkoutsList from "./ScheduledWorkoutsList/ScheduledWorkoutsList";
+import ScheduledWorkoutsList from "./MyWorkouts/ScheduledWorkouts/ScheduledWorkoutsForDesktop/ScheduledWorkoutsList";
 import WorkoutsList from "./WorkoutsList/WorkoutList";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -19,7 +19,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import AppBarMain from "./ActionsAndUtils/AppBarMain";
-import MyWorkouts from "./WorkoutsList/MyWorkouts/MyWorkouts";
+import MyWorkouts from "./MyWorkouts/MyWorkouts";
 import MainMenu from "./ActionsAndUtils/MainMenu";
 
 //============ Imports end ============
@@ -48,9 +48,9 @@ function MainPage() {
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
-        <Grid item xs={12} style={showInMobileOnly} >
-          <Grid container spacing={0} >
-            <Grid item xs={12} sx={{ justifySelf: "flex-start"}}>
+        <Grid item xs={12} style={showInMobileOnly}>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sx={{ justifySelf: "flex-start", mt: 1, ml: 1 }}>
               <MainMenu />
             </Grid>
           </Grid>

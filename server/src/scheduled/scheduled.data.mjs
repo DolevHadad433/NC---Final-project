@@ -2,7 +2,7 @@ import { getDB } from "../mongodb.mjs";
 import { ObjectId } from "mongodb";
 
 // GET - Scheduled collection
-async function getScheduledCollection() {
+export async function getScheduledCollection() {
   const db = await getDB();
   return db.collection("Scheduled");
 }
@@ -93,7 +93,9 @@ export async function editSchedule(id, newSchedule) {
   return schedule.updateOne({ _id: ObjectId(id) }, { $set: newSchedule });
 }
 
-// DELETE - Delete schedule by ID and return the deleted one in order to inform the user
+// DELETE - Delete schedule by scheduled ID if the user click in unsubscribe button and return the deleted one in order to inform the user, or by workoutID if the admin has deleted the workout and return the deleted schedules in order to inform the all the users that subscribed to the workout. 
+//Depend on which id is enter.
+
 export async function deleteSchedule(id) {
   const schedule = await getScheduledCollection();
 

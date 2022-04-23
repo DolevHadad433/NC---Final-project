@@ -69,6 +69,7 @@ function SubscribeWorkout({ workout }) {
 
   const openPopover = Boolean(anchorEl);
   console.log("Subscribe action render");
+  console.log(`userID from user context: ${userContextState.userID}`);
   return (
     <>
       <Container maxWidth={"xs"} sx={{ p: 0 }} style={showInMobileOnly}>

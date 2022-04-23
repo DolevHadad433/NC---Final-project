@@ -75,6 +75,8 @@ const initialState = {
   username: getUsernameFromLocalStorage(
     JSON.parse(localStorage.getItem("User"))
   ),
+  // username: "",
+  // userID: "",
   password: "",
   phoneNumber: "",
   userID: getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))),
@@ -107,12 +109,6 @@ function UsersProvider({ children }) {
     isAdmin,
   };
 
-  function getUsernameFromLocalStorage(obj) {
-    return obj.username;
-  }
-  function getUserIdFromLocalStorage(obj) {
-    return obj.userID;
-  }
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 //============ Context end ============

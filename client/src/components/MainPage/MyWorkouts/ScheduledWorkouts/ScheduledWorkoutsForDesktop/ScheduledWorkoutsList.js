@@ -1,24 +1,25 @@
 //============ Imports start ============
 import React, { useEffect, useState } from "react";
-import { useWorkoutsContext } from "../../../contexts/WorkoutsContext";
-import { useUsersContext, Actions } from "../../../contexts/UsersContext";
+import { useWorkoutsContext } from "../../../../../contexts/WorkoutsContext";
+import { useUsersContext, Actions } from "../../../../../contexts/UsersContext";
 import { v4 as uuid } from "uuid";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import { Container, Grid } from "@mui/material";
 import ScheduledWorkoutsFilter from "./ScheduledWorkoutsFilter/ScheduledWorkoutsFilter";
-import useUpdateWorkout from "../../../utils/useUpdateWorkout";
 
 //============ Imports end ============
 
 //============ Component start ============
-function ScheduledWorkoutsList({whatIsYourUserName}) {
-  const { schedulesForAdmin, schedulesForUsers, userNames, deletedWorkout } =
-    useWorkoutsContext();
+function ScheduledWorkoutsList({
+  schedules,
+  historyScheduledList,
+  setHistoryScheduledList,
+  setSchedules
+}) {
+  const { userNames, deletedWorkout } = useWorkoutsContext();
 
   const { isAdmin } = useUsersContext();
-
-  const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
 
   function ifThereIsScheduled() {
     if (schedules.length > 0) {
@@ -36,16 +37,9 @@ function ScheduledWorkoutsList({whatIsYourUserName}) {
           })
         );
       })();
-      return (
-        <ScheduledWorkoutsFilter
-          schedulesList={schedules}
-          username={whatIsYourUserName}
-        />
-      );
+      return <ScheduledWorkoutsFilter schedulesList={schedules} />;
     } else return "Not subscribed yet";
   }
-
- 
 
   return (
     <Container maxWidth="xxl" sx={{ alignItems: "center" }}>

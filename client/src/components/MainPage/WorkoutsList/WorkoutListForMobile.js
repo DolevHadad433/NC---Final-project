@@ -16,16 +16,18 @@ import DeleteWorkout from "../ActionsAndUtils/DeleteWorkout";
 import EditWorkout from "../ActionsAndUtils/EditWorkout";
 import SubscribeWorkout from "../ActionsAndUtils/SubscribeWorkout";
 import UnsubscribeWorkout from "../ActionsAndUtils/UnsubscribeWorkout";
-import { Container, Switch } from "@mui/material";
+import { Container, Divider, Switch } from "@mui/material";
 import { Link } from "@mui/material";
+import DisplayWorkoutsMenu from "../ActionsAndUtils/DisplayWorkoutsMenu";
+import moment from "moment";
 
 function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
   const { schedulesForAdmin, schedulesForUsers } = useWorkoutsContext();
   const [secondary, setSecondary] = useState(false);
   const [anchorMenu, setAnchorMenu] = useState(null);
-  const openMenu = Boolean(anchorMenu);
   const { isAdmin } = useUsersContext();
-
+  const [secondaryAll, setSecondaryAll] = useState(false);
+  const [descriptionAll, setDescriptionAll] = useState(false);
   const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
 
   const handleMenuClick = (event) => {
@@ -34,6 +36,8 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
   const handleMenuClose = () => {
     setAnchorMenu(null);
   };
+
+  const openMenu = Boolean(anchorMenu);
 
   function workoutAction(workout) {
     if (isAdmin()) {
@@ -57,8 +61,8 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
           </Grid>
         );
       } else {
-        if (schedules.find((e) => e.workoutID === workout._id) !== undefined) {
-          const scheduled = schedules.find((e) => e.workoutID === workout._id);
+        const scheduled = schedules.find((e) => e.workoutID === workout._id);
+        if (scheduled !== undefined) {
           return (
             <Grid container sx={{ justifyContent: "flex-end" }}>
               <Grid item xs={6}>
@@ -71,8 +75,33 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
     }
   }
 
+  function thisWeekOrAfter() {
+    const thisWeek = [];
+    const nextWeek = [];
+    workouts.map((workout) => {
+      if (Number(workout.weekOfYear) === Number(moment().format("w")) + 1) {
+        nextWeek.push(workout);
+      } else if (Number(workout.weekOfYear) === Number(moment().format("w"))) {
+        thisWeek.push(workout);
+      }
+      return workout;
+    });
+    return { thisWeek, nextWeek };
+  }
+
+  function showDivider(week) {
+    if (week !== undefined && week.length > 1) {
+      return true;
+    } else return false;
+  }
+
+  const { thisWeek, nextWeek } = thisWeekOrAfter();
+
+  console.log(thisWeek);
+  console.log(nextWeek);
+
   return (
-    <Container maxWidth={"xs"} sx={{ paddingLeft: 0.5, paddingRight: 0.5 }}>
+    <Container maxWidth={"sm"} sx={{ paddingLeft: 0.5, paddingRight: 0.5 }}>
       {workouts.length === 0 ? (
         <Grid container spacing={2}>
           {isAdmin() ? (
@@ -106,10 +135,18 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
           )}
         </Grid>
       ) : (
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={1} sx={{ justifySelf: "flex-start" }}>
+        <Grid
+          container
+          spacing={0}
+          sx={{ justifyContent: "center", alignItems: "center" }}
+        >
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <Grid
+              container
+              spacing={0}
+              sx={{ justifyContent: "center", alignItems: "center" }}
+            >
+              <Grid item xs={1} sx={{ alignSelf: "center" }}>
                 <IconButton
                   sx={{ color: "#b3b3b3" }}
                   size="small"
@@ -121,7 +158,7 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                   <SettingsIcon />
                 </IconButton>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={0}>
                 <Grid container sx={{ justifyContent: "flex-end" }}>
                   <Menu
                     id="basic-menu"
@@ -132,12 +169,23 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                     <Grid item xs={12}>
                       <MenuItem>
                         <Switch
-                          checked={secondary}
+                          checked={secondaryAll}
                           onChange={(event) => {
-                            setSecondary(event.target.checked);
+                            setSecondaryAll(event.target.checked);
                           }}
                         />
                         More information
+                      </MenuItem>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <MenuItem>
+                        <Switch
+                          checked={descriptionAll}
+                          onChange={(event) => {
+                            setDescriptionAll(event.target.checked);
+                          }}
+                        />
+                        Show workouts description
                       </MenuItem>
                     </Grid>
                     <Grid item xs={12}>
@@ -149,7 +197,7 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                       >
                         <Grid
                           item
-                          xs={3}
+                          xs={2}
                           sx={{ paddingTop: 1, paddingBottom: 1 }}
                         >
                           <Link
@@ -166,77 +214,82 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                 </Grid>
               </Grid>
               <Grid item xs={10} sx={{ alignSelf: "center" }}>
-                <Grid container spacing={0} sx={{ justifyContent: "center" }}>
-                  <Grid item xs={12}>
-                    <Typography
-                      color="text.secondary"
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        textAlign: "center",
-                        fontWeight: 500,
-                        fontSize: 18,
-                      }}
-                    >
-                      Subscribe to your workouts!
-                    </Typography>
-                  </Grid>
-                </Grid>
+                <Typography
+                  color="text.secondary"
+                  variant="h6"
+                  component="div"
+                  sx={{
+                    textAlign: "center",
+                    fontWeight: 500,
+                    fontSize: 18,
+                  }}
+                >
+                  Subscribe to your workouts!
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <List>
-              {workouts.map((workout) => {
-                return (
-                  <ListItem
-                    divider
-                    key={workout._id}
-                    secondaryAction={<IconButton edge="end"></IconButton>}
-                    sx={{ p: 1 }}
+            <Grid container spacing={0}>
+              {thisWeek.length > 0 ? (
+                <Grid item xs={12}>
+                  <Divider
+                    sx={{
+                      fontSize: 13,
+                      fontStyle: "italic",
+                      color: "text.secondary",
+                      mt: 1,
+                      mb: 1,
+                    }}
                   >
-                    <Grid container>
-                      <Grid item xs={9}>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="h7"
-                              sx={{ fontWeight: 500 }}
-                              component="div"
-                            >
-                              {workout.title}
-                              <Typography
-                                variant="subtitle2"
-                                sx={{ fontWeight: "normal" }}
-                                component="div"
-                              >
-                                {workout.dayInMonth}, {workout.time}
-                              </Typography>
-                            </Typography>
-                          }
-                          secondary={
-                            secondary ? (
-                              <Typography
-                                variant="subtitle2"
-                                sx={{ fontWeight: "normal" }}
-                                component="div"
-                              >
-                                Category: {workout.category}
-                                <br />
-                                Trainer: {workout.trainerName}
-                              </Typography>
-                            ) : null
-                          }
+                    This week
+                  </Divider>
+                  <List>
+                    {thisWeek.map((workout) => {
+                      return (
+                        <DisplayWorkoutsMenu
+                          key={workout._id}
+                          workout={workout}
+                          showDivider={showDivider(thisWeek)}
+                          secondaryAll={secondaryAll}
+                          descriptionAll={descriptionAll}
+                          workoutAction={workoutAction}
                         />
-                      </Grid>
-                      <Grid item xs={3}>
-                        {workoutAction(workout)}
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                );
-              })}
-            </List>
+                      );
+                    })}
+                  </List>
+                  <Divider
+                    sx={{
+                      fontSize: 13,
+                      fontStyle: "italic",
+                      color: "text.secondary",
+                      mt: 1,
+                      mb: 1,
+                    }}
+                  >
+                    Next week
+                  </Divider>
+                </Grid>
+              ) : null}
+              {nextWeek.length > 0 ? (
+                <Grid item xs={12}>
+                  <List>
+                    {nextWeek.map((workout) => {
+                      return (
+                        <DisplayWorkoutsMenu
+                          key={workout._id}
+                          workout={workout}
+                          showDivider={showDivider(nextWeek)}
+                          secondaryAll={secondaryAll}
+                          descriptionAll={descriptionAll}
+                          workoutAction={workoutAction}
+                        />
+                      );
+                    })}
+                  </List>
+                </Grid>
+              ) : null}
+            </Grid>
           </Grid>
         </Grid>
       )}

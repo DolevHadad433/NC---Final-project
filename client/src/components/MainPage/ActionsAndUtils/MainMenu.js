@@ -49,7 +49,7 @@ function MainMenu() {
   };
 
   async function onLogOutButtonClick() {
-    localStorage.removeItem("User");
+    localStorage.setItem("User", JSON.stringify({ username: "", userID: "" }));
     userContextDispatch({ type: Actions.logOutSuccess });
     clickLogOutHandler("/", { replace: true });
   }

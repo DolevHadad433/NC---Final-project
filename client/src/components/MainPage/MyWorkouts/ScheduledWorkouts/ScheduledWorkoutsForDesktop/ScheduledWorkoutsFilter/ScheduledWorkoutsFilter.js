@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useUsersContext, Actions } from "../../../../contexts/UsersContext";
-import { useWorkoutsContext } from "../../../../contexts/WorkoutsContext";
-import useUnsubscribeWorkout from "../../../../utils/useUnsubscribeWorkout";
+import { useUsersContext, Actions } from "../../../../../../contexts/UsersContext";
+import { useWorkoutsContext } from "../../../../../../contexts/WorkoutsContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -11,18 +10,13 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { Grid } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import UnsubscribeWorkout from "../../ActionsAndUtils/UnsubscribeWorkout";
+import UnsubscribeWorkout from "../../../../ActionsAndUtils/UnsubscribeWorkout";
 
-function ScheduledWorkoutsFilter({
-  username,
-  search,
-  setSearch,
-  schedulesList,
-}) {
+function ScheduledWorkoutsFilter({ search, setSearch, schedulesList }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     localStorage.getItem("schedulesColumnVisibilityModel")
   );
-
+  const { userNames, whatIsYourUserName } = useWorkoutsContext();
   const { isAdmin } = useUsersContext();
 
   function initLocalStorageColumnVisibility() {
@@ -103,7 +97,6 @@ function ScheduledWorkoutsFilter({
       },
     ],
   };
-
   function scheduledAction(scheduled) {
     return (
       <Grid item sm={2}>
@@ -126,13 +119,13 @@ function ScheduledWorkoutsFilter({
       groupSize: scheduled.workoutInfo.groupSize,
       description: scheduled.workoutInfo.description,
       duration: scheduled.workoutInfo.duration + " minutes",
-      username: username(scheduled.userID),
+      username: whatIsYourUserName(scheduled.userID),
       actions: scheduledAction(scheduled),
     };
     return scheduledValue;
   });
 
-  console.log("ScheduledWorkoutsFilter is render");
+  console.log("Scheduled desktop");
 
   return (
     <div style={{ height: 450, width: "100%" }}>

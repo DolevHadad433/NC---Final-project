@@ -84,23 +84,8 @@ function WorkoutList({ search, setSearch }) {
     setValue(newValue);
   };
 
-  const {
-    showInMobileOnly,
-    showInTabletOnly,
-    showInTabletVerticalOnly,
-    showInTabletHorizontalOnly,
-    showInTabletVerticalAndBelow,
-    showInTabletHorizontalAndBelow,
-    showInLaptopOnly,
-    showInLaptopAndBelow,
-    showInLaptopToTabletVertical,
-    showInLaptopToTabletHorizontalOnly,
-    showInDesktopToTabletVerticalOnly,
-    showInDesktopToTabletHorizontalOnly,
-    showInDesktopToLaptopOnly,
-    showInDesktopOnly,
-    showInAllWidth,
-  } = useResponsive();
+  const { showInMobileOnly, showInDesktopToTabletVerticalOnly, displayOrNot } =
+    useResponsive();
 
   const {
     workoutsList,
@@ -112,7 +97,7 @@ function WorkoutList({ search, setSearch }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     localStorage.getItem("workoutColumnVisibilityModel")
   );
-  const { isAdmin } = useUsersContext();
+  const { userContextState, isAdmin } = useUsersContext();
 
   const schedules = isAdmin() ? schedulesForAdmin : schedulesForUsers;
 
@@ -283,18 +268,40 @@ function WorkoutList({ search, setSearch }) {
   }
 
   function matchDayInWeekForMobile(day) {
-    const matchWorkouts = workoutsList.filter((workout) => {
+    const sundayToThursday = [];
+    const allWeek = [];
+
+    workoutsList.map((workout) => {
       const dayInNum = Number(moment(workout.dayInWeek, "dddd").format("d"));
-      return (
-        dayInNum === day &&
-        workout.weekOfYear === String(Number(moment().format("w")))
-      );
+      const thisWeekOrAfter =
+        Number(workout.weekOfYear) === Number(moment().format("w")) + 1 ||
+        Number(workout.weekOfYear) === Number(moment().format("w"));
+      const workoutIsEnd = moment(
+        workout.dayInMonth + " " + workout.time,
+        "MMM Do kk:mm A"
+      ).isAfter(moment());
+
+      const sundayToThursdayItem =
+        dayInNum === day && thisWeekOrAfter && workoutIsEnd;
+      const allWeekItem = dayInNum !== day && thisWeekOrAfter && workoutIsEnd;
+
+      if (sundayToThursdayItem) {
+        sundayToThursday.push(workout);
+      } else if (allWeekItem) {
+        allWeek.push(workout);
+      }
+
+      return workout;
     });
-    return matchWorkouts;
+
+    if (day >= 0 && day <= 4) {
+      return sundayToThursday;
+    } else if (day === 5) {
+      return allWeek;
+    }
   }
 
   console.log("WorkoutList is render");
-
   function getDayInMonth(day) {
     return data.rows
       .filter(
@@ -307,88 +314,88 @@ function WorkoutList({ search, setSearch }) {
       });
   }
 
-  return (
-    <Container maxWidth={"lg"} sx={{ p: 0 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} style={showInMobileOnly} sx={{ mt: -2 }}>
-          <Grid container rowSpacing={2}>
-            <Grid item xs={12}>
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                variant="scrollable"
-                scrollButtons={true}
-                allowScrollButtonsMobile
+  if (displayOrNot(showInMobileOnly)) {
+    return (
+      <Container maxWidth={"sm"} sx={{ p: 0 }}>
+        <Grid container>
+          <Grid item xs={12} sx={{ mt: -2 }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons={true}
+              allowScrollButtonsMobile
+            >
+              <Tab label="Sunday" {...a11yProps(0)} />
+              <Tab label="Monday" {...a11yProps(1)} />
+              <Tab label="Tuesday" {...a11yProps(2)} />
+              <Tab label="Wednesday" {...a11yProps(3)} />
+              <Tab label="Thursday" {...a11yProps(4)} />
+              <Tab label="All week" {...a11yProps(5)} />
+            </Tabs>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{ alignSelf: "center", justifySelf: "center" }}
+          >
+            <WorkoutListForMobile
+              workouts={matchDayInWeekForMobile(value)}
+              showAddNewWorkoutButton={showAddNewWorkoutButton}
+            />
+          </Grid>
+        </Grid>
+      </Container>
+    );
+  } else {
+    return (
+      <Container maxWidth={"lg"} sx={{ p: 0 }}>
+        <Grid container spacing={2}>
+          <Grid item sm={12} sx={{ width: "100%" }}>
+            <Grid container spacing={2}>
+              <Grid item sm={12}>
+                <Tabs value={value} onChange={handleChange}>
+                  <Tab label="Sunday" {...a11yProps(0)} />
+                  <Tab label="Monday" {...a11yProps(1)} />
+                  <Tab label="Tuesday" {...a11yProps(2)} />
+                  <Tab label="Wednesday" {...a11yProps(3)} />
+                  <Tab label="Thursday" {...a11yProps(4)} />
+                </Tabs>
+              </Grid>
+              <Grid item sm={12} sx={{ height: 400 }}>
+                <DataGrid
+                  experimentalFeatures={{ newEditingApi: true }}
+                  editMode="row"
+                  rowHeight={50}
+                  rows={matchDayInWeek(value)}
+                  columns={data.columns}
+                  onColumnVisibilityModelChange={(newModel) => {
+                    localStorage.setItem(
+                      "workoutColumnVisibilityModel",
+                      JSON.stringify(newModel)
+                    );
+                    setColumnVisibilityModel(newModel);
+                  }}
+                  columnVisibilityModel={initLocalStorageColumnVisibility()}
+                  hideFooter
+                  // sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
+                />
+              </Grid>
+              <Grid
+                item
+                sm={12}
+                sx={{ alignSelf: "center", justifySelf: "center" }}
               >
-                <Tab label="Sunday" {...a11yProps(0)} />
-                <Tab label="Monday" {...a11yProps(1)} />
-                <Tab label="Tuesday" {...a11yProps(2)} />
-                <Tab label="Wednesday" {...a11yProps(3)} />
-                <Tab label="Thursday" {...a11yProps(4)} />
-              </Tabs>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{ alignSelf: "center", justifySelf: "center" }}
-            >
-              <WorkoutListForMobile
-                workouts={matchDayInWeekForMobile(value)}
-                showAddNewWorkoutButton={showAddNewWorkoutButton}
-              />
+                {matchDayInWeek(value).length === 0
+                  ? showAddNewWorkoutButton()
+                  : null}
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-
-        <Grid
-          item
-          sm={12}
-          style={showInDesktopToTabletVerticalOnly}
-          sx={{ width: "100%" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item sm={12}>
-              <Tabs value={value} onChange={handleChange}>
-                <Tab label="Sunday" {...a11yProps(0)} />
-                <Tab label="Monday" {...a11yProps(1)} />
-                <Tab label="Tuesday" {...a11yProps(2)} />
-                <Tab label="Wednesday" {...a11yProps(3)} />
-                <Tab label="Thursday" {...a11yProps(4)} />
-              </Tabs>
-            </Grid>
-            <Grid item sm={12} sx={{ height: 400 }}>
-              <DataGrid
-                experimentalFeatures={{ newEditingApi: true }}
-                editMode="row"
-                rowHeight={50}
-                rows={matchDayInWeek(value)}
-                columns={data.columns}
-                onColumnVisibilityModelChange={(newModel) => {
-                  localStorage.setItem(
-                    "workoutColumnVisibilityModel",
-                    JSON.stringify(newModel)
-                  );
-                  setColumnVisibilityModel(newModel);
-                }}
-                columnVisibilityModel={initLocalStorageColumnVisibility()}
-                hideFooter
-                // sx={{bgcolor:"#F6F1ED", borderColor:"#D6D6D5"}}
-              />
-            </Grid>
-            <Grid
-              item
-              sm={12}
-              sx={{ alignSelf: "center", justifySelf: "center" }}
-            >
-              {matchDayInWeek(value).length === 0
-                ? showAddNewWorkoutButton()
-                : null}
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Container>
-  );
+      </Container>
+    );
+  }
 }
 
 export default WorkoutList;
