@@ -67,7 +67,7 @@ function UnsubscribeWorkout({ scheduled }) {
           spacing={0}
           sx={{ justifyContent: "end", alignItems: "center" }}
         >
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <IconButton
               aria-owns={openPopover ? "mouse-over-popover" : undefined}
               aria-haspopup="true"
