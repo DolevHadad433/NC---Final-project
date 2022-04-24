@@ -20,8 +20,14 @@ import { Container, Divider, Switch } from "@mui/material";
 import { Link } from "@mui/material";
 import DisplayWorkoutsMenu from "../ActionsAndUtils/DisplayWorkoutsMenu";
 import moment from "moment";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { v4 as uuid } from "uuid";
 
-function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
+function WorkoutListForMobile({
+  workouts,
+  showAddNewWorkoutButton,
+  setWorkoutsList,
+}) {
   const { schedulesForAdmin, schedulesForUsers } = useWorkoutsContext();
   const [secondary, setSecondary] = useState(false);
   const [anchorMenu, setAnchorMenu] = useState(null);
@@ -44,7 +50,7 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
       return (
         <Grid container sx={{ justifyContent: "flex-end" }}>
           <Grid item xs={6}>
-            <EditWorkout />
+            <EditWorkout workout={workout} />
           </Grid>
           <Grid item xs={6}>
             <DeleteWorkout workout={workout} />
@@ -103,21 +109,49 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
   return (
     <Container maxWidth={"sm"} sx={{ paddingLeft: 0.5, paddingRight: 0.5 }}>
       {workouts.length === 0 ? (
-        <Grid container spacing={2}>
+        <Grid container spacing={0}>
           {isAdmin() ? (
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
               <Grid
                 container
                 columnSpacing={0}
-                sx={{ justifyContent: "center", mt: 5 }}
+                sx={{ justifyContent: "center" }}
               >
-                <Grid item xs={8} sx={{ alignSelf: "center" }}>
+                <Grid item xs={11} sx={{ alignSelf: "center" }}>
+                  <Typography
+                    color="text.secondary"
+                    variant="h6"
+                    component="div"
+                    sx={{
+                      textAlign: "center",
+                      fontWeight: 500,
+                      fontSize: 16,
+                    }}
+                  >
+                    There are no workouts for selected day.
+                  </Typography>
+                </Grid>
+                <Grid item xs={1} sx={{ alignSelf: "center" }}>
+                  <IconButton
+                    sx={{ color: "#b3b3b3" }}
+                    size="small"
+                    aria-controls={openMenu ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openMenu ? "true" : undefined}
+                    onClick={() => {
+                      setWorkoutsList(`Workout list has refresh ${uuid()}`);
+                    }}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={8} sx={{ alignSelf: "center", mt: 2 }}>
                   {showAddNewWorkoutButton()}
                 </Grid>
               </Grid>
             </Grid>
           ) : (
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
               <Typography
                 color="text.secondary"
                 variant="h6"
@@ -125,12 +159,23 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                 sx={{
                   textAlign: "center",
                   fontWeight: 500,
-                  fontSize: 18,
-                  mt: 5,
+                  fontSize: 17,
                 }}
               >
                 There are no workouts for today yet!
               </Typography>
+              <IconButton
+                sx={{ color: "#b3b3b3" }}
+                size="small"
+                aria-controls={openMenu ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenu ? "true" : undefined}
+                onClick={() => {
+                  setWorkoutsList(`Workout list has refresh ${uuid()}`);
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
             </Grid>
           )}
         </Grid>
@@ -221,11 +266,27 @@ function WorkoutListForMobile({ workouts, showAddNewWorkoutButton }) {
                   sx={{
                     textAlign: "center",
                     fontWeight: 500,
-                    fontSize: 18,
+                    fontSize: 17,
                   }}
                 >
-                  Subscribe to your workouts!
+                  {isAdmin()
+                    ? "Available workouts"
+                    : "Subscribe to your workouts!"}
                 </Typography>
+              </Grid>
+              <Grid item xs={1} sx={{ alignSelf: "center" }}>
+                <IconButton
+                  sx={{ color: "#b3b3b3" }}
+                  size="small"
+                  aria-controls={openMenu ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openMenu ? "true" : undefined}
+                  onClick={() => {
+                    setWorkoutsList(`Workout list has refresh ${uuid()}`);
+                  }}
+                >
+                  <RefreshIcon />
+                </IconButton>
               </Grid>
             </Grid>
           </Grid>

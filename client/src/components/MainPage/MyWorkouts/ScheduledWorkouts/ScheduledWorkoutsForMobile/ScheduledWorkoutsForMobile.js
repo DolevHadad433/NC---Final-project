@@ -44,6 +44,36 @@ function ScheduledWorkoutsForMobile({
   console.log("Scheduled mobile");
   // console.log(moment());
 
+  function thisWeekOrAfter() {
+    const thisWeek = [];
+    const nextWeek = [];
+    schedules.map((scheduled) => {
+      if (
+        Number(scheduled.workoutInfo.weekOfYear) ===
+        Number(moment().format("w")) + 1
+      ) {
+        nextWeek.push(scheduled);
+      } else if (
+        Number(scheduled.workoutInfo.weekOfYear) ===
+        Number(moment().format("w"))
+      ) {
+        thisWeek.push(scheduled);
+      }
+      return scheduled;
+    });
+    return { thisWeek, nextWeek };
+  }
+
+  const { thisWeek, nextWeek } = thisWeekOrAfter();
+
+  const thereAreExpectedWorkouts = thisWeek.length > 0 || nextWeek > 0;
+
+  function showDivider(week) {
+    if (week !== undefined && week.length > 1) {
+      return true;
+    } else return false;
+  }
+
   return (
     <Container maxWidth={"sm"} sx={{ paddingLeft: 0.5, paddingRight: 0.5 }}>
       <Grid
@@ -57,21 +87,18 @@ function ScheduledWorkoutsForMobile({
             spacing={0}
             sx={{ justifyContent: "center", alignItems: "center" }}
           >
-            {schedules.length !== 0 ? (
-              <Grid item xs={1} sx={{ alignSelf: "center" }}>
-                <IconButton
-                  sx={{ color: "#b3b3b3" }}
-                  size="small"
-                  aria-controls={openMenu ? "basic-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={openMenu ? "true" : undefined}
-                  onClick={handleMenuClick}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              </Grid>
-            ) : null}
-
+            <Grid item xs={1} sx={{ alignSelf: "center" }}>
+              <IconButton
+                sx={{ color: "#b3b3b3" }}
+                size="small"
+                aria-controls={openMenu ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenu ? "true" : undefined}
+                onClick={handleMenuClick}
+              >
+                <SettingsIcon />
+              </IconButton>
+            </Grid>
             <Grid item xs={0}>
               <Grid container sx={{ justifyContent: "flex-end" }}>
                 <Menu
@@ -146,13 +173,13 @@ function ScheduledWorkoutsForMobile({
                 sx={{
                   textAlign: "center",
                   fontWeight: 500,
-                  fontSize: 18,
+                  fontSize: 17,
                 }}
               >
                 {isAdmin()
                   ? "Workouts subscriptions:"
                   : schedules.length === 0
-                  ? "You havn't subscribed to any workouts yet!"
+                  ? "You havn't subscribed to any workouts for today!"
                   : "Manage your schedules workouts!"}
               </Typography>
             </Grid>
@@ -164,9 +191,9 @@ function ScheduledWorkoutsForMobile({
                 aria-haspopup="true"
                 aria-expanded={openMenu ? "true" : undefined}
                 onClick={() => {
-                  setSchedules(`History schedules has update ${uuid()}`);
+                  setSchedules(`History schedules has refresh ${uuid()}`);
                   setHistoryScheduledList(
-                    `History schedules has update ${uuid()}`
+                    `History schedules has refresh ${uuid()}`
                   );
                 }}
               >
@@ -177,53 +204,96 @@ function ScheduledWorkoutsForMobile({
         </Grid>
 
         <Grid item className="history-scheduled" xs={12}>
-          {showPastScheduled ? (
+          {showPastScheduled && thereAreExpectedWorkouts ? (
             <Divider
               sx={{
-                fontSize: 13,
+                fontSize: 16,
                 fontStyle: "italic",
                 color: "text.secondary",
-                mt: 1,
+                mt: 2,
                 mb: 1,
               }}
             >
               Expected workouts
             </Divider>
           ) : null}
-          <List>
-            {schedules
-              .filter(
-                (scheduled) =>
-                  scheduled.workoutInfo.weekOfYear >= moment().format("w")
-              )
-              .map((scheduled) => {
-                return (
-                  <ItemListScheduledForMobile
-                    key={scheduled._id}
-                    scheduled={scheduled}
-                    secondaryAll={secondaryAll}
-                    descriptionAll={descriptionAll}
-                    schedules={schedules}
-                  />
-                );
-              })}
-          </List>
-          {showPastScheduled ? (
+
+          {thisWeek.length > 0 ? (
+            <Grid item xs={12}>
+              <Divider
+                sx={{
+                  fontSize: 13,
+                  fontStyle: "italic",
+                  color: "text.secondary",
+                  mt: 1,
+                  mb: 1,
+                }}
+              >
+                This week
+              </Divider>
+              <List>
+                {thisWeek.map((scheduled) => {
+                  return (
+                    <ItemListScheduledForMobile
+                      key={scheduled._id}
+                      scheduled={scheduled}
+                      secondaryAll={secondaryAll}
+                      descriptionAll={descriptionAll}
+                      schedules={schedules}
+                      showDivider={showDivider(thisWeek)}
+                    />
+                  );
+                })}
+              </List>
+              {nextWeek.length > 0 ? (
+                <Divider
+                  sx={{
+                    fontSize: 13,
+                    fontStyle: "italic",
+                    color: "text.secondary",
+                    mt: 1,
+                    mb: 1,
+                  }}
+                >
+                  Next week
+                </Divider>
+              ) : null}
+            </Grid>
+          ) : null}
+          {nextWeek.length > 0 ? (
+            <Grid item xs={12}>
+              <List>
+                {nextWeek.map((scheduled) => {
+                  return (
+                    <ItemListScheduledForMobile
+                      key={scheduled._id}
+                      scheduled={scheduled}
+                      secondaryAll={secondaryAll}
+                      descriptionAll={descriptionAll}
+                      schedules={schedules}
+                      showDivider={showDivider(nextWeek)}
+                    />
+                  );
+                })}
+              </List>
+            </Grid>
+          ) : null}
+        </Grid>
+
+        {showPastScheduled ? (
+          <Grid item className="scheduled" xs={12}>
             <Divider
               sx={{
-                fontSize: 13,
+                fontSize: 16,
                 fontStyle: "italic",
                 color: "text.secondary",
-                mt: 1,
+                mt: 2,
                 mb: 1,
               }}
             >
               Workouts that has already ended
             </Divider>
-          ) : null}
-        </Grid>
-        {showPastScheduled ? (
-          <Grid item className="scheduled" xs={12}>
+
             <List>
               {historyScheduledList
                 .filter(

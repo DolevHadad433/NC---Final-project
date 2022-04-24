@@ -84,17 +84,37 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
   };
 
   function matchDayInWeekForMobile(day) {
-    const matchSchedules = schedules.filter((scheduled) => {
-      const dayInNum = Number(
-        moment(scheduled.workoutInfo.dayInWeek, "dddd").format("d")
-      );
-      return (
-        dayInNum === day &&
-        scheduled.workoutInfo.weekOfYear ===
-          String(Number(moment().format("w")))
-      );
+    const sundayToThursday = [];
+    const allWeek = [];
+
+    schedules.map((scheduled) => {
+      const dayInNum = Number(moment(scheduled.workoutInfo.dayInWeek, "dddd").format("d"));
+      const thisWeekOrAfter =
+        Number(scheduled.workoutInfo.weekOfYear) === Number(moment().format("w")) + 1 ||
+        Number(scheduled.workoutInfo.weekOfYear) === Number(moment().format("w"));
+      const workoutIsEnd = moment(
+        scheduled.workoutInfo.dayInMonth + " " + scheduled.workoutInfo.time,
+        "MMM Do kk:mm A"
+      ).isAfter(moment());
+
+      const sundayToThursdayItem =
+        dayInNum === day && thisWeekOrAfter && workoutIsEnd;
+      const allWeekItem = dayInNum !== day && thisWeekOrAfter && workoutIsEnd;
+
+      if (sundayToThursdayItem) {
+        sundayToThursday.push(scheduled);
+      } else if (allWeekItem) {
+        allWeek.push(scheduled);
+      }
+
+      return scheduled;
     });
-    return matchSchedules;
+
+    if (day >= 0 && day <= 4) {
+      return sundayToThursday;
+    } else if (day === 5) {
+      return allWeek;
+    }
   }
 
   if (displayOrNot(showInMobileOnly)) {
@@ -128,6 +148,7 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
                     <Tab label="Tuesday" {...a11yProps(2)} />
                     <Tab label="Wednesday" {...a11yProps(3)} />
                     <Tab label="Thursday" {...a11yProps(4)} />
+                    <Tab label="All week" {...a11yProps(5)} />
                   </Tabs>
                 </Grid>
                 <Grid
@@ -136,7 +157,7 @@ function MyWorkouts({ updateWorkout, setUpdateWorkout, workoutBaseList }) {
                   sx={{ alignSelf: "center", justifySelf: "center" }}
                 >
                   <ScheduledWorkoutsForMobile
-                    schedules={schedules}
+                    schedules={matchDayInWeekForMobile(value)}
                     historyScheduledList={historyScheduledList}
                     setHistoryScheduledList={setHistoryScheduledList}
                     setSchedules={setSchedules}

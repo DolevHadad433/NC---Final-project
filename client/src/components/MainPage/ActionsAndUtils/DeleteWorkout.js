@@ -28,20 +28,7 @@ function DeleteWorkout({ workout }) {
   const deleteWorkoutHandler = useDeleteWorkout();
   const {
     showInMobileOnly,
-    showInTabletOnly,
-    showInTabletVerticalOnly,
-    showInTabletHorizontalOnly,
-    showInTabletVerticalAndBelow,
-    showInTabletHorizontalAndBelow,
-    showInLaptopOnly,
-    showInLaptopAndBelow,
-    showInLaptopToTabletVertical,
-    showInLaptopToTabletHorizontalOnly,
     showInDesktopToTabletVerticalOnly,
-    showInDesktopToTabletHorizontalOnly,
-    showInDesktopToLaptopOnly,
-    showInDesktopOnly,
-    showInAllWidth,
   } = useResponsive();
 
   const [open, setOpen] = useState(false);

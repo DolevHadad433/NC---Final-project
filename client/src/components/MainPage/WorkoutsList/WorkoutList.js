@@ -204,7 +204,7 @@ function WorkoutList({ search, setSearch }) {
       return (
         <Grid container>
           <Grid item xs={2}>
-            <EditWorkout />
+            <EditWorkout workout={workout} />
           </Grid>
           <Grid item xs={2}>
             <DeleteWorkout workout={workout} />
@@ -301,7 +301,6 @@ function WorkoutList({ search, setSearch }) {
     }
   }
 
-  console.log("WorkoutList is render");
   function getDayInMonth(day) {
     return data.rows
       .filter(
@@ -313,6 +312,8 @@ function WorkoutList({ search, setSearch }) {
         return row.dayInMonth;
       });
   }
+
+  console.log("WorkoutList is render");
 
   if (displayOrNot(showInMobileOnly)) {
     return (
@@ -342,6 +343,7 @@ function WorkoutList({ search, setSearch }) {
             <WorkoutListForMobile
               workouts={matchDayInWeekForMobile(value)}
               showAddNewWorkoutButton={showAddNewWorkoutButton}
+              setWorkoutsList={setWorkoutsList}
             />
           </Grid>
         </Grid>

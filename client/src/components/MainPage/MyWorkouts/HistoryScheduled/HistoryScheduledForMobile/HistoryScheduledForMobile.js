@@ -118,7 +118,6 @@ function HistoryScheduledForMobile({
                           sx={{ fontWeight: "normal", fontSize:12  }}
                           component="div"
                         >
-                          {/* Title check: {scheduled.title} */}
                           Username: {whatIsYourUserName(scheduled.userID)}
                           <br />
                           Trainer: {scheduled.workoutInfo.trainerName}
