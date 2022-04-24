@@ -26,10 +26,8 @@ function DeleteWorkout({ workout }) {
   const { setWorkoutsList, setScheduledForAdmin, setScheduledForUsers } =
     useWorkoutsContext();
   const deleteWorkoutHandler = useDeleteWorkout();
-  const {
-    showInMobileOnly,
-    showInDesktopToTabletVerticalOnly,
-  } = useResponsive();
+  const { showInMobileOnly, showInDesktopToTabletVerticalOnly } =
+    useResponsive();
 
   const [open, setOpen] = useState(false);
 
@@ -97,7 +95,11 @@ function DeleteWorkout({ workout }) {
                       >
                         <strong>{workout.title}</strong>
                       </Typography>{" "}
-                      workout on <strong>{workout.date}</strong>?
+                      workout on{" "}
+                      <strong>
+                        {workout.dayInMonth}, {workout.time}
+                      </strong>
+                      ?
                     </Typography>
                   </Grid>
                   <Grid className="Buttons" item xs={12}>
@@ -140,7 +142,7 @@ function DeleteWorkout({ workout }) {
           </Grid>
         </Grid>
       </Container>
-      
+
       <Container
         maxWidth={"lg"}
         sx={{ p: 0 }}

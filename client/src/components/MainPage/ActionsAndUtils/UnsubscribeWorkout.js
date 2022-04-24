@@ -110,7 +110,7 @@ function UnsubscribeWorkout({ scheduled }) {
                     <Typography variant="h7" component="span" display="inline">
                       <strong>{scheduled.workoutInfo.title}</strong>
                     </Typography>{" "}
-                    workout on <strong>{scheduled.workoutInfo.date}</strong>?
+                    workout on <strong>{scheduled.workoutInfo.dayInMonth}, {scheduled.workoutInfo.time}</strong>?
                   </Typography>
                 </Grid>
                 <Grid className="Buttons" item xs={12}>

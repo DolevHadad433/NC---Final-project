@@ -123,7 +123,7 @@ function SubscribeWorkout({ workout }) {
                     <Typography variant="h7" component="span" display="inline">
                       <strong>{workout.title}</strong>
                     </Typography>{" "}
-                    workout on <strong>{workout.date}</strong>.
+                    workout on <strong>{workout.dayInMonth}, {workout.time}</strong>.
                   </Typography>
                 </Grid>
                 <Grid className="Buttons" item xs={12}>
