@@ -72,14 +72,14 @@ function userReducer(state, action) {
   }
 }
 const initialState = {
-  username: getUsernameFromLocalStorage(
-    JSON.parse(localStorage.getItem("User"))
-  ),
-  // username: "",
-  // userID: "",
+  // username: getUsernameFromLocalStorage(
+  //   JSON.parse(localStorage.getItem("User"))
+  // ),
+  username: "",
+  userID: "",
   password: "",
   phoneNumber: "",
-  userID: getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))),
+  // userID: getUserIdFromLocalStorage(JSON.parse(localStorage.getItem("User"))),
   isLoading: false,
   isAdmin: false,
 };

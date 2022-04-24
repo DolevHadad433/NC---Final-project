@@ -103,8 +103,8 @@ function WorkoutListForMobile({
 
   const { thisWeek, nextWeek } = thisWeekOrAfter();
 
-  console.log(thisWeek);
-  console.log(nextWeek);
+  // console.log(thisWeek);
+  // console.log(nextWeek);
 
   return (
     <Container maxWidth={"sm"} sx={{ paddingLeft: 0.5, paddingRight: 0.5 }}>
@@ -152,30 +152,40 @@ function WorkoutListForMobile({
             </Grid>
           ) : (
             <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography
-                color="text.secondary"
-                variant="h6"
-                component="div"
-                sx={{
-                  textAlign: "center",
-                  fontWeight: 500,
-                  fontSize: 17,
-                }}
+              <Grid
+                container
+                columnSpacing={0}
+                sx={{ justifyContent: "center" }}
               >
-                There are no workouts for today yet!
-              </Typography>
-              <IconButton
-                sx={{ color: "#b3b3b3" }}
-                size="small"
-                aria-controls={openMenu ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={openMenu ? "true" : undefined}
-                onClick={() => {
-                  setWorkoutsList(`Workout list has refresh ${uuid()}`);
-                }}
-              >
-                <RefreshIcon />
-              </IconButton>
+                <Grid item xs={11}>
+                  <Typography
+                    color="text.secondary"
+                    variant="h6"
+                    component="div"
+                    sx={{
+                      textAlign: "center",
+                      fontWeight: 500,
+                      fontSize: 17,
+                    }}
+                  >
+                    There are no workouts for today yet!
+                  </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButton
+                    sx={{ color: "#b3b3b3" }}
+                    size="small"
+                    aria-controls={openMenu ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openMenu ? "true" : undefined}
+                    onClick={() => {
+                      setWorkoutsList(`Workout list has refresh ${uuid()}`);
+                    }}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
             </Grid>
           )}
         </Grid>

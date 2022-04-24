@@ -68,13 +68,22 @@ function SubscribeWorkout({ workout }) {
   };
 
   const openPopover = Boolean(anchorEl);
-  console.log("Subscribe action render");
-  console.log(`userID from user context: ${userContextState.userID}`);
+
+  function getUserIdFromLocalStorage(obj) {
+    return obj.userID;
+  }
+
+  // console.log("Subscribe action render");
+  // console.log(`userID from user context: ${userContextState.userID}`);
   return (
     <>
       <Container maxWidth={"xs"} sx={{ p: 0 }} style={showInMobileOnly}>
-        <Grid container>
-          <Grid item>
+        <Grid
+          container
+          spacing={0}
+          sx={{ justifyContent: "end", alignItems: "center" }}
+        >
+          <Grid item xs={6}>
             <IconButton
               aria-owns={openPopover ? "mouse-over-popover" : undefined}
               aria-haspopup="true"
@@ -127,7 +136,9 @@ function SubscribeWorkout({ workout }) {
                         onClick={() => {
                           subscribeHandler(
                             workout._id,
-                            userContextState.userID
+                            getUserIdFromLocalStorage(
+                              JSON.parse(localStorage.getItem("User"))
+                            )
                           );
                           handleClose(workout._id);
                         }}
@@ -240,7 +251,9 @@ function SubscribeWorkout({ workout }) {
                           onClick={() => {
                             subscribeHandler(
                               workout._id,
-                              userContextState.userID
+                              getUserIdFromLocalStorage(
+                                JSON.parse(localStorage.getItem("User"))
+                              )
                             );
                             handleClose(workout._id);
                           }}

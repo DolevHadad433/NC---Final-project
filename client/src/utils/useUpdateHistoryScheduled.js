@@ -19,10 +19,11 @@ function useUpdateHistoryScheduled() {
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
-      })
-    } else {
-      console.log("Nothing to update!");
-    }
+      });
+    } 
+    // else {
+    //   console.log("Nothing to update!");
+    // }
   }
 
   // const UpdateHistoryScheduledHandler = useCallback((scheduledList) => {
