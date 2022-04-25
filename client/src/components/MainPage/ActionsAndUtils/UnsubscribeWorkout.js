@@ -55,9 +55,9 @@ function UnsubscribeWorkout({ scheduled }) {
 
   const openPopover = Boolean(anchorEl);
 
-  // console.log(
-  //   `Unubscribe ${showInMobileOnly.display === "flex" ? "mobile" : "desktop"}`
-  // );
+  console.log(
+    `Unubscribe ${showInMobileOnly.display === "flex" ? "mobile" : "desktop"}`
+  );
 
   if (displayOrNot(showInMobileOnly)) {
     return (

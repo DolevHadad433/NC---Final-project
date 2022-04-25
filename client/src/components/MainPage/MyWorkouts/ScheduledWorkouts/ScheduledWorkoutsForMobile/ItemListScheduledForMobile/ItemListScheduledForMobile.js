@@ -34,7 +34,7 @@ function ItemListScheduledForMobile({
   const handleMenuClose = () => {
     setAnchorMenu(null);
   };
-  // console.log("display menu");
+  console.log("display menu");
 
   function isChecked(checkedAll, checkedThis) {
     if (checkedThis) {

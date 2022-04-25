@@ -313,7 +313,7 @@ function WorkoutList({ search, setSearch }) {
       });
   }
 
-  // console.log("WorkoutList is render");
+  console.log("WorkoutList is render");
 
   if (displayOrNot(showInMobileOnly)) {
     return (

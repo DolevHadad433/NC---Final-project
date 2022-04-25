@@ -34,7 +34,7 @@ function HistoryScheduledForMobile({
   const handleMenuClose = () => {
     setAnchorMenu(null);
   };
-  // console.log("History scheduled is show");
+  console.log("History scheduled is show");
 
   function isChecked(checkedAll, checkedThis) {
     if (checkedThis) {

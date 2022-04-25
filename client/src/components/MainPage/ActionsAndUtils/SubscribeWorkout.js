@@ -73,7 +73,7 @@ function SubscribeWorkout({ workout }) {
     return obj.userID;
   }
 
-  // console.log("Subscribe action render");
+  console.log("Subscribe action render");
   // console.log(`userID from user context: ${userContextState.userID}`);
   return (
     <>

@@ -125,7 +125,7 @@ function ScheduledWorkoutsFilter({ search, setSearch, schedulesList }) {
     return scheduledValue;
   });
 
-  // console.log("Scheduled desktop");
+  console.log("Scheduled desktop");
 
   return (
     <div style={{ height: 450, width: "100%" }}>

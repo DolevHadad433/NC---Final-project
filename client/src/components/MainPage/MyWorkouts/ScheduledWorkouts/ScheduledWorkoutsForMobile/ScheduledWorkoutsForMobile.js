@@ -41,7 +41,7 @@ function ScheduledWorkoutsForMobile({
 
   const openMenu = Boolean(anchorMenu);
 
-  // console.log("Scheduled mobile");
+  console.log("Scheduled mobile");
   // console.log(moment());
 
   function thisWeekOrAfter() {
